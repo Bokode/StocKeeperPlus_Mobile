@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 
 import CalendarScreen from "./Screens/calendar";
 import HomeScreen from "./Screens/home";
@@ -18,12 +17,3 @@ export default function Index() {
       </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-})
