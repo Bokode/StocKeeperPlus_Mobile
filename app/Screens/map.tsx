@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const HomeScreen = () => {
+const MapScreen = () => {
   return (
     <View
       style={{
@@ -9,9 +9,9 @@ const HomeScreen = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text>Try editing me! 🎉</Text>
+      <Text>MapScreen</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default MapScreen;
