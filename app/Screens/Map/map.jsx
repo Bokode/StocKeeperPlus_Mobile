@@ -1,0 +1,154 @@
+import { Ionicons } from "@expo/vector-icons";
+import * as Location from "expo-location";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+
+export default function MapScreen({ navigation }) {
+  const [location, setLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
+  const [filterVisible, setFilterVisible] = useState(false);
+
+  // Géolocalisation
+  useEffect(() => {
+    let subscriber;
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        subscriber = await Location.watchPositionAsync(
+          { accuracy: Location.Accuracy.High, distanceInterval: 5 },
+          (pos) => setLocation(pos.coords)
+        );
+      }
+      setLoading(false);
+    })();
+
+    return () => {
+      if (subscriber) subscriber.remove();
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <Image
+          source={require("../../../assets/images/favicon.png")}
+          style={{ width: 120, height: 120, marginBottom: 20 }}
+        />
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Barre de recherche */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Rechercher..."
+          value={searchText}
+          onChangeText={setSearchText}
+        />
+        <TouchableOpacity style={styles.iconButton} onPress={() => console.log("Recherche :", searchText)}>
+          <Ionicons name="search" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.iconButton} onPress={() => setFilterVisible(true)}>
+          <Ionicons name="funnel-outline" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Carte */}
+      <MapView
+        style={{ flex: 1 }}
+        showsUserLocation={true}
+        followsUserLocation={true}
+        region={
+          location
+            ? {
+                latitude: location.latitude,
+                longitude: location.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01
+              }
+            : undefined
+        }
+      >
+        <Marker
+          coordinate={{ latitude: 50.469695, longitude: 4.861748 }}
+          onPress={() => navigation.navigate("DetailsStore")}
+        />
+      </MapView>
+
+      {/* Modal filtre */}
+      <Modal
+        visible={filterVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setFilterVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={{ fontWeight: "bold", marginBottom: 10, textAlign: "center"}}>Rayon de recherche</Text>
+            {/* Ajouter les filtres */}
+            <TouchableOpacity onPress={() => setFilterVisible(false)}>
+              <Text style={{ color: "blue", textAlign: "center" }}>Fermer</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+}
+
+// Styles
+const styles = StyleSheet.create({
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
+  searchContainer: {
+    position: "absolute",
+    top: 60,
+    left: 10,
+    right: 10,
+    flexDirection: "row",
+    backgroundColor: "white",
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    zIndex: 10,
+    elevation: 5, // Android shadow
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    alignItems: "center"
+  },
+  input: { flex: 1, height: 40 },
+  iconButton: {
+    marginLeft: 8,
+    backgroundColor: "#007AFF",
+    padding: 8,
+    borderRadius: 7
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  modalContent: {
+    width: 250,
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10
+  }
+});
