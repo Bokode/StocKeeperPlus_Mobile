@@ -10,7 +10,7 @@ import {
   View
 } from "react-native";
 
-const API_KEY_SPASH = "EJ8kCwXFwAuBHUy5QCLq6bbJT04FW_tXVq2ceAiFQc8"; // asupprimer avant de commiter
+const API_KEY_SPASH = ""; // ajouter la clé api de chez https://unsplash.com/developers
 
 export default function DetailsStore({ navigation }) {
   const [searchText, setSearchText] = useState("");
