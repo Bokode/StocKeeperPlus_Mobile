@@ -1,9 +1,13 @@
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import FoodItem from './FoodItem';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AddFood from './addFood';
+import FoodItem from './foodItem';
 import SearchBar from './searchBar';
 
 const HomeScreen = () => {
+  const [showAddFood, setShowAddFood] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Remplacer par les fetchs de l'API
@@ -23,21 +27,27 @@ const HomeScreen = () => {
     item.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return (
+  return showAddFood ? (
+    <AddFood onClose={() => setShowAddFood(false)} />
+  ) : (
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Bonjour {mockUsername},</Text>
       <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery}/>
       <ScrollView  style={styles.containerContent} showsVerticalScrollIndicator={false}>
         {filteredData.map((item, index) => (
-          <FoodItem
-            key={index}
-            {...item}
-          />
+          <FoodItem key={index} {...item} />
         ))}
       </ScrollView>
+      <TouchableOpacity 
+        style={styles.fab}
+        onPress={() => setShowAddFood(true)}
+      >
+        <FontAwesomeIcon icon={faPlus} size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   containerScreen: {
@@ -53,7 +63,22 @@ const styles = StyleSheet.create({
   },
   containerContent: {
     marginTop: 15
-  }
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 25,
+    right: 30,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#4379de',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 })
 
 export default HomeScreen;
