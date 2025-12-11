@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   quantityBadge: {
     position: 'absolute',
-    left: '33.4%',
+    left: 115,
     top: '20%',
     transform: [{ translateX: -16 }, { translateY: -10 }],
     width: 32,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'white',
-    zIndex: 10
+    zIndex: 10,
   },
 
   quantityText: {

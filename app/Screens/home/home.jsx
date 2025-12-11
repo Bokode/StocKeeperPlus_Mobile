@@ -13,13 +13,13 @@ const HomeScreen = () => {
   // Remplacer par les fetchs de l'API
   let mockUsername = "Patron"
   let mockData = [
-    { label: "Pomme", diet: "vegan", nutriScore: "A", quantity: 15, storageType: "Corbeille de fruits", expirationDate: "2025-12-10"},
-    { label: "Banane", diet: "vegan", nutriScore: "A", quantity: 10, storageType: "Frigo", expirationDate: "2025-12-11" },
-    { label: "Steak", diet: "viande", nutriScore: "B", quantity: 3, storageType: "Frigo", expirationDate: "2025-12-15" },
+    { label: "Pomme", diet: "vegan", nutriScore: "A", quantity: 15, storageType: "Corbeille de fruits", expirationDate: "2025-12-12"},
+    { label: "Banane", diet: "vegan", nutriScore: "A", quantity: 10, storageType: "Frigo", expirationDate: "2025-12-21" },
+    { label: "Steak", diet: "viande", nutriScore: "B", quantity: 3, storageType: "Frigo", expirationDate: "2025-12-17" },
     { label: "Oiseau", diet: "Viande", nutriScore: "C", quantity: 23, storageType: "Armoire", expirationDate: "2025-12-08" },
     { label: "Pomme", diet: "vegan", nutriScore: "A", quantity: 15, storageType: "Corbeille de fruits", expirationDate: "2025-12-10"},
-    { label: "Bonone", diet: "vegan", nutriScore: "A", quantity: 10, storageType: "Frigo", expirationDate: "2025-12-11" },
-    { label: "Steak", diet: "viande", nutriScore: "B", quantity: 3, storageType: "Frigo", expirationDate: "2025-12-15" },
+    { label: "Bonone", diet: "vegan", nutriScore: "A", quantity: 10, storageType: "Frigo", expirationDate: "2025-12-12" },
+    { label: "Steak", diet: "viande", nutriScore: "B", quantity: 3, storageType: "Frigo", expirationDate: "2025-12-19" },
     { label: "Oiseau", diet: "Viande", nutriScore: "C", quantity: 23, storageType: "Armoire", expirationDate: "2025-12-08" },
   ];
 
