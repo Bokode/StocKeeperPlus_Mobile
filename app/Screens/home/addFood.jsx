@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import Camera from './camera';
 
 const AddFood = ({ onClose }) => {
+  const [showCamera, setShowCamera] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
   const [date, setDate] = useState(null);
@@ -23,14 +25,13 @@ const AddFood = ({ onClose }) => {
     setBarcode(numericValue.slice(0, 13));
   };
 
-
-
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) setDate(selectedDate);
   };
 
   return (
+    <>
     <TouchableWithoutFeedback
       onPress={() => {
         setShowStorageMenu(false);
@@ -51,7 +52,7 @@ const AddFood = ({ onClose }) => {
               keyboardType="numeric"
             />
           </View>
-          <TouchableOpacity // onPress={() => setShowDatePicker(true)}
+          <TouchableOpacity onPress={() => setShowCamera(true)}
           >
             <FontAwesomeIcon icon={faCamera} size={20} color="#1c1b1f" style={{marginRight: 6}}/>
           </TouchableOpacity>
@@ -127,6 +128,15 @@ const AddFood = ({ onClose }) => {
       </View>
     </View>
     </TouchableWithoutFeedback>
+    {showCamera && (
+      <View style={styles.containerCamera}>
+        <Camera 
+          onClose={() => setShowCamera(false)}
+          onBarcodeScanned={(code) => {setBarcode(code);}}
+        />
+      </View>
+    )}
+    </>
   );
 };
 
@@ -214,6 +224,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "lightgrey",
   },
+  containerCamera: {
+    position: "absolute",
+    top: 0, 
+    left: 0, 
+    right: 0, 
+    bottom: 0,
+    zIndex: 999
+  }
 });
 
 export default AddFood;
