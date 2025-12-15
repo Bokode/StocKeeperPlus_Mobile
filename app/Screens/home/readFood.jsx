@@ -1,41 +1,47 @@
 import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Modal from 'react-native-modal';
 
 const ReadFood = ({ onClose, data }) => {
   const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
+  const [isModalVisible, setModalVisible] = useState(false);
   let nutriScoreImage;
 
-switch (data.nutriScore) {
-  case "A":
-    nutriScoreImage = require("../../../assets/nutriscore/nutriscore_a.png");
-    break;
-  case "B":
-    nutriScoreImage = require("../../../assets/nutriscore/nutriscore_b.png");
-    break;
-  case "C":
-    nutriScoreImage = require("../../../assets/nutriscore/nutriscore_c.png");
-    break;
-  case "D":
-    nutriScoreImage = require("../../../assets/nutriscore/nutriscore_d.png");
-    break;
-  case "E":
-    nutriScoreImage = require("../../../assets/nutriscore/nutriscore_e.png");
-    break;
-  default:
-    nutriScoreImage = require("../../../assets/nutriscore/nutriscore_unknown.png");
-}
+  switch (data.nutriScore) {
+    case "A":
+      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_a.png");
+      break;
+    case "B":
+      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_b.png");
+      break;
+    case "C":
+      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_c.png");
+      break;
+    case "D":
+      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_d.png");
+      break;
+    case "E":
+      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_e.png");
+      break;
+    default:
+      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_unknown.png");
+  }
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   return (
     <View style={styles.container}>
-        <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
-          <View style={styles.topContainer}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
+        <View style={styles.topContainer}>
           <View style={styles.line}>
             <TouchableOpacity onPress={() => onClose()} style={styles.button}>
               <FontAwesomeIcon icon={faAngleLeft} size={24} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => console.log("Delete")} style={styles.button}>
+            <TouchableOpacity onPress={() => toggleModal()} style={styles.button}>
               <FontAwesomeIcon icon={faTrashCan} size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -43,9 +49,8 @@ switch (data.nutriScore) {
             <TouchableOpacity onPress={() => console.log("Update")} style={styles.button}>
               <FontAwesomeIcon icon={faPenToSquare} size={24} color="black" />
             </TouchableOpacity>
+          </View>
         </View>
-        
-      </View>
       </ImageBackground>
       <View style={styles.containerContent}>
         <Text style={styles.title}>
@@ -77,6 +82,23 @@ switch (data.nutriScore) {
         </Text>
         <Image source={nutriScoreImage} style={styles.nutriScoreImage}/>
       </View>
+      <Modal isVisible={isModalVisible}>
+        <View style={styles.modalDelete}>
+          <Text style={styles.textModal}>Êtes-vous sûr de vouloir supprimer cet aliment ?</Text>
+          <TouchableOpacity
+            style={styles.buttonModalYes}
+            onPress={toggleModal}
+          >
+            <Text style={styles.buttonTextYes}>Oui</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonModalNo}
+            onPress={toggleModal}
+          >
+            <Text style={styles.buttonTextNo}>Non</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -141,6 +163,41 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: 100,
     height: 55,
+  },
+  modalDelete: {
+    height: "24%",
+    width: "90%",
+    margin: "auto",
+    borderRadius: 10,
+    padding: 15,
+    backgroundColor: "white",
+    justifyContent: "space-around"
+  },
+  textModal: {
+    textAlign: "center",
+    fontWeight: "800",
+    fontSize: 15,
+    marginBottom: 20
+  },
+  buttonModalYes: {
+    backgroundColor: "#4379de",
+    paddingVertical: 12,
+    borderRadius: 50,
+    alignItems: "center"
+  },
+  buttonModalNo: {
+    backgroundColor: "white",
+    paddingVertical: 12,
+    borderRadius: 50,
+    alignItems: "center"
+  },
+  buttonTextYes: {
+    color: "white",
+    fontWeight: "bold"
+  },
+  buttonTextNo: {
+    color: "#3962ac",
+    fontWeight: "bold"
   }
 });
 
