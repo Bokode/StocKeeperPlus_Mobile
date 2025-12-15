@@ -4,10 +4,13 @@ import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AddFood from './addFood';
 import FoodItem from './foodItem';
+import ReadFood from './readFood';
 import SearchBar from './searchBar';
 
 const HomeScreen = () => {
   const [showAddFood, setShowAddFood] = useState(false);
+  const [showReadFood, setShowReadFood] = useState(false);
+  const [indexFood, setIndexFood] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Remplacer par les fetchs de l'API
@@ -20,7 +23,7 @@ const HomeScreen = () => {
     { label: "Pomme", diet: "vegan", nutriScore: "A", quantity: 15, storageType: "Corbeille de fruits", expirationDate: "2025-12-10"},
     { label: "Bonone", diet: "vegan", nutriScore: "A", quantity: 10, storageType: "Frigo", expirationDate: "2025-12-12" },
     { label: "Steak", diet: "viande", nutriScore: "B", quantity: 3, storageType: "Frigo", expirationDate: "2025-12-19" },
-    { label: "Oiseau", diet: "Viande", nutriScore: "C", quantity: 23, storageType: "Armoire", expirationDate: "2025-12-08" },
+    { label: "Oiseau", diet: "Viande", nutriScore: "?", quantity: 23, storageType: "Armoire", expirationDate: "2025-12-08" },
   ];
 
   const filteredData = mockData.filter(item =>
@@ -29,13 +32,17 @@ const HomeScreen = () => {
 
   return showAddFood ? (
     <AddFood onClose={() => setShowAddFood(false)} />
+  ) : ( showReadFood ? (
+      <ReadFood onClose={() => setShowReadFood(false)} data={mockData[indexFood]} />
   ) : (
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Bonjour {mockUsername},</Text>
       <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery}/>
       <ScrollView  style={styles.containerContent} showsVerticalScrollIndicator={false}>
         {filteredData.map((item, index) => (
-          <FoodItem key={index} {...item} />
+          <TouchableOpacity key={index} onPress={() => {setIndexFood(index); setShowReadFood(true)}}>
+            <FoodItem {...item} />
+          </TouchableOpacity>
         ))}
       </ScrollView>
       <TouchableOpacity 
@@ -45,6 +52,7 @@ const HomeScreen = () => {
         <FontAwesomeIcon icon={faPlus} size={24} color="white" />
       </TouchableOpacity>
     </View>
+  )
   );
 };
 
