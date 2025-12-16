@@ -6,6 +6,7 @@ import AddOrUpdateFood from './addOrUpdateFood';
 import FoodItem from './foodItem';
 import ReadFood from './readFood';
 import SearchBar from './searchBar';
+import { MOCK_FOOD_ITEMS } from '../../../src/data/foodData';
 
 const HomeScreen = () => {
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
@@ -15,18 +16,8 @@ const HomeScreen = () => {
 
   // Remplacer par les fetchs de l'API
   let mockUsername = "Patron"
-  let mockData = [
-    { label: "Pomme", diet: "vegan", nutriScore: "A", quantity: 15, storageType: "Corbeille de fruits", expirationDate: "2025-12-12"},
-    { label: "Banane", diet: "vegan", nutriScore: "A", quantity: 10, storageType: "Frigo", expirationDate: "2025-12-21" },
-    { label: "Steak", diet: "viande", nutriScore: "B", quantity: 3, storageType: "Frigo", expirationDate: "2025-12-17" },
-    { label: "Oiseau", diet: "Viande", nutriScore: "C", quantity: 23, storageType: "Armoire", expirationDate: "2025-12-08" },
-    { label: "Pomme", diet: "vegan", nutriScore: "A", quantity: 15, storageType: "Corbeille de fruits", expirationDate: "2025-12-10"},
-    { label: "Bonone", diet: "vegan", nutriScore: "A", quantity: 10, storageType: "Frigo", expirationDate: "2025-12-12" },
-    { label: "Steak", diet: "viande", nutriScore: "B", quantity: 3, storageType: "Frigo", expirationDate: "2025-12-19" },
-    { label: "Oiseau", diet: "Viande", nutriScore: "?", quantity: 23, storageType: "Armoire", expirationDate: "2025-12-08" },
-  ];
 
-  const filteredData = mockData.filter(item =>
+  const filteredData = MOCK_FOOD_ITEMS.filter(item =>
     item.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

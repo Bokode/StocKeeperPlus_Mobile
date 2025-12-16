@@ -1,4 +1,4 @@
-import CalendarScreen from "./Screens/calendar";
+import CalendarScreen from "./Screens/calendar/calendar";
 import HomeScreen from "./Screens/home/home";
 import MapScreen from "./Screens/map";
 import RecipeScreen from "./Screens/recipe";
