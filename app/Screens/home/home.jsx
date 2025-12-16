@@ -37,11 +37,9 @@ const HomeScreen = () => {
     return false;
   }
 
-  // A Changer
   const today = new Date();
   const expDate = new Date(item.expirationDate);
   const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
-
   if (filters.estPerime && (dayBeforeExpiration >= 0)) {
     return false;
   }
