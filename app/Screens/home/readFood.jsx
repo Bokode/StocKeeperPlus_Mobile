@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
+import AddOrUpdateFood from './addOrUpdateFood';
 
 const ReadFood = ({ onClose, data }) => {
   const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
   const [isModalVisible, setModalVisible] = useState(false);
+  const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   let nutriScoreImage;
 
   switch (data.nutriScore) {
@@ -33,7 +35,9 @@ const ReadFood = ({ onClose, data }) => {
     setModalVisible(!isModalVisible);
   };
 
-  return (
+  return showAddOrUpdateFood ? (
+    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data}/>
+  ) : (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
         <View style={styles.topContainer}>
@@ -46,7 +50,7 @@ const ReadFood = ({ onClose, data }) => {
             </TouchableOpacity>
           </View>
           <View style={[styles.line, styles.updateLine]}>
-            <TouchableOpacity onPress={() => console.log("Update")} style={styles.button}>
+            <TouchableOpacity onPress={() => setShowAddOrUpdateFood(true)} style={styles.button}>
               <FontAwesomeIcon icon={faPenToSquare} size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -100,7 +104,7 @@ const ReadFood = ({ onClose, data }) => {
         </View>
       </Modal>
     </View>
-  );
+    )
 };
 
 const styles = StyleSheet.create({
@@ -182,13 +186,13 @@ const styles = StyleSheet.create({
   buttonModalYes: {
     backgroundColor: "#4379de",
     paddingVertical: 12,
-    borderRadius: 50,
+    borderRadius: 10,
     alignItems: "center"
   },
   buttonModalNo: {
     backgroundColor: "white",
     paddingVertical: 12,
-    borderRadius: 50,
+    borderRadius: 10,
     alignItems: "center"
   },
   buttonTextYes: {
