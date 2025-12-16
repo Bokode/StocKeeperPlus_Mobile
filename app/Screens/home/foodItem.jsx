@@ -38,7 +38,7 @@ const FoodItem = ({ label, diet, nutriScore, quantity, storageType, expirationDa
       />
       <View style={styles.textContainer}>
         <View style={styles.labelIconContainer}>
-          <Text style={styles.label}>{label}</Text>
+          <Text style={styles.label} numberOfLines={1} ellipsizeMode='tail'>{label}</Text>
           <FontAwesomeIcon icon={bigIcon} size={25} color={color}/>
         </View>
         <Text style={styles.infoText}>{storageType}</Text>
@@ -85,6 +85,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 4,
+    flex: 1,
+    marginRight: 10,
   },
   infoText: {
     color: "grey",
