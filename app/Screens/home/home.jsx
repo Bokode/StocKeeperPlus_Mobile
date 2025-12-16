@@ -2,15 +2,15 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import AddFood from './addFood';
+import AddOrUpdateFood from './addOrUpdateFood';
 import FoodItem from './foodItem';
 import ReadFood from './readFood';
 import SearchBar from './searchBar';
 
 const HomeScreen = () => {
-  const [showAddFood, setShowAddFood] = useState(false);
+  const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   const [showReadFood, setShowReadFood] = useState(false);
-  const [indexFood, setIndexFood] = useState(0);
+  const [selectedFood, setSelectedFood] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Remplacer par les fetchs de l'API
@@ -30,24 +30,24 @@ const HomeScreen = () => {
     item.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return showAddFood ? (
-    <AddFood onClose={() => setShowAddFood(false)} />
+  return showAddOrUpdateFood ? (
+    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} />
   ) : ( showReadFood ? (
-      <ReadFood onClose={() => setShowReadFood(false)} data={mockData[indexFood]} />
+    <ReadFood onClose={() => setShowReadFood(false)} data={selectedFood} />
   ) : (
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Bonjour {mockUsername},</Text>
       <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery}/>
       <ScrollView  style={styles.containerContent} showsVerticalScrollIndicator={false}>
         {filteredData.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => {setIndexFood(index); setShowReadFood(true)}}>
+          <TouchableOpacity key={index} onPress={() => {setSelectedFood(item); setShowReadFood(true)}}>
             <FoodItem {...item} />
           </TouchableOpacity>
         ))}
       </ScrollView>
       <TouchableOpacity 
         style={styles.fab}
-        onPress={() => setShowAddFood(true)}
+        onPress={() => setShowAddOrUpdateFood(true)}
       >
         <FontAwesomeIcon icon={faPlus} size={24} color="white" />
       </TouchableOpacity>
