@@ -4,40 +4,34 @@ import { Image, StyleSheet, Text, View } from "react-native";
 
 const RecipeItem = ({ label, nbeaters, timetomake, description }) => {
   
-  // Logique factice pour "Faisable" / "Pas faisable" (À connecter plus tard avec le stock réel)
   // Pour la démo : si le temps de préparation est pair = faisable, sinon pas faisable
   const isDoable = timetomake % 2 !== 0; 
   
-  const statusColor = isDoable ? "#76cc77" : "#bb413b"; // Vert ou Rouge
+  const statusColor = isDoable ? "#76cc77" : "#bb413b";
   const statusText = isDoable ? "Faisable" : "Pas faisable";
 
   return (
     <View style={styles.card}>
-      {/* Image statique pour le moment, à remplacer par item.imagepath plus tard */}
       <Image 
         style={styles.img} 
         source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} 
       />
       
       <View style={styles.textContainer}>
-        {/* Titre */}
         <Text style={styles.label} numberOfLines={1} ellipsizeMode='tail'>
           {label}
         </Text>
 
-        {/* Ligne Nombre de personnes */}
         <View style={styles.infoRow}>
           <FontAwesomeIcon icon={faUserGroup} size={14} color="#1c1b1f" style={styles.icon} />
           <Text style={styles.infoText}>{nbeaters} personnes</Text>
         </View>
 
-        {/* Ligne Temps de préparation */}
         <View style={styles.infoRow}>
           <FontAwesomeIcon icon={faClock} size={14} color="#1c1b1f" style={styles.icon} />
           <Text style={styles.infoText}>{timetomake}m</Text>
         </View>
 
-        {/* Statut Faisable / Pas faisable */}
         <Text style={[styles.statusText, { color: statusColor }]}>
           {statusText}
         </Text>
