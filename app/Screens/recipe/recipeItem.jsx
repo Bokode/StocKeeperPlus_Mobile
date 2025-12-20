@@ -44,29 +44,29 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 10,
-    marginBottom: 12,
+    marginBottom: 8,
     flexDirection: "row",
     alignItems: "center",
-    padding: 10, // Ajout d'un peu de padding interne
+    padding: 4,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3
   },
   img: {
-    width: 100, // Légèrement ajusté par rapport à FoodItem pour laisser place au texte
-    height: 100,
+    width: 105,
+    height: 105,
     borderRadius: 8,
     marginRight: 15,
-    backgroundColor: '#eee' // Couleur de fond si l'image charge mal
+    backgroundColor: '#eee'
   },
   textContainer: {
     flex: 1,
     justifyContent: 'space-between',
-    height: 90 // Pour bien espacer les éléments verticalement
+    height: 90
   },
   label: {
-    fontSize: 20, // Un peu plus petit que FoodItem car titres souvent plus longs
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 4,
     color: '#1c1b1f'
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   infoText: {
-    color: "#49454F", // Gris foncé (style Material Design)
+    color: "#49454F",
     fontSize: 14,
   },
   statusText: {
