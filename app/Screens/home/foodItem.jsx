@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 10,
-    marginBottom: 12,
+    marginBottom: 8,
     flexDirection: "row",
     alignItems: "center",
     shadowColor: "#000",
@@ -67,9 +67,10 @@ const styles = StyleSheet.create({
     elevation: 3
   },
   img: {
-    width: 115,
-    height: 115,
+    width: 105,
+    height: 105,
     borderRadius: 8,
+    margin: 4,
     marginRight: 15
   },
   textContainer: {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
   quantityBadge: {
     position: 'absolute',
-    left: 115,
+    left: 108,
     top: '20%',
     transform: [{ translateX: -16 }, { translateY: -10 }],
     width: 32,
