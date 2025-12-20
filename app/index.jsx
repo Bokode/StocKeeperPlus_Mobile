@@ -1,7 +1,7 @@
 import CalendarScreen from "./Screens/calendar/calendar";
 import HomeScreen from "./Screens/home/home";
 import MapScreen from "./Screens/map";
-import RecipeScreen from "./Screens/recipe/recipe";
+import RecipeScreen from "./Screens/recipeComponents/home/recipe";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard} from 'react-native';
 import Modal from 'react-native-modal';
 
-import { styles } from './_recipeFilter.styles';
+import styles from './recipeFilter.styles';
 
 const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onReset }) => {
   const [showTimeMenu, setShowTimeMenu] = useState(false);

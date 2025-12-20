@@ -25,3 +25,6 @@ const styles = StyleSheet.create({
     fontSize: 16
   }
 });
+
+// C'est cette ligne qui permet d'éviter le warning d'Expo Router
+export default styles;

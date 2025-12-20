@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import SearchBar from '../home/searchBar'; 
-import RecipeItem from './recipeItem';
-import RecipeFilter from './recipeFilter';
-import { MOCK_RECIPE_ITEMS } from '../../../src/data/recipeData'; 
+import SearchBar from '../../home/searchBar'; 
+import RecipeItem from '../item/recipeItem';
+import RecipeFilter from '../filter/recipeFilter';
+import { MOCK_RECIPE_ITEMS } from '../../../../src/data/recipeData'; 
 
-import { styles } from './_recipe.styles';
+import styles from './recipe.style';
 
 const RecipeScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
