@@ -24,7 +24,7 @@ export default function HomeScreen() {
   // A changer selon l'ip du pc qui host l'API (ou peut-être localhost si android studio ? jsp)
   const BASE_URL = "http://192.168.0.20:3001/v1";
 
-  /*useEffect(() => {
+  useEffect(() => {
     login().then(() => {
       getAllFoodFromDB();
     });
@@ -65,7 +65,7 @@ export default function HomeScreen() {
   };
 
   // fin de ce qu'il faut déplacer //
-  */
+  
 
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
@@ -81,6 +81,7 @@ export default function HomeScreen() {
         measuringunit: food.measuringunit,
         barcode: food.barcode,
         imagepath: food.imagepath,
+        userMail: userFood.user_mail,
         quantity: userFood.quantity,
         storagetype: userFood.storagetype,
         expirationdate: userFood.expirationdate,
@@ -97,9 +98,37 @@ export default function HomeScreen() {
       const mergedFood = buildFoodToShow(allFoodData, foodUserData);
       setAllFoodToShow(mergedFood);
     })
-    .catch(err => {
-      console.error(err);
+    .catch(error => {
+      console.error(error);
       setAllFoodToShow([]);
+    });
+  }
+
+  function addFoodFromDB(content) {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(content)
+    })
+    .then(() => getAllFoodFromDB())
+    .catch(error => {
+      console.error(error);
+    });
+  }
+
+  function updateFoodFromDB(content) {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(content)
+    })
+    .then(() => getAllFoodFromDB())
+    .catch(error => {
+      console.error(error);
     });
   }
 
@@ -143,9 +172,9 @@ export default function HomeScreen() {
   };
 
   return showAddOrUpdateFood ? (
-    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} isAnAdd={true}/>
+    <AddOrUpdateFood BASE_URL={BASE_URL} userMail={email} onClose={() => setShowAddOrUpdateFood(false)} isAnAdd={true} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB}/>
   ) : ( showReadFood ? (
-    <ReadFood onClose={() => setShowReadFood(false)} data={selectedFood} />
+    <ReadFood BASE_URL={BASE_URL} onClose={() => setShowReadFood(false)} data={selectedFood} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB} />
   ) : (
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Bonjour {mockUsername},</Text>
