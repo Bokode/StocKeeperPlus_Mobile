@@ -1,5 +1,5 @@
 import CalendarScreen from "./Screens/calendar/calendar";
-import HomeScreen from "./Screens/home/home";
+import HomeScreen from "./Screens/home/homePage/home";
 import MapScreen from "./Screens/map";
 import RecipeScreen from "./Screens/recipeComponents/home/recipe";
 

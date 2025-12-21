@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import SearchBar from '../../home/searchBar'; 
+import SearchBar from '../../home/searchBar/searchBar'; 
 import RecipeItem from '../item/recipeItem';
 import RecipeFilter from '../filter/recipeFilter';
 import { MOCK_RECIPE_ITEMS } from '../../../../src/data/recipeData'; 
