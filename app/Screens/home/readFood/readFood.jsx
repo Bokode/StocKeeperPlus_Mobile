@@ -1,7 +1,7 @@
 import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
@@ -12,7 +12,7 @@ export default function ReadFood({ onClose, data }) {
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   let nutriScoreImage;
 
-  switch (data.nutriScore) {
+  switch (data.nutriscoreFood) {
     case "A":
       nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_a.png");
       break;
@@ -37,7 +37,7 @@ export default function ReadFood({ onClose, data }) {
   };
 
   return showAddOrUpdateFood ? (
-    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data}/>
+    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data} isAnAdd={false}/>
   ) : (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
@@ -59,7 +59,7 @@ export default function ReadFood({ onClose, data }) {
       </ImageBackground>
       <View style={styles.containerContent}>
         <Text style={styles.title}>
-          {data.label}
+          {data.labelFood}
         </Text>
         <Text style={styles.description}>
           Et quoniam inedia gravi adflictabantur, locum petivere Paleas nomine, vergentem in mare, valido muro firmatum, ubi conduntur nunc usque commeatus distribui militibus omne latus Isauriae defendentibus adsueti. circumstetere igitur hoc munimentum per triduum et trinoctium et cum neque adclivitas ipsa sine discrimine adiri letali.
@@ -74,7 +74,7 @@ export default function ReadFood({ onClose, data }) {
           </Text>
         </View>
         <Text style={styles.textData}>
-          {data.storageType}
+          {data.storagetype}
         </Text>
         <View style={styles.rowMiniTitle}>
           <FontAwesomeIcon icon={faCalendar} size={14} color="black" style={{marginRight: 6}}/>
@@ -83,7 +83,7 @@ export default function ReadFood({ onClose, data }) {
           </Text>
         </View>
         <Text style={styles.textData}>
-          {data.expirationDate}
+          {data.expirationdate}
         </Text>
         <Image source={nutriScoreImage} style={styles.nutriScoreImage}/>
       </View>

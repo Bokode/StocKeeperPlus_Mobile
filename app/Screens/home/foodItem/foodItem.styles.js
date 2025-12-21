@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
   infoText: {
     color: "grey",
   },
+  containerExpirationDate: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    marginTop: 4 
+  },
   quantityBadge: {
     position: 'absolute',
     left: 108,
@@ -52,7 +57,6 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     zIndex: 10,
   },
-
   quantityText: {
     color: 'white',
     fontWeight: 'bold',

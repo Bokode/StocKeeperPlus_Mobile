@@ -7,7 +7,7 @@ import Modal from 'react-native-modal';
 import Camera from '../camera/camera';
 import styles from './addOrUpdateFood.styles';
 
-export default function AddOrUpdateFood({ onClose, data }) {
+export default function AddOrUpdateFood({ onClose, data, isAnAdd }) {
   const [showCamera, setShowCamera] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
@@ -23,8 +23,8 @@ export default function AddOrUpdateFood({ onClose, data }) {
     if (data) {
       setBarcode(data.barcode ?? "");
       setQuantityValue(String(data.quantity ?? ""));
-      setDate(data.expirationDate ? new Date(data.expirationDate) : null);
-      setStorageType(data.storageType ?? null);
+      setDate(data.expirationdate ? new Date(data.expirationdate) : null);
+      setStorageType(data.storagetype ?? null);
     }
   }, [data]);
 
@@ -49,8 +49,12 @@ export default function AddOrUpdateFood({ onClose, data }) {
 
   function sendData() {
     if (regexBarcode.test(barcode)) {
+      if (isAnAdd) {
+        // send data to add
+      } else {
+        // send data to update
+      }
       onClose();
-      // Send data
     } else {
       toggleModal();
     }
