@@ -1,7 +1,8 @@
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
+import styles from "./searchBar.styles"
 
 export default function SearchBar({ searchQuery, onSearchChange, toggleFilter }) {
   return (
@@ -26,23 +27,3 @@ export default function SearchBar({ searchQuery, onSearchChange, toggleFilter })
     </View>
   );
 };
-
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  searchbar: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 10
-  },
-  filterButton: {
-    marginLeft: 10,
-    padding: 12,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    elevation: 2
-  }
-});
