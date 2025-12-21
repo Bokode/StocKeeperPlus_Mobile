@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import { Calendar} from 'react-native-calendars';
 
-import FoodItem from '../home/foodItem';
-import ReadFood from '../home/readFood';
+import FoodItem from '../home/foodItem/foodItem';
+import ReadFood from '../home/readFood/readFood';
 import { MOCK_FOOD_ITEMS } from '../../../src/data/foodData';
 import { getMarkedDates } from '../../../src/utils/calendarUtils';
 import { getTodayDateString } from '../../../src/utils/dateHelpers';

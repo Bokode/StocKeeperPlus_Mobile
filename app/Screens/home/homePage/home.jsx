@@ -2,12 +2,12 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { MOCK_FOOD_ITEMS } from '../../../src/data/foodData';
-import AddOrUpdateFood from './addOrUpdateFood';
-import Filter from './filter';
-import FoodItem from './foodItem';
-import ReadFood from './readFood';
-import SearchBar from './searchBar';
+import { MOCK_FOOD_ITEMS } from '../../../../src/data/foodData';
+import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
+import Filter from '../filter/filter';
+import FoodItem from '../foodItem/foodItem';
+import ReadFood from '../readFood/readFood';
+import SearchBar from '../searchBar/searchBar';
 
 const HomeScreen = () => {
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);

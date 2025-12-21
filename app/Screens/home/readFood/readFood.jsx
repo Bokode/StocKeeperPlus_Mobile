@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
-import AddOrUpdateFood from './addOrUpdateFood';
+import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 
 const ReadFood = ({ onClose, data }) => {
   const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
@@ -13,22 +13,22 @@ const ReadFood = ({ onClose, data }) => {
 
   switch (data.nutriScore) {
     case "A":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_a.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_a.png");
       break;
     case "B":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_b.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_b.png");
       break;
     case "C":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_c.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_c.png");
       break;
     case "D":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_d.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_d.png");
       break;
     case "E":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_e.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_e.png");
       break;
     default:
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_unknown.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_unknown.png");
   }
 
   const toggleModal = () => {
