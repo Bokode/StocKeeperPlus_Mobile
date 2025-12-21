@@ -1,14 +1,14 @@
-import CalendarScreen from "./Screens/calendar/calendar";
-import HomeScreen from "./Screens/home/homePage/home";
-import MapScreen from "./Screens/map";
-import RecipeScreen from "./Screens/recipeComponents/home/recipe";
+import CalendarScreen from "../Screens/calendar/calendar";
+import HomeScreen from "../Screens/home/homeScreen/home";
+import MapScreen from "../Screens/map";
+import RecipeScreen from "../Screens/recipeComponents/home/recipe";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Tab = createBottomTabNavigator();
 
-export default function Index() {
+export default function TabNavigator() {
   return (
       <Tab.Navigator
         initialRouteName="Home"

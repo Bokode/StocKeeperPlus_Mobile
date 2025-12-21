@@ -40,7 +40,6 @@ export default function ReadFood({BASE_URL, onClose, data, updateFoodFromDB, add
       },
       body: JSON.stringify({food: data.idFood, user_mail: data.userMail})
     })
-    .then(res => console.log(res))
     .catch(error => {
       console.error(error);
     });
