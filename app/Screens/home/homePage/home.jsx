@@ -24,7 +24,7 @@ export default function HomeScreen() {
   // A changer selon l'ip du pc qui host l'API (ou peut-être localhost si android studio ? jsp)
   const BASE_URL = "http://192.168.0.20:3001/v1";
 
-  useEffect(() => {
+  /*useEffect(() => {
     login().then(() => {
       getAllFoodFromDB();
     });
@@ -65,6 +65,7 @@ export default function HomeScreen() {
   };
 
   // fin de ce qu'il faut déplacer //
+  */
 
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
