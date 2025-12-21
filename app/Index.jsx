@@ -7,7 +7,7 @@ import TabNavigator from "./StackNavigator/TabNavigator";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const AuthStack = () => (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
