@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useEffect, useState } from 'react';
 import { Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import Modal from 'react-native-modal';
-import Camera from './camera';
+import Camera from '../camera/camera';
 
 const AddOrUpdateFood = ({ onClose, data }) => {
   const [showCamera, setShowCamera] = useState(false);
