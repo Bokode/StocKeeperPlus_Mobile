@@ -3,10 +3,18 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LoginScreen from "./StackNavigator/LoginScreen";
 import TabNavigator from "./StackNavigator/TabNavigator";
+import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging';
 
 const Stack = createNativeStackNavigator();
 
+const messaging = getMessaging();
+
+setBackgroundMessageHandler(messaging, async () => {});
+
 export default function App() {
+
+  useNotifications("admin@test.com"); 
+
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const AuthStack = () => (

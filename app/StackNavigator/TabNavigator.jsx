@@ -1,35 +1,14 @@
-<<<<<<< HEAD:app/index.jsx
-import CalendarScreen from "./Screens/calendar/calendar";
-import HomeScreen from "./Screens/home/home";
-import MapScreen from "./Screens/map";
-import RecipeScreen from "./Screens/recipe";
-import { useNotifications } from "../src/utils/useNotifications.js";
-=======
 import CalendarScreen from "../Screens/calendar/calendar";
 import HomeScreen from "../Screens/home/homeScreen/home";
 import MapScreen from "../Screens/map";
 import RecipeScreen from "../Screens/recipeComponents/home/recipe";
 
->>>>>>> f4deeac2c7e7abc59288c9ee25b771ba821b4109:app/StackNavigator/TabNavigator.jsx
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging';
-
 const Tab = createBottomTabNavigator();
 
-<<<<<<< HEAD:app/index.jsx
-const messaging = getMessaging();
-
-setBackgroundMessageHandler(messaging, async () => {});
-
-export default function Index() {
-  
-  useNotifications("admin@test.com"); 
-
-=======
 export default function TabNavigator() {
->>>>>>> f4deeac2c7e7abc59288c9ee25b771ba821b4109:app/StackNavigator/TabNavigator.jsx
   return (
       <Tab.Navigator
         initialRouteName="Home"
