@@ -5,9 +5,10 @@ import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-nati
 import Modal from 'react-native-modal';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
+import { BASE_URL } from '../../../config/config';
 
-export default function ReadFood({BASE_URL, onClose, data, updateFoodFromDB, addFoodFromDB}) {
-  const image = { uri: 'http://192.168.0.20:3001' + data.imagepath };
+export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromDB, onRefresh }) {
+  const image = { uri: BASE_URL.slice(0, -3) + data.imagepath };
   const [isModalVisible, setModalVisible] = useState(false);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   let nutriScoreImage;
@@ -40,6 +41,10 @@ export default function ReadFood({BASE_URL, onClose, data, updateFoodFromDB, add
       },
       body: JSON.stringify({food: data.idFood, user_mail: data.userMail})
     })
+    .then(() => {
+      onRefresh();
+      onClose();
+    })
     .catch(error => {
       console.error(error);
     });
@@ -50,7 +55,7 @@ export default function ReadFood({BASE_URL, onClose, data, updateFoodFromDB, add
   };
 
   return showAddOrUpdateFood ? (
-    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data} isAnAdd={false} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB}/>
+    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} isAnAdd={false} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB} data={data} onCloseRead={onClose}/>
   ) : (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
@@ -107,7 +112,8 @@ export default function ReadFood({BASE_URL, onClose, data, updateFoodFromDB, add
             style={styles.buttonModalYes}
             onPress={() => {
               deleteFoodFromDB();
-              toggleModal}}
+              toggleModal();
+            }}
           >
             <Text style={styles.buttonTextYes}>Oui</Text>
           </TouchableOpacity>
