@@ -135,7 +135,7 @@ export default function HomeScreen() {
       isAnAdd={true} 
       updateFoodFromDB={updateFoodFromDB} 
       addFoodFromDB={addFoodFromDB}
-      //onRefresh={getAllFoodFromDB}
+      existingFoods={foodToshow}
     />
   ) : ( showReadFood ? (
     <ReadFood 

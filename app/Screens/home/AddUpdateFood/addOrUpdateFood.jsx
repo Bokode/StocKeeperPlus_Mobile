@@ -8,7 +8,7 @@ import Camera from '../camera/camera';
 import styles from './addOrUpdateFood.styles';
 import { BASE_URL } from '../../../config/config';
 
-export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, addFoodFromDB, data, onCloseRead }) {
+export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, addFoodFromDB, data, onCloseRead, existingFoods }) {
   const [showCamera, setShowCamera] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
@@ -73,6 +73,9 @@ export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, ad
       setModalVisible(true);
     } else if (isAnAdd && !regexBarcode.test(barcode)) {
       setErrorMessage("Code barre incorrect (mauvais format)");
+      setModalVisible(true);
+    } else if (isAnAdd && existingFoods.some(food => food.barcode === barcode)) {
+      setErrorMessage("Nourriture déjà présente");
       setModalVisible(true);
     } else if (isAnAdd) {
       foodID = await fetchFoodIdByBarcode(barcode);
