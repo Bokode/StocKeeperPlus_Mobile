@@ -60,7 +60,7 @@ export const MOCK_FOOD_ITEMS = [
     diet: 'vegan',
     nutriScore: 'A',
     quantity: 2,
-    storageType: 'Garde-manger',
+    storageType: 'Placard',
     // Expire dans 30 jours
     expirationDate: addDays(TODAY, 30),
   },

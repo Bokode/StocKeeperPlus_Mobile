@@ -66,7 +66,8 @@ const HomeScreen = () => {
     <ReadFood onClose={() => setShowReadFood(false)} data={selectedFood} />
   ) : (
     <View style={styles.containerScreen}>
-      <Text style={styles.title}>Bonjour {mockUsername},</Text>
+      <Text style={styles.title}>Bonjour {mockUsername},</Text> 
+      
       <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} toggleFilter={toggleModal}/>
       <ScrollView  style={styles.containerContent} showsVerticalScrollIndicator={false}>
         {filteredData.map((item, index) => (
