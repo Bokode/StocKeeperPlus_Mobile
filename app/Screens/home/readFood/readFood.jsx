@@ -6,8 +6,8 @@ import Modal from 'react-native-modal';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
 
-export default function ReadFood({ onClose, data }) {
-  const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
+export default function ReadFood({BASE_URL, onClose, data, updateFoodFromDB, addFoodFromDB}) {
+  const image = { uri: 'http://192.168.0.20:3001' + data.imagepath };
   const [isModalVisible, setModalVisible] = useState(false);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   let nutriScoreImage;
@@ -32,12 +32,25 @@ export default function ReadFood({ onClose, data }) {
       nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_unknown.png");
   }
 
+  function deleteFoodFromDB() {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({food: data.idFood, user_mail: data.userMail})
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
   return showAddOrUpdateFood ? (
-    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data} isAnAdd={false}/>
+    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data} isAnAdd={false} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB}/>
   ) : (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
@@ -92,7 +105,9 @@ export default function ReadFood({ onClose, data }) {
           <Text style={styles.textModal}>Êtes-vous sûr de vouloir supprimer cet aliment ?</Text>
           <TouchableOpacity
             style={styles.buttonModalYes}
-            onPress={toggleModal}
+            onPress={() => {
+              deleteFoodFromDB();
+              toggleModal}}
           >
             <Text style={styles.buttonTextYes}>Oui</Text>
           </TouchableOpacity>

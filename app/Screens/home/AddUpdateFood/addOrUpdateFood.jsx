@@ -7,7 +7,7 @@ import Modal from 'react-native-modal';
 import Camera from '../camera/camera';
 import styles from './addOrUpdateFood.styles';
 
-export default function AddOrUpdateFood({ onClose, data, isAnAdd }) {
+export default function AddOrUpdateFood({ BASE_URL, userMail, onClose, data, isAnAdd, updateFoodFromDB, addFoodFromDB }) {
   const [showCamera, setShowCamera] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
@@ -47,12 +47,34 @@ export default function AddOrUpdateFood({ onClose, data, isAnAdd }) {
     setModalVisible(!isModalVisible);
   };
 
-  function sendData() {
+  async function fetchFoodIdByBarcode(barcode) {
+    const res = await fetch(`${BASE_URL}/food/barcode/${barcode}`);
+    if (!res.ok) {
+      throw new Error("Produit introuvable");
+    }
+    const data = await res.json();
+    return data.id;
+  }
+
+  async function sendData() {
     if (regexBarcode.test(barcode)) {
+      let foodID = null;
       if (isAnAdd) {
-        // send data to add
+        foodID = await fetchFoodIdByBarcode(barcode);
+      }
+      
+      const content = {
+        food: foodID ?? data.idFood,
+        user_mail: userMail,
+        quantity: Number(quantityValue),
+        storagetype: storageType,
+        expirationdate: date ? date.toISOString().slice(0, 10) : null
+      };
+
+      if (isAnAdd) {
+        addFoodFromDB(content);
       } else {
-        // send data to update
+        updateFoodFromDB(content);
       }
       onClose();
     } else {
@@ -78,14 +100,16 @@ export default function AddOrUpdateFood({ onClose, data, isAnAdd }) {
               <FontAwesomeIcon icon={faBarcode} size={20} color="#1c1b1f"/>
               <TextInput 
                 style={styles.input} 
+                color={isAnAdd ? "#1c1b1f" : "grey"}
                 placeholder="Barcode" 
                 value={barcode}
                 onChangeText={handleChangeBarcode}
                 keyboardType="numeric"
+                editable={isAnAdd}
               />
             </View>
-            <TouchableOpacity onPress={() => setShowCamera(true)}>
-              <FontAwesomeIcon icon={faCamera} size={20} color="#1c1b1f" style={{marginRight: 6}}/>
+            <TouchableOpacity onPress={() => setShowCamera(true)} disabled={!isAnAdd}>
+              <FontAwesomeIcon icon={faCamera} size={20} color={isAnAdd ? "#1c1b1f" : "grey"} style={{marginRight: 6}}/>
             </TouchableOpacity>
           </View>
           <View style={styles.searchSection}>

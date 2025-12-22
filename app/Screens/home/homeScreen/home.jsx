@@ -8,6 +8,7 @@ import FoodItem from '../foodItem/foodItem';
 import ReadFood from '../readFood/readFood';
 import SearchBar from '../searchBar/searchBar';
 import styles from "./home.styles"
+import { BASE_URL } from '../../../config/config';
 
 export default function HomeScreen() {
   const [foodToshow, setAllFoodToShow] = useState([]);
@@ -21,52 +22,13 @@ export default function HomeScreen() {
     storageType: null,
     nutriScore: null,
   });
-  // A changer selon l'ip du pc qui host l'API (ou peut-être localhost si android studio ? jsp)
-  const BASE_URL = "http://192.168.0.20:3001/v1";
+
+  let mockUsername = "Patron"
 
   /*useEffect(() => {
-    login().then(() => {
-      getAllFoodFromDB();
-    });
-  }, []);
-
-  // Déplacer dans login tout ce qui suit //
-
-  const [email, setEmail] = useState('admin@test.com');
-  const [password, setPassword] = useState('hello');
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const login = async () => {
-    setError(null);
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`${BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', 
-        body: JSON.stringify({ email, password }), 
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        setError(errorData.message || 'Identifiants invalides ou erreur serveur.');
-        return;
-      }
-    } catch (err) {
-      console.error("Erreur durant la connexion:", err);
-      const handledError = err;
-      setError(handledError.message);
-    } finally {
-
-      setIsLoading(false);
-    }
-  };
-
-  // fin de ce qu'il faut déplacer //
-  */
-
+    getAllFoodFromDB();
+  }, []);*/
+ 
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
       const food = allFood.find(f => f.id === userFood.food);
@@ -81,6 +43,7 @@ export default function HomeScreen() {
         measuringunit: food.measuringunit,
         barcode: food.barcode,
         imagepath: food.imagepath,
+        userMail: userFood.user_mail,
         quantity: userFood.quantity,
         storagetype: userFood.storagetype,
         expirationdate: userFood.expirationdate,
@@ -97,9 +60,37 @@ export default function HomeScreen() {
       const mergedFood = buildFoodToShow(allFoodData, foodUserData);
       setAllFoodToShow(mergedFood);
     })
-    .catch(err => {
-      console.error(err);
+    .catch(error => {
+      console.error(error);
       setAllFoodToShow([]);
+    });
+  }
+
+  function addFoodFromDB(content) {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(content)
+    })
+    .then(() => getAllFoodFromDB())
+    .catch(error => {
+      console.error(error);
+    });
+  }
+
+  function updateFoodFromDB(content) {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(content)
+    })
+    .then(() => getAllFoodFromDB())
+    .catch(error => {
+      console.error(error);
     });
   }
 
@@ -111,41 +102,37 @@ export default function HomeScreen() {
     });
   };
 
-  // Remplacer par les fetchs de l'API
-  let mockUsername = "Patron"
-
   const filteredData = foodToshow.filter(item => {
-      if (searchQuery && !item.labelFood.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false;
-  }
+    if (searchQuery && !item.labelFood.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
 
-  const today = new Date();
-  const expDate = new Date(item.expirationdate);
-  const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
-  if (filters.estPerime && (dayBeforeExpiration >= 0)) {
-    return false;
-  }
+    const today = new Date();
+    const expDate = new Date(item.expirationdate);
+    const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+    if (filters.estPerime && (dayBeforeExpiration >= 0)) {
+      return false;
+    }
 
-  if (filters.storageType && item.storagetype !== filters.storageType) {
-    return false;
-  }
+    if (filters.storageType && item.storagetype !== filters.storageType) {
+      return false;
+    }
 
-  if (filters.nutriScore && item.nutriscoreFood !== filters.nutriScore) {
-    return false;
-  }
-
-  return true;
-});
-
+    if (filters.nutriScore && item.nutriscoreFood !== filters.nutriScore) {
+      return false;
+    }
+  
+    return true;
+  });
 
   const toggleModal = () => {
     setFilterVisible(!isFilterVisible);
   };
 
   return showAddOrUpdateFood ? (
-    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} isAnAdd={true}/>
+    <AddOrUpdateFood BASE_URL={BASE_URL} userMail={email} onClose={() => setShowAddOrUpdateFood(false)} isAnAdd={true} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB}/>
   ) : ( showReadFood ? (
-    <ReadFood onClose={() => setShowReadFood(false)} data={selectedFood} />
+    <ReadFood BASE_URL={BASE_URL} onClose={() => setShowReadFood(false)} data={selectedFood} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB} />
   ) : (
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Bonjour {mockUsername},</Text>
