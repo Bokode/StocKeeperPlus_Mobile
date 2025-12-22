@@ -1,4 +1,4 @@
-import { faCalendarCheck, faCalendarMinus, faCalendarXmark, faExclamationTriangle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck, faCalendarMinus, faCalendarXmark, faExclamationTriangle, faTimesCircle, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Image, Text, View } from "react-native";
 import styles from "./foodItem.styles"
@@ -10,7 +10,12 @@ export default function FoodItem({ labelFood, quantity, storagetype, expirationd
   const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
 
   let color, textExpiration, smallIcon, bigIcon;
-  if (dayBeforeExpiration > 4) {
+  if (!expirationdate) {
+    color = "grey";
+    textExpiration = "";
+    smallIcon = null;
+    bigIcon = faQuestion;
+  } else if (dayBeforeExpiration > 4) {
     color = "#76cc77";
     textExpiration = dayBeforeExpiration + " jours";
     smallIcon = faCalendarCheck;
@@ -45,7 +50,7 @@ export default function FoodItem({ labelFood, quantity, storagetype, expirationd
         </View>
         <Text style={styles.infoText}>{storagetype}</Text>
         <View style={styles.containerExpirationDate}>
-          <FontAwesomeIcon icon={smallIcon} size={14} color={"grey"} style={{ marginRight: 5 }} />
+          {smallIcon && <FontAwesomeIcon icon={smallIcon} size={14} color={"grey"} style={{ marginRight: 5 }} />}
           <Text style={styles.infoText}>{textExpiration}</Text>
         </View>
       </View>
