@@ -72,7 +72,7 @@ export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, ad
       setErrorMessage("Quantité incorrect (Doit être plus grande que 1)");
       setModalVisible(true);
     } else if (isAnAdd && !regexBarcode.test(barcode)) {
-      setErrorMessage("Code barre incorrect (mauvais format)");
+      setErrorMessage("Code barre incorrect (Mauvais format)");
       setModalVisible(true);
     } else if (isAnAdd && existingFoods.some(food => food.barcode === barcode)) {
       setErrorMessage("Nourriture déjà présente");

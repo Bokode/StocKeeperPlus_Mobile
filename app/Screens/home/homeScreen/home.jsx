@@ -25,9 +25,9 @@ export default function HomeScreen() {
 
   let mockUsername = "Patron"
 
-  useEffect(() => {
+  /*useEffect(() => {
     getAllFoodFromDB();
-  }, []);
+  }, []);*/
  
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
