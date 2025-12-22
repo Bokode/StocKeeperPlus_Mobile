@@ -1,34 +1,48 @@
 import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
-import AddOrUpdateFood from './addOrUpdateFood';
+import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
+import styles from "./readFood.styles"
 
-const ReadFood = ({ onClose, data }) => {
-  const image = {uri: 'https://legacy.reactjs.org/logo-og.png'};
+export default function ReadFood({BASE_URL, onClose, data, updateFoodFromDB, addFoodFromDB}) {
+  const image = { uri: 'http://192.168.0.20:3001' + data.imagepath };
   const [isModalVisible, setModalVisible] = useState(false);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   let nutriScoreImage;
 
-  switch (data.nutriScore) {
+  switch (data.nutriscoreFood) {
     case "A":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_a.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_a.png");
       break;
     case "B":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_b.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_b.png");
       break;
     case "C":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_c.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_c.png");
       break;
     case "D":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_d.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_d.png");
       break;
     case "E":
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_e.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_e.png");
       break;
     default:
-      nutriScoreImage = require("../../../assets/nutriscore/nutriscore_unknown.png");
+      nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_unknown.png");
+  }
+
+  function deleteFoodFromDB() {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({food: data.idFood, user_mail: data.userMail})
+    })
+    .catch(error => {
+      console.error(error);
+    });
   }
 
   const toggleModal = () => {
@@ -36,7 +50,7 @@ const ReadFood = ({ onClose, data }) => {
   };
 
   return showAddOrUpdateFood ? (
-    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data}/>
+    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} data={data} isAnAdd={false} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB}/>
   ) : (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
@@ -58,7 +72,7 @@ const ReadFood = ({ onClose, data }) => {
       </ImageBackground>
       <View style={styles.containerContent}>
         <Text style={styles.title}>
-          {data.label}
+          {data.labelFood}
         </Text>
         <Text style={styles.description}>
           Et quoniam inedia gravi adflictabantur, locum petivere Paleas nomine, vergentem in mare, valido muro firmatum, ubi conduntur nunc usque commeatus distribui militibus omne latus Isauriae defendentibus adsueti. circumstetere igitur hoc munimentum per triduum et trinoctium et cum neque adclivitas ipsa sine discrimine adiri letali.
@@ -73,7 +87,7 @@ const ReadFood = ({ onClose, data }) => {
           </Text>
         </View>
         <Text style={styles.textData}>
-          {data.storageType}
+          {data.storagetype}
         </Text>
         <View style={styles.rowMiniTitle}>
           <FontAwesomeIcon icon={faCalendar} size={14} color="black" style={{marginRight: 6}}/>
@@ -82,7 +96,7 @@ const ReadFood = ({ onClose, data }) => {
           </Text>
         </View>
         <Text style={styles.textData}>
-          {data.expirationDate}
+          {data.expirationdate}
         </Text>
         <Image source={nutriScoreImage} style={styles.nutriScoreImage}/>
       </View>
@@ -91,7 +105,9 @@ const ReadFood = ({ onClose, data }) => {
           <Text style={styles.textModal}>Êtes-vous sûr de vouloir supprimer cet aliment ?</Text>
           <TouchableOpacity
             style={styles.buttonModalYes}
-            onPress={toggleModal}
+            onPress={() => {
+              deleteFoodFromDB();
+              toggleModal}}
           >
             <Text style={styles.buttonTextYes}>Oui</Text>
           </TouchableOpacity>
@@ -106,103 +122,3 @@ const ReadFood = ({ onClose, data }) => {
     </View>
     )
 };
-
-const styles = StyleSheet.create({
-  backgroundImage: {
-    justifyContent: 'flex-start',
-    height: 225,
-    paddingTop: 40
-  },
-  container: {
-    height: "100%",
-    backgroundColor: "#ecf3fe",
-  },
-  topContainer: {
-    width: "100%",
-  },
-  line: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingInline: 10,
-    marginBottom: 10,
-  },
-  updateLine: {
-    justifyContent: "flex-end",
-  },
-  button: {
-    backgroundColor: "white",
-    borderRadius: 6,
-    padding: 12
-  },
-  containerContent: {
-    marginTop: -40,
-    paddingTop: 30,
-    borderRadius: 40,
-    height: "100%",
-    backgroundColor: "white",
-    paddingInlineStart: 26
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 35,
-    marginBottom: 15
-  },
-  description: {
-    marginBottom: 25,
-    paddingInlineEnd: 26,
-  },
-  rowMiniTitle: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 15,
-  },
-  miniTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  textData: {
-    color: "grey"
-  },
-  nutriScoreImage: {
-    marginTop: 15,
-    width: 100,
-    height: 55,
-  },
-  modalDelete: {
-    height: "24%",
-    width: "90%",
-    margin: "auto",
-    borderRadius: 10,
-    padding: 15,
-    backgroundColor: "white",
-    justifyContent: "space-around"
-  },
-  textModal: {
-    textAlign: "center",
-    fontWeight: "800",
-    fontSize: 15,
-    marginBottom: 20
-  },
-  buttonModalYes: {
-    backgroundColor: "#4379de",
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: "center"
-  },
-  buttonModalNo: {
-    backgroundColor: "white",
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: "center"
-  },
-  buttonTextYes: {
-    color: "white",
-    fontWeight: "bold"
-  },
-  buttonTextNo: {
-    color: "#3962ac",
-    fontWeight: "bold"
-  }
-});
-
-export default ReadFood;

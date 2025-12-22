@@ -2,11 +2,12 @@ import { faBarcode, faBoxArchive, faCalendar, faCamera, faWeightScale } from '@f
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useEffect, useState } from 'react';
-import { Keyboard, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import Modal from 'react-native-modal';
-import Camera from './camera';
+import Camera from '../camera/camera';
+import styles from './addOrUpdateFood.styles';
 
-const AddOrUpdateFood = ({ onClose, data }) => {
+export default function AddOrUpdateFood({ BASE_URL, userMail, onClose, data, isAnAdd, updateFoodFromDB, addFoodFromDB }) {
   const [showCamera, setShowCamera] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
@@ -22,8 +23,8 @@ const AddOrUpdateFood = ({ onClose, data }) => {
     if (data) {
       setBarcode(data.barcode ?? "");
       setQuantityValue(String(data.quantity ?? ""));
-      setDate(data.expirationDate ? new Date(data.expirationDate) : null);
-      setStorageType(data.storageType ?? null);
+      setDate(data.expirationdate ? new Date(data.expirationdate) : null);
+      setStorageType(data.storagetype ?? null);
     }
   }, [data]);
 
@@ -46,10 +47,36 @@ const AddOrUpdateFood = ({ onClose, data }) => {
     setModalVisible(!isModalVisible);
   };
 
-  function sendData() {
+  async function fetchFoodIdByBarcode(barcode) {
+    const res = await fetch(`${BASE_URL}/food/barcode/${barcode}`);
+    if (!res.ok) {
+      throw new Error("Produit introuvable");
+    }
+    const data = await res.json();
+    return data.id;
+  }
+
+  async function sendData() {
     if (regexBarcode.test(barcode)) {
+      let foodID = null;
+      if (isAnAdd) {
+        foodID = await fetchFoodIdByBarcode(barcode);
+      }
+      
+      const content = {
+        food: foodID ?? data.idFood,
+        user_mail: userMail,
+        quantity: Number(quantityValue),
+        storagetype: storageType,
+        expirationdate: date ? date.toISOString().slice(0, 10) : null
+      };
+
+      if (isAnAdd) {
+        addFoodFromDB(content);
+      } else {
+        updateFoodFromDB(content);
+      }
       onClose();
-      // Send data
     } else {
       toggleModal();
     }
@@ -73,14 +100,16 @@ const AddOrUpdateFood = ({ onClose, data }) => {
               <FontAwesomeIcon icon={faBarcode} size={20} color="#1c1b1f"/>
               <TextInput 
                 style={styles.input} 
+                color={isAnAdd ? "#1c1b1f" : "grey"}
                 placeholder="Barcode" 
                 value={barcode}
                 onChangeText={handleChangeBarcode}
                 keyboardType="numeric"
+                editable={isAnAdd}
               />
             </View>
-            <TouchableOpacity onPress={() => setShowCamera(true)}>
-              <FontAwesomeIcon icon={faCamera} size={20} color="#1c1b1f" style={{marginRight: 6}}/>
+            <TouchableOpacity onPress={() => setShowCamera(true)} disabled={!isAnAdd}>
+              <FontAwesomeIcon icon={faCamera} size={20} color={isAnAdd ? "#1c1b1f" : "grey"} style={{marginRight: 6}}/>
             </TouchableOpacity>
           </View>
           <View style={styles.searchSection}>
@@ -173,123 +202,3 @@ const AddOrUpdateFood = ({ onClose, data }) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%",
-    backgroundColor: "#ecf3fe"
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold"
-  },
-  lineBarcode: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  inputContainer: {
-    backgroundColor: "white",
-    width: "90%",
-    marginTop: 40,
-    paddingTop: 40,
-    padding: 10,
-    borderRadius: 10
-  },
-  searchSectionBarcode: {
-    width: "88%",
-    marginBottom: 0,
-  },
-  searchSection: {
-    border: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "lightgrey",
-    borderRadius: 10,
-    marginBottom: 30,
-    paddingLeft: 10,
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    paddingLeft: 10
-  },
-  confirmButton: {
-    backgroundColor: "#4379de",
-    marginTop: 30
-  },
-  button: {
-    alignItems: "center",
-    marginBottom: 20,
-    padding: 14,
-    borderRadius: 10
-  },
-  text: {
-    fontWeight: "800",
-    fontSize: 16
-  },
-  confirmText: {
-    color: "white",
-  },
-  cancelText: {
-    color: "#4379de"
-  },
-  dropdown: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "lightgrey",
-    borderRadius: 8,
-    overflow: "hidden",
-    zIndex: 1000,
-  },
-  dropdownScroll: {
-    maxHeight: 140,
-  },
-  dropdownItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgrey",
-  },
-  containerCamera: {
-    position: "absolute",
-    top: 0, 
-    left: 0, 
-    right: 0, 
-    bottom: 0,
-    zIndex: 999
-  },
-   modalDelete: {
-    height: "20%",
-    width: "90%",
-    margin: "auto",
-    borderRadius: 10,
-    padding: 15,
-    backgroundColor: "white",
-    justifyContent: "space-around"
-  },
-  textModal: {
-    textAlign: "center",
-    fontWeight: "800",
-    fontSize: 15,
-  },
-  buttonModal: {
-    backgroundColor: "#4379de",
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: "center"
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold"
-  },
-});
-
-export default AddOrUpdateFood;

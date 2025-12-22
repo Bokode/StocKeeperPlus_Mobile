@@ -1,10 +1,11 @@
 import { faCalendarCheck, faCalendarMinus, faCalendarXmark, faExclamationTriangle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
+import styles from "./foodItem.styles"
 
-const FoodItem = ({ label, diet, nutriScore, quantity, storageType, expirationDate }) => {
+export default function FoodItem({ labelFood, quantity, storagetype, expirationdate, imagepath }) {
   const today = new Date();
-  const expDate = new Date(expirationDate);
+  const expDate = new Date(expirationdate);
   const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
 
   let color, textExpiration, smallIcon, bigIcon;
@@ -34,15 +35,15 @@ const FoodItem = ({ label, diet, nutriScore, quantity, storageType, expirationDa
     <View style={styles.card}>
       <Image 
         style={styles.img} 
-        source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }} 
+        source={{ uri: 'http://192.168.0.20:3001' + imagepath }} 
       />
       <View style={styles.textContainer}>
         <View style={styles.labelIconContainer}>
-          <Text style={styles.label} numberOfLines={1} ellipsizeMode='tail'>{label}</Text>
+          <Text style={styles.label} numberOfLines={1} ellipsizeMode='tail'>{labelFood}</Text>
           <FontAwesomeIcon icon={bigIcon} size={25} color={color}/>
         </View>
-        <Text style={styles.infoText}>{storageType}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={styles.infoText}>{storagetype}</Text>
+        <View style={styles.containerExpirationDate}>
           <FontAwesomeIcon icon={smallIcon} size={14} color={"grey"} style={{ marginRight: 5 }} />
           <Text style={styles.infoText}>{textExpiration}</Text>
         </View>
@@ -53,64 +54,3 @@ const FoodItem = ({ label, diet, nutriScore, quantity, storageType, expirationDa
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    marginBottom: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3
-  },
-  img: {
-    width: 115,
-    height: 115,
-    borderRadius: 8,
-    marginRight: 15
-  },
-  textContainer: {
-    flex: 1
-  },
-  labelIconContainer: {
-    flexDirection: 'row', 
-    alignItems: "center", 
-    justifyContent: "space-between",
-    paddingRight: 15,
-  },
-  label: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 4,
-    flex: 1,
-    marginRight: 10,
-  },
-  infoText: {
-    color: "grey",
-  },
-  quantityBadge: {
-    position: 'absolute',
-    left: 115,
-    top: '20%',
-    transform: [{ translateX: -16 }, { translateY: -10 }],
-    width: 32,
-    height: 20,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'white',
-    zIndex: 10,
-  },
-
-  quantityText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 12,
-  }
-});
-
-export default FoodItem;
