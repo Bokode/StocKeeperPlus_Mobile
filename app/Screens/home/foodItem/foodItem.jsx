@@ -2,6 +2,7 @@ import { faCalendarCheck, faCalendarMinus, faCalendarXmark, faExclamationTriangl
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Image, Text, View } from "react-native";
 import styles from "./foodItem.styles"
+import { BASE_URL } from '../../../config/config';
 
 export default function FoodItem({ labelFood, quantity, storagetype, expirationdate, imagepath }) {
   const today = new Date();
@@ -35,7 +36,7 @@ export default function FoodItem({ labelFood, quantity, storagetype, expirationd
     <View style={styles.card}>
       <Image 
         style={styles.img} 
-        source={{ uri: 'http://192.168.0.20:3001' + imagepath }} 
+        source={{ uri: BASE_URL.slice(0, -3) +imagepath }} 
       />
       <View style={styles.textContainer}>
         <View style={styles.labelIconContainer}>
