@@ -6,8 +6,9 @@ import { Keyboard, ScrollView, Text, TextInput, TouchableOpacity, TouchableWitho
 import Modal from 'react-native-modal';
 import Camera from '../camera/camera';
 import styles from './addOrUpdateFood.styles';
+import { BASE_URL } from '../../../config/config';
 
-export default function AddOrUpdateFood({ BASE_URL, userMail, onClose, data, isAnAdd, updateFoodFromDB, addFoodFromDB }) {
+export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, addFoodFromDB, data, onCloseRead }) {
   const [showCamera, setShowCamera] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [quantityValue, setQuantityValue] = useState("");
@@ -16,6 +17,7 @@ export default function AddOrUpdateFood({ BASE_URL, userMail, onClose, data, isA
   const [storageType, setStorageType] = useState(null);
   const [showStorageMenu, setShowStorageMenu] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("Une erreur est survenue");
   const storageOptions = ["Placard", "Frigo", "Congélateur", "Corbeille", "Armoire"];
   const regexBarcode = /^(?:\d{8}|\d{13})$/;
 
@@ -50,22 +52,41 @@ export default function AddOrUpdateFood({ BASE_URL, userMail, onClose, data, isA
   async function fetchFoodIdByBarcode(barcode) {
     const res = await fetch(`${BASE_URL}/food/barcode/${barcode}`);
     if (!res.ok) {
-      throw new Error("Produit introuvable");
+      setErrorMessage("Barcode incorrect (Non présent dans DB)");
+      setModalVisible(true);
+      return -1;
+    } else {
+      const data = await res.json();
+      return data.id;
     }
-    const data = await res.json();
-    return data.id;
   }
 
   async function sendData() {
-    if (regexBarcode.test(barcode)) {
-      let foodID = null;
-      if (isAnAdd) {
-        foodID = await fetchFoodIdByBarcode(barcode);
-      }
+    let foodID = null;
+    const quantity = Number(quantityValue);
+    
+    if (!quantityValue) {
+      setErrorMessage("Veuillez saisir une quantité");
+      setModalVisible(true);
+    } else if (quantity <= 0) {
+      setErrorMessage("Quantité incorrect (Doit être plus grande que 1)");
+      setModalVisible(true);
+    } else if (isAnAdd && !regexBarcode.test(barcode)) {
+      setErrorMessage("Code barre incorrect (mauvais format)");
+      setModalVisible(true);
+    } else if (isAnAdd) {
+      foodID = await fetchFoodIdByBarcode(barcode);
       
+      if (foodID == -1) {
+        setErrorMessage("Code barre incorrect (Non présent dans la DB)");
+        setModalVisible(true);
+        foodID = null;
+      }
+    }
+
+    if ((isAnAdd && foodID != null) || !isAnAdd) {
       const content = {
         food: foodID ?? data.idFood,
-        user_mail: userMail,
         quantity: Number(quantityValue),
         storagetype: storageType,
         expirationdate: date ? date.toISOString().slice(0, 10) : null
@@ -73,12 +94,12 @@ export default function AddOrUpdateFood({ BASE_URL, userMail, onClose, data, isA
 
       if (isAnAdd) {
         addFoodFromDB(content);
+        onClose();
       } else {
-        updateFoodFromDB(content);
+        updateFoodFromDB(content)
+        onClose();
+        onCloseRead();
       }
-      onClose();
-    } else {
-      toggleModal();
     }
   }
 
@@ -180,7 +201,7 @@ export default function AddOrUpdateFood({ BASE_URL, userMail, onClose, data, isA
         </View>
         <Modal isVisible={isModalVisible}>
           <View style={styles.modalDelete}>
-            <Text style={styles.textModal}>Code-barre incorrect</Text>
+            <Text style={styles.textModal}>{errorMessage}</Text>
               <TouchableOpacity
                 style={styles.buttonModal}
                 onPress={toggleModal}
