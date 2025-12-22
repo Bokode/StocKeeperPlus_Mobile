@@ -9,8 +9,10 @@ import ReadFood from '../readFood/readFood';
 import SearchBar from '../searchBar/searchBar';
 import styles from "./home.styles"
 import { BASE_URL } from '../../../config/config';
+import TopBar from '../../topBar/topBar';
 
 export default function HomeScreen() {
+  const [username, setUsername] = useState("le GOAT")
   const [foodToshow, setAllFoodToShow] = useState([]);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   const [showReadFood, setShowReadFood] = useState(false);
@@ -23,11 +25,24 @@ export default function HomeScreen() {
     nutriScore: null,
   });
 
-  let mockUsername = "Patron"
-
   useEffect(() => {
+    getUserInfo();
     getAllFoodFromDB();
   }, []);
+
+  function getUserInfo() {
+    fetch(`${BASE_URL}/user/me`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+    .then(res => res.json())
+    .then(data => setUsername(data.username))
+    .catch(error => {
+      console.error(error);
+    });
+  }
  
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
@@ -74,6 +89,7 @@ export default function HomeScreen() {
       },
       body: JSON.stringify(content)
     })
+    .then(res => res.json())
     .then(() => getAllFoodFromDB())
     .catch(error => {
       console.error(error);
@@ -88,6 +104,7 @@ export default function HomeScreen() {
       },
       body: JSON.stringify(content)
     })
+    .then(res => res.json())
     .then(() => getAllFoodFromDB())
     .catch(error => {
       console.error(error);
@@ -146,8 +163,10 @@ export default function HomeScreen() {
       onRefresh={getAllFoodFromDB}
     />
   ) : (
+    <>
+    <TopBar />
     <View style={styles.containerScreen}>
-      <Text style={styles.title}>Bonjour {mockUsername},</Text>
+      <Text style={styles.title}>Bonjour {username},</Text>
       <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} toggleFilter={toggleModal}/>
       <ScrollView  style={styles.containerContent} showsVerticalScrollIndicator={false}>
         {filteredData.map((item, index) => (
@@ -170,6 +189,7 @@ export default function HomeScreen() {
         onReset={resetFilters}
       />
     </View>
+    </>
   )
   );
 };

@@ -3,6 +3,7 @@ import HomeScreen from "../Screens/home/homeScreen/home";
 import MapScreen from "../Screens/map";
 import RecipeScreen from "../Screens/recipeComponents/home/recipe";
 
+import { View } from 'react-native';
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -14,14 +15,22 @@ export default function TabNavigator() {
         initialRouteName="Home"
         screenOptions={({ route }) => ({
           headerShown: false,
-          tabBarIcon: ({ color, size }) => {
+
+          tabBarStyle: {
+            backgroundColor: "#2c7be5"
+          },
+
+          tabBarActiveTintColor: "#eaf4ff",
+          tabBarInactiveTintColor: "#e5eefc",
+
+          tabBarIcon: ({ color, size, focused }) => {
             let iconName;
 
             switch (route.name) {
               case "Home":
                 iconName = "home";
                 break;
-              case "Recipe":
+              case "Recipe":q
                 iconName = "cutlery";
                 break;
               case "Map":
@@ -32,10 +41,22 @@ export default function TabNavigator() {
                 break;
             }
 
-            return <FontAwesome name={iconName} size={size} color={color} />;
+            return (
+              <View
+                style={{
+                  backgroundColor: focused ? "#58a6ff" : "transparent",
+                  borderRadius: 15,
+                  paddingInline: 6,
+                  width: 50,
+                  height: 32,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <FontAwesome name={iconName} size={size} color={color} />
+              </View>
+            )
           },
-          tabBarActiveTintColor: "#007AFF",
-          tabBarInactiveTintColor: "gray",
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
