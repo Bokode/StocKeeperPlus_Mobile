@@ -130,9 +130,21 @@ export default function HomeScreen() {
   };
 
   return showAddOrUpdateFood ? (
-    <AddOrUpdateFood BASE_URL={BASE_URL} userMail={email} onClose={() => setShowAddOrUpdateFood(false)} isAnAdd={true} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB}/>
+    <AddOrUpdateFood 
+      onClose={() => setShowAddOrUpdateFood(false)} 
+      isAnAdd={true} 
+      updateFoodFromDB={updateFoodFromDB} 
+      addFoodFromDB={addFoodFromDB}
+      existingFoods={foodToshow}
+    />
   ) : ( showReadFood ? (
-    <ReadFood BASE_URL={BASE_URL} onClose={() => setShowReadFood(false)} data={selectedFood} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB} />
+    <ReadFood 
+      onClose={() => setShowReadFood(false)} 
+      data={selectedFood} 
+      updateFoodFromDB={updateFoodFromDB} 
+      addFoodFromDB={addFoodFromDB}
+      onRefresh={getAllFoodFromDB}
+    />
   ) : (
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Bonjour {mockUsername},</Text>
