@@ -89,7 +89,6 @@ export default function HomeScreen() {
       },
       body: JSON.stringify(content)
     })
-    .then(res => res.json())
     .then(() => getAllFoodFromDB())
     .catch(error => {
       console.error(error);
@@ -104,7 +103,6 @@ export default function HomeScreen() {
       },
       body: JSON.stringify(content)
     })
-    .then(res => res.json())
     .then(() => getAllFoodFromDB())
     .catch(error => {
       console.error(error);

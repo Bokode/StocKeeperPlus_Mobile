@@ -11,20 +11,12 @@ export default function TopBar() {
         style={styles.logo} 
         source={require("../../../assets/logo/BigLogo.png")} 
       />
-      <View style={styles.containerIcon}>
-          <TouchableOpacity 
-            style={styles.icon}
-            onPress={() => console.log("Notifications")}
-        >
-            <FontAwesomeIcon icon={faBell} size={26} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity 
-            style={styles.icon}
-            onPress={() => console.log("Paramètres")}
-        >
-            <FontAwesomeIcon icon={faGear} size={26} color="white" />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity 
+        style={styles.icon}
+        onPress={() => console.log("Paramètres")}
+      >
+        <FontAwesomeIcon icon={faGear} size={26} color="white" />
+      </TouchableOpacity>
     </View>
   );
 };

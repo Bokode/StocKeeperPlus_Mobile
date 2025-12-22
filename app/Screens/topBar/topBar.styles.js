@@ -9,19 +9,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingBottom: 10,
-    paddingInline: 15
+    paddingInline: 15,
   },
   logo: {
     width: 180,
     height: 45,
-    tintColor: "white"
-  },
-  containerIcon: {
-    flexDirection: "row",
+    tintColor: "white",
   },
   icon: {
-    paddingVertical: 10,
-    paddingInline: 15
+    paddingTop: 10,
+    paddingInline: 15,
   }
 })
 
