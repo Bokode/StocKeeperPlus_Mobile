@@ -4,21 +4,20 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 10,
-    marginBottom: 12,
+    marginBottom: 8,
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3
   },
   img: {
-    width: 100,
-    height: 100,
+    width: 105,
+    height: 105,
     borderRadius: 8,
-    marginRight: 15,
-    backgroundColor: '#eee'
+    margin: 4,
+    marginRight: 15
   },
   textContainer: {
     flex: 1,
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 4,
+    paddingRight: 15,
   },
   label: {
     fontSize: 20,

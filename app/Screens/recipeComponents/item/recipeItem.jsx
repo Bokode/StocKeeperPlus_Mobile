@@ -24,7 +24,7 @@ const RecipeItem = ({ label, nbeaters, timetomake }) => {
           <Text style={styles.label} numberOfLines={1} ellipsizeMode='tail'>
             {label}
           </Text>
-          <FontAwesomeIcon icon={statusIcon} size={25} color={statusColor} />
+          <FontAwesomeIcon icon={statusIcon} size={25} color={statusColor}/>
         </View>
 
         <View style={styles.infoRow}>
