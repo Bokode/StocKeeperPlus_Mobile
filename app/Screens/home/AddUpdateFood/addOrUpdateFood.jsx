@@ -42,7 +42,7 @@ export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, ad
 
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
-    if (selectedDate) setDate(selectedDate);
+    if (event.type === "set" && selectedDate) setDate(selectedDate);
   };
 
   const toggleModal = () => {

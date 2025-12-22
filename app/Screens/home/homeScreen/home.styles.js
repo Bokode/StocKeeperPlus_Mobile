@@ -3,9 +3,12 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   containerScreen: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 25,
     paddingInline: 20,
-    backgroundColor: '#f7f9fd'
+    backgroundColor: '#f7f9fd',
+    marginTop: -30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
   title: {
     fontSize: 20,
