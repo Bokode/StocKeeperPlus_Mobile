@@ -44,14 +44,16 @@ const styles = StyleSheet.create({
   labelIconContainer: {
     flexDirection: 'row',
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    paddingRight: 15
   },
   label: {
     fontSize: 20,
     fontWeight: "bold",
     color: '#1c1b1f',
     flex: 1,       
-    marginRight: 10 
+    marginRight: 10,
+    flexShrink: 1,
   },
   infoRow: {
     flexDirection: 'row', 

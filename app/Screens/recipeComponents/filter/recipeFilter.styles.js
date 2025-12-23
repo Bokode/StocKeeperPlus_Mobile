@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   modalFilter: {
-    width: "90%",
+    width: "95%",
     alignSelf: "center",
-    borderRadius: 10,
+    borderRadius: 15,
     padding: 20,
     backgroundColor: "white",
     zIndex: 1, 
@@ -13,7 +13,8 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "800",
     fontSize: 18,
-    marginBottom: 20
+    marginBottom: 20,
+    color: "#1c1b1f"
   },
   searchSection: {
     flexDirection: "row",
@@ -21,7 +22,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "lightgrey",
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 15,
     paddingLeft: 10,
     height: 50,
     position: 'relative'
@@ -57,33 +58,44 @@ export const styles = StyleSheet.create({
     elevation: 5,
     zIndex: 9999,
   },
-  dropdownScroll: {
-    maxHeight: 200,
-  },
   dropdownItem: {
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
   },
-  checkboxRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingLeft: 5,
-    marginBottom: 30,
-    zIndex: -1 
-  },
-  checkboxLabel: {
-    marginLeft: 10,
-    fontSize: 14,
-    color: "#1c1b1f",
-  },
-  resetButton: {
+  // --- NOUVEAU STYLE : FILTRE FAVORIS ---
+  favoriteFilterRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 10,
+    marginBottom: 20,
+  },
+  checkboxBase: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#4379de',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  checkboxChecked: {
+    backgroundColor: '#4379de',
+  },
+  favoriteLabel: {
+    fontSize: 16,
+    color: '#1c1b1f',
+    fontWeight: '600',
+  },
+  // --- BOUTONS ---
+  resetButton: {
+    paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#4379de",
-    marginBottom: 10,
+    marginBottom: 12,
   },
   resetButtonText: {
     color: "#4379de",
@@ -91,13 +103,14 @@ export const styles = StyleSheet.create({
   },
   buttonModal: {
     backgroundColor: "#4379de",
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
   },
   buttonText: {
     color: "white",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: 16
   }
 });
 
