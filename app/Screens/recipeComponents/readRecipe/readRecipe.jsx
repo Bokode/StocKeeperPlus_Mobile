@@ -13,9 +13,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import styles from "./readRecipe.style";
 
-const ReadRecipe = ({ onClose, data }) => {
+const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
     const [activeTab, setActiveTab] = useState('ingredients');
-    const [isFavorite, setIsFavorite] = useState(false);
 
     const percentage = Math.min(100, Math.max(0, (data.id * 17) % 100 + 20));
 
@@ -39,7 +38,7 @@ const ReadRecipe = ({ onClose, data }) => {
                         <TouchableOpacity onPress={onClose} style={styles.button}>
                             <FontAwesomeIcon icon={faAngleLeft} size={24} color="black" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => setIsFavorite(!isFavorite)}>
+                        <TouchableOpacity style={styles.button} onPress={onToggleFavorite}>
                             <FontAwesomeIcon 
                                 icon={isFavorite ? faBookmarkSolid : faBookmarkRegular} 
                                 size={24} 

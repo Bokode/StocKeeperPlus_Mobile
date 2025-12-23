@@ -1,4 +1,4 @@
-import { faChevronDown, faClock, faUserGroup, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faClock, faUserGroup, faUtensils, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard} from 'react-native';
@@ -35,13 +35,13 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
     return found ? found.label : "Faisabilité (%)";
   };
 
-  // Clic à côté = ferme la liste du temps de préparation -> Dédicace à la team Augustin
   const closeDropdown = () => {
     if (showTimeMenu) setShowTimeMenu(false);
     if (showFeasibilityMenu) setShowFeasibilityMenu(false);
     Keyboard.dismiss();
   };
-return (
+
+  return (
     <Modal 
       isVisible={isFilterVisible} 
       avoidKeyboard={true}
@@ -69,15 +69,14 @@ return (
                 />
             </View>
 
-          {/* --- DROPDOWN 1 : Temps de préparation (z-index 20 pour passer au dessus du reste) --- */}
+          {/* --- DROPDOWN 1 : Temps --- */}
           <View style={[styles.searchSection, { zIndex: 20 }]}> 
             <FontAwesomeIcon icon={faClock} size={20} color="#1c1b1f" />
-            
             <TouchableOpacity
               style={styles.dropdownTrigger}
               onPress={() => {
                 Keyboard.dismiss();
-                setShowFeasibilityMenu(false); // Ferme l'autre menu
+                setShowFeasibilityMenu(false);
                 setShowTimeMenu(!showTimeMenu);
               }}
             >
@@ -105,19 +104,18 @@ return (
             )}
           </View>
 
-          {/* --- DROPDOWN 2 : Faisabilité (z-index 10) --- */}
+          {/* --- DROPDOWN 2 : Faisabilité --- */}
           <View style={[styles.searchSection, { zIndex: 10 }]}> 
             <FontAwesomeIcon icon={faUtensils} size={20} color="#1c1b1f" />
-            
             <TouchableOpacity
               style={styles.dropdownTrigger}
               onPress={() => {
                 Keyboard.dismiss();
-                setShowTimeMenu(false); // Ferme l'autre menu
+                setShowTimeMenu(false);
                 setShowFeasibilityMenu(!showFeasibilityMenu);
               }}
             >
-              <Text style={{ color: filters.minPercentage !== null ? "#1c1b1f" : "grey", flex: 1 }}>
+              <Text style={{ color: filters.minPercentage !== 0 ? "#1c1b1f" : "grey", flex: 1 }}>
                 {getSelectedFeasibilityLabel()}
               </Text>
               <FontAwesomeIcon icon={faChevronDown} size={12} color="grey" />
@@ -130,7 +128,6 @@ return (
                             key={option.value}
                             style={styles.dropdownItem}
                             onPress={() => {
-                                // On met à jour le pourcentage minimum
                                 setFilters(prev => ({ ...prev, minPercentage: option.value }));
                                 setShowFeasibilityMenu(false);
                             }}
@@ -141,6 +138,23 @@ return (
                 </View>
             )}
           </View>
+
+          {/* --- CHECKBOX : Uniquement Favoris --- */}
+          <TouchableOpacity 
+            style={styles.favoriteFilterRow} 
+            onPress={() => {
+                closeDropdown();
+                setFilters(prev => ({ ...prev, onlyFavorites: !prev.onlyFavorites }));
+            }}
+          >
+            <View style={[
+                styles.checkboxBase, 
+                filters.onlyFavorites && styles.checkboxChecked
+            ]}>
+                {filters.onlyFavorites && <FontAwesomeIcon icon={faBookmark} size={12} color="white" />}
+            </View>
+            <Text style={styles.favoriteLabel}>Afficher uniquement mes favoris</Text>
+          </TouchableOpacity>
 
           {/* --- BOUTONS --- */}
           <TouchableOpacity 
