@@ -14,9 +14,9 @@ const RecipeScreen = () => {
   const [isFilterVisible, setFilterVisible] = useState(false);
   
   const [filters, setFilters] = useState({
-    isDoableOnly: false,
     nbEaters: null,
     maxTime: null,
+    minPercentage: 0
   });
 
   const toggleFilterModal = () => {
@@ -25,9 +25,9 @@ const RecipeScreen = () => {
 
   const resetFilters = () => {
     setFilters({
-      isDoableOnly: false,
       nbEaters: null,
       maxTime: null,
+      minPercentage: 0
     });
   };
 
@@ -36,10 +36,13 @@ const RecipeScreen = () => {
       return false;
     }
 
-    // Note: On recalcule isDoable ici comme dans RecipeItem, ou idéalement cette donnée vient du backend
-    const isDoable = item.timetomake % 2 !== 0; // Logique temporaire
-    if (filters.isDoableOnly && !isDoable) {
-      return false;
+    // --- CALCUL DU POURCENTAGE (Même formule que RecipeItem) ---
+    // Important : On doit recalculer ça ici pour savoir si on garde l'item ou pas
+    const percentage = Math.min(100, Math.max(0, (item.id * 17) % 100 + 20));
+
+    // 2. Dropdown "Faisabilité" (minPercentage)
+    if (filters.minPercentage > 0 && percentage < filters.minPercentage) {
+        return false;
     }
 
     if (filters.nbEaters !== null) {

@@ -1,6 +1,5 @@
-import { faChevronDown, faClock, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faClock, faUserGroup, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import Checkbox from 'expo-checkbox';
 import { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard} from 'react-native';
 import Modal from 'react-native-modal';
@@ -9,6 +8,7 @@ import styles from './recipeFilter.styles';
 
 const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onReset }) => {
   const [showTimeMenu, setShowTimeMenu] = useState(false);
+  const [showFeasibilityMenu, setShowFeasibilityMenu] = useState(false);
 
   const timeOptions = [
     { label: "< 15 min", value: 15 },
@@ -17,24 +17,35 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
     { label: "< 1 h", value: 60 }
   ];
 
+  const feasibilityOptions = [
+    { label: "Peu importe (> 0%)", value: 0 },
+    { label: "Au moins 25%", value: 25 },
+    { label: "Au moins 50%", value: 50 },
+    { label: "Au moins 75%", value: 75 },
+    { label: "J'ai tout (100%)", value: 100 }
+  ];
+
   const getSelectedTimeLabel = () => {
     const found = timeOptions.find(opt => opt.value === filters.maxTime);
     return found ? found.label : "Temps maximum";
   };
 
+  const getSelectedFeasibilityLabel = () => {
+    const found = feasibilityOptions.find(opt => opt.value === filters.minPercentage);
+    return found ? found.label : "Faisabilité (%)";
+  };
+
   // Clic à côté = ferme la liste du temps de préparation -> Dédicace à la team Augustin
   const closeDropdown = () => {
     if (showTimeMenu) setShowTimeMenu(false);
+    if (showFeasibilityMenu) setShowFeasibilityMenu(false);
     Keyboard.dismiss();
   };
-
-  return (
+return (
     <Modal 
       isVisible={isFilterVisible} 
-      // onBackdropPress={toggleFilter} <-- si on veut fermer le popup en cliquant à côté, pertinent ?
       avoidKeyboard={true}
     >
-      {/* TouchableWithoutFeedback permet de faire plaisir à Augustin */}
       <TouchableWithoutFeedback onPress={closeDropdown}>
         <View style={styles.modalFilter}>
             <Text style={styles.textModal}>Filtrer les recettes</Text>
@@ -48,21 +59,25 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
                     keyboardType="numeric"
                     value={filters.nbEaters}
                     onChangeText={(text) => {
-                    const numericText = text.replace(/[^0-9]/g, '');
-                    setFilters(prev => ({ ...prev, nbEaters: numericText }));
-                }}
-                onFocus={() => setShowTimeMenu(false)}
+                        const numericText = text.replace(/[^0-9]/g, '');
+                        setFilters(prev => ({ ...prev, nbEaters: numericText }));
+                    }}
+                    onFocus={() => {
+                        setShowTimeMenu(false);
+                        setShowFeasibilityMenu(false);
+                    }}
                 />
             </View>
 
-          {/* --- DROPDOWN : Temps de préparation --- */}
-          <View style={[styles.searchSection, { zIndex: 10 }]}> 
+          {/* --- DROPDOWN 1 : Temps de préparation (z-index 20 pour passer au dessus du reste) --- */}
+          <View style={[styles.searchSection, { zIndex: 20 }]}> 
             <FontAwesomeIcon icon={faClock} size={20} color="#1c1b1f" />
             
             <TouchableOpacity
               style={styles.dropdownTrigger}
               onPress={() => {
                 Keyboard.dismiss();
+                setShowFeasibilityMenu(false); // Ferme l'autre menu
                 setShowTimeMenu(!showTimeMenu);
               }}
             >
@@ -90,28 +105,42 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
             )}
           </View>
 
-          {/* --- CHECKBOX : Recettes Faisables --- */}
-          <TouchableOpacity 
-            style={styles.checkboxRow} 
-            activeOpacity={1} 
-            onPress={() => {
-                // MODIF : Ferme aussi le menu si on clique sur la zone checkbox
-                setShowTimeMenu(false);
-                setFilters(prev => ({ ...prev, isDoableOnly: !prev.isDoableOnly }));
-            }}
-          >
-            <Checkbox
-              value={filters.isDoableOnly}
-              onValueChange={(value) => {
-                setShowTimeMenu(false);
-                setFilters(prev => ({ ...prev, isDoableOnly: value }));
+          {/* --- DROPDOWN 2 : Faisabilité (z-index 10) --- */}
+          <View style={[styles.searchSection, { zIndex: 10 }]}> 
+            <FontAwesomeIcon icon={faUtensils} size={20} color="#1c1b1f" />
+            
+            <TouchableOpacity
+              style={styles.dropdownTrigger}
+              onPress={() => {
+                Keyboard.dismiss();
+                setShowTimeMenu(false); // Ferme l'autre menu
+                setShowFeasibilityMenu(!showFeasibilityMenu);
               }}
-              color={filters.isDoableOnly ? "#4379de" : undefined}
-            />
-            <Text style={styles.checkboxLabel}>
-              Recettes Faisables
-            </Text>
-          </TouchableOpacity>
+            >
+              <Text style={{ color: filters.minPercentage !== null ? "#1c1b1f" : "grey", flex: 1 }}>
+                {getSelectedFeasibilityLabel()}
+              </Text>
+              <FontAwesomeIcon icon={faChevronDown} size={12} color="grey" />
+            </TouchableOpacity>
+            
+            {showFeasibilityMenu && (
+                <View style={styles.dropdown}>
+                    {feasibilityOptions.map((option) => (
+                        <TouchableOpacity
+                            key={option.value}
+                            style={styles.dropdownItem}
+                            onPress={() => {
+                                // On met à jour le pourcentage minimum
+                                setFilters(prev => ({ ...prev, minPercentage: option.value }));
+                                setShowFeasibilityMenu(false);
+                            }}
+                        >
+                        <Text>{option.label}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            )}
+          </View>
 
           {/* --- BOUTONS --- */}
           <TouchableOpacity 
