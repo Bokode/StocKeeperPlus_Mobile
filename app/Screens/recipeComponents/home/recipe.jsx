@@ -15,7 +15,7 @@ const RecipeScreen = () => {
   
   const [filters, setFilters] = useState({
     isDoableOnly: false,
-    nbEaters: "",
+    nbEaters: null,
     maxTime: null,
   });
 
@@ -26,7 +26,7 @@ const RecipeScreen = () => {
   const resetFilters = () => {
     setFilters({
       isDoableOnly: false,
-      nbEaters: "",
+      nbEaters: null,
       maxTime: null,
     });
   };
@@ -42,12 +42,14 @@ const RecipeScreen = () => {
       return false;
     }
 
-    if (filters.nbEaters !== "" && item.nbeaters !== parseInt(filters.nbEaters)) {
-      return false; 
+    if (filters.nbEaters !== null) {
+        if (item.nbeaters === null) return false;
+        if (item.nbeaters !== parseInt(filters.nbEaters)) return false; 
     }
 
-    if (filters.maxTime && item.timetomake > filters.maxTime) {
-      return false;
+    if (filters.maxTime) {
+        if (item.timetomake === null) return false;
+        if (item.timetomake > filters.maxTime) return false;
     }
 
     return true;

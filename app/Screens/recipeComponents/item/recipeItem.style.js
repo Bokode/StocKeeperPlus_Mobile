@@ -12,13 +12,30 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3
   },
-  img: {
-    width: 105,
+  
+  widgetContainer: {
+    width: 105, 
     height: 105,
-    borderRadius: 8,
     margin: 4,
-    marginRight: 15
+    marginRight: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
+  
+  widgetContent: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%'
+  },
+  percentageText: {
+    fontSize: 16, 
+    fontWeight: 'bold',
+    color: '#1c1b1f',
+    marginTop: 2
+  },
+
   textContainer: {
     flex: 1,
     justifyContent: 'space-evenly', 
@@ -27,8 +44,7 @@ const styles = StyleSheet.create({
   labelIconContainer: {
     flexDirection: 'row',
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingRight: 15,
+    justifyContent: "space-between"
   },
   label: {
     fontSize: 20,
@@ -44,7 +60,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     color: "grey",
-    fontSize: 14,
+    fontSize: 14
   }
 });
 
