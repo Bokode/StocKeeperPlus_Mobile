@@ -3,9 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { BASE_URL } from "../../../config/config";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import styles from "./loginScreen.styles";
-import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
 
-export default function LoginScreen({ onLoginSuccess }) {
+export default function LoginScreen({ navigation, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -42,18 +42,20 @@ export default function LoginScreen({ onLoginSuccess }) {
       />
       <View style={styles.containerUser}>
         <View style={styles.section}>
-          <Text style={styles.title}>Login</Text>
+          <Text style={styles.title}>Connexion</Text>
         </View>
 
         <View style={styles.section}>
           <View style={styles.inputContainer}>
-            <FontAwesomeIcon icon={faUser} size={22} color="black" style={{marginRight: 6}}/>
+            <FontAwesomeIcon icon={faEnvelope} size={22} color="black" style={{marginRight: 6}}/>
             <TextInput
               style={styles.input}
               placeholder="Email"
               placeholderTextColor="#B0B0B0"
               value={email}
               onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
           </View>
         </View>
@@ -67,6 +69,7 @@ export default function LoginScreen({ onLoginSuccess }) {
               placeholderTextColor="#B0B0B0"
               value={password}
               onChangeText={setPassword}
+              autoCapitalize="none"
               secureTextEntry
             />
           </View>
@@ -83,7 +86,7 @@ export default function LoginScreen({ onLoginSuccess }) {
         </View>
 
         <View style={styles.section}>
-          <TouchableOpacity  onPress={() => console.log("Changement de screen")}>
+          <TouchableOpacity onPress={() => navigation.navigate("CreateAccount")}>
             <Text style={styles.link}>Créer un compte</Text>
           </TouchableOpacity>
         </View>
