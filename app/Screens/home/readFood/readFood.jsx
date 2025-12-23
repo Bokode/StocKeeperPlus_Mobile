@@ -1,7 +1,7 @@
-import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan, faClock, faUtensils, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useState } from 'react';
-import { Image, ImageBackground, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { useState, useEffect } from 'react';
+import { Image, ImageBackground, Text, TouchableOpacity, View, Modal, FlatList } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
 import { BASE_URL } from '../../../config/config';
@@ -10,8 +10,13 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
   const image = { uri: BASE_URL.slice(0, -3) + data.imagepath };
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
+  const [recipeToShow, setRecipeToShow] = useState([]);
   let nutriScoreImage;
   let measuringunit;
+
+  useEffect(() => {
+    getAllRecipePossible();
+  }, []);
 
   switch (data.nutriscoreFood) {
     case "A":
@@ -45,6 +50,39 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
       break;
     default: 
       measuringunit = "Quantité";
+  }
+
+  function getAllRecipePossible() {
+    Promise.all([
+      fetch(`${BASE_URL}/ingredientAmount/all`).then(res => res.json()),
+      fetch(`${BASE_URL}/recipe/all`).then(res => res.json())
+    ])
+    .then(([ingredientAmountData, recipeData]) => {
+      const recipeToShow = buildRecipeToShow(ingredientAmountData, recipeData);
+      setRecipeToShow(recipeToShow);
+    })
+    .catch(error => {
+      console.error(error);
+      setRecipeToShow([]);
+    });
+  }
+
+  function buildRecipeToShow(ingredientAmountData, recipeData) {
+    const recipesWithCurrentFood = recipeData.filter(recipe => 
+      ingredientAmountData.some(ingredient => ingredient.recipe === recipe.id && ingredient.food === data.idFood)
+    );
+
+    return recipesWithCurrentFood.map(recipe => {
+      const ingredientsForRecipe = ingredientAmountData.filter(ingredient => ingredient.recipe === recipe.id);
+
+      return {
+        id: recipe.id,
+        label: recipe.label,
+        timeToMake: recipe.timetomake,
+        nbEaters: recipe.nbeaters,
+        numberOfIngredients: ingredientsForRecipe.length,
+      };
+    });
   }
 
   function deleteFoodFromDB() {
@@ -88,9 +126,6 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
         <Text style={styles.title}>
           {data.labelFood}
         </Text>
-        <Text style={styles.description}>
-          Et quoniam inedia gravi adflictabantur, locum petivere Paleas nomine, vergentem in mare, valido muro firmatum, ubi conduntur nunc usque commeatus distribui militibus omne latus Isauriae defendentibus adsueti. circumstetere igitur hoc munimentum per triduum et trinoctium et cum neque adclivitas ipsa sine discrimine adiri letali.
-        </Text>  
         <Text style={styles.miniTitle}>
           {data.quantity} {measuringunit}{data.quantity > 1 ? "s" : ""}
         </Text>
@@ -113,8 +148,55 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
           {data.expirationdate}
         </Text>
         <Image source={nutriScoreImage} style={styles.nutriScoreImage}/>
+        {recipeToShow.length > 0 && (
+          <>
+          <View style={styles.rowMiniTitle}>
+            <Text style={styles.miniTitle}>
+              Recettes
+            </Text>
+          </View>
+          <View style={styles.carouselContainer}>
+            <FlatList
+              data={recipeToShow}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 10 }} 
+              renderItem={({ item }) => (
+                <View style={styles.carouselCard}>
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.carouselTitle} numberOfLines={1}>
+                      {item.label}
+                    </Text>
+                  </View>
+                  
+                  <View style={styles.cardBody}>
+                    <View style={styles.statRow}>
+                      <View style={styles.iconContainer}>
+                        <FontAwesomeIcon icon={faClock} size={14} color="#4379de" />
+                      </View>
+                      <Text style={styles.carouselText}>{item.timeToMake} Minutes</Text>
+                    </View>
+                     <View style={styles.statRow}>
+                      <View style={styles.iconContainer}>
+                        <FontAwesomeIcon icon={faUtensils} size={14} color="#4379de" />
+                      </View>
+                      <Text style={styles.carouselText}>{item.nbEaters} Personnes</Text>
+                    </View>
+                    <View style={styles.statRow}>
+                      <View style={styles.iconContainer}>
+                        <FontAwesomeIcon icon={faListUl} size={14} color="#4379de" />
+                      </View>
+                      <Text style={styles.carouselText}>{item.numberOfIngredients} Ingrédients</Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+          </>
+        )}
       </View>
-      
     </View>
     {showDeleteModal && (
       <Modal
