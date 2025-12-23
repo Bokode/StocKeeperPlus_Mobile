@@ -175,19 +175,19 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
                       <View style={styles.iconContainer}>
                         <FontAwesomeIcon icon={faClock} size={14} color="#4379de" />
                       </View>
-                      <Text style={styles.carouselText}>{item.timeToMake} Minutes</Text>
+                      <Text style={styles.carouselText}>{item.timeToMake} {item.timeToMake > 1 ? "Minutes" : "Minute"}</Text>
                     </View>
                      <View style={styles.statRow}>
                       <View style={styles.iconContainer}>
                         <FontAwesomeIcon icon={faUtensils} size={14} color="#4379de" />
                       </View>
-                      <Text style={styles.carouselText}>{item.nbEaters} Personnes</Text>
+                      <Text style={styles.carouselText}>{item.nbEaters} {item.nbEaters > 1 ? "Personnes" : "Personne"}</Text>
                     </View>
                     <View style={styles.statRow}>
                       <View style={styles.iconContainer}>
                         <FontAwesomeIcon icon={faListUl} size={14} color="#4379de" />
                       </View>
-                      <Text style={styles.carouselText}>{item.numberOfIngredients} Ingrédients</Text>
+                      <Text style={styles.carouselText}>{item.numberOfIngredients} {item.numberOfIngredients > 1 ? "Ingrédients" : "Ingrédient"}</Text>
                     </View>
                   </View>
                 </View>
