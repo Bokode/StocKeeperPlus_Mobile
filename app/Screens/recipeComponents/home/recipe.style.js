@@ -3,20 +3,20 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   containerScreen: {
     flex: 1,
-    paddingTop: 40,
-    paddingHorizontal: 20,
-    backgroundColor: '#f7f9fd'
+    paddingTop: 25,
+    paddingInline: 20,
+    backgroundColor: '#f7f9fd',
+    marginTop: -30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-    marginTop: 10,
-    color: '#1c1b1f'
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15
   },
   containerContent: {
-    marginTop: 20
+    marginTop: 15
   },
   noResultText: {
     textAlign: 'center',

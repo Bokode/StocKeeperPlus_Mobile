@@ -3,6 +3,8 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import SearchBar from '../../home/searchBar/searchBar'; 
 import RecipeItem from '../item/recipeItem';
 import RecipeFilter from '../filter/recipeFilter';
+import TopBar from '../../topBar/topBar';
+
 import { MOCK_RECIPE_ITEMS } from '../../../../src/data/recipeData'; 
 
 import styles from './recipe.style';
@@ -52,6 +54,8 @@ const RecipeScreen = () => {
   });
 
   return (
+    <>
+    <TopBar />
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Vos Recettes</Text>
       
@@ -83,6 +87,7 @@ const RecipeScreen = () => {
         onReset={resetFilters}
       />
     </View>
+    </>
   );
 };
 
