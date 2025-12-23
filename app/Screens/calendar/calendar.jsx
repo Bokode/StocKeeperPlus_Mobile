@@ -16,6 +16,7 @@ import styles from './calendar.styles';
 import { getMarkedDates } from '../../../src/utils/calendarUtils';
 import { getTodayDateString } from '../../../src/utils/dateHelpers';
 import { BASE_URL } from '../../config/config';
+import TopBar from '../topBar/topBar';
 
 const CalendarScreen = () => {
   const today = getTodayDateString();
@@ -111,6 +112,8 @@ const CalendarScreen = () => {
   };
 
   return (
+    <>
+    <TopBar />
     <View style={styles.container}>
       <View style={styles.calendarWrapper}>
         <Calendar
@@ -205,6 +208,7 @@ const CalendarScreen = () => {
       </Modal>
       
     </View>
+    </>
   );
 };
 
