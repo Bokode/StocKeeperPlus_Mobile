@@ -1,11 +1,11 @@
-import { faCheckCircle, faTimesCircle, faUserGroup, faClock, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle, faUserGroup, faClock, faUtensils, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Text, View } from "react-native";
 import Svg, { Circle } from 'react-native-svg';
 
 import styles from './recipeItem.style';
 
-const RecipeItem = ({ id, label, nbeaters, timetomake }) => {
+const RecipeItem = ({ id, label, isFavorite, nbeaters, timetomake }) => {
   
   // --- 1. LOGIQUE DE FAISABILITÉ (Inchangé) ---
   const isDoable = (timetomake || 0) % 2 !== 0; 
@@ -61,6 +61,15 @@ const RecipeItem = ({ id, label, nbeaters, timetomake }) => {
           <Text style={styles.label} numberOfLines={1} ellipsizeMode='tail'>
             {label}
           </Text>
+          {/* On affiche l'icône seulement si c'est un favori */}
+          {isFavorite && (
+            <FontAwesomeIcon 
+              icon={faBookmark} 
+              size={16} 
+              color="#4379de" 
+              style={{ marginLeft: 8 }} 
+            />
+          )}
         </View>
 
         <View style={styles.infoRow}>
