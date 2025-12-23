@@ -15,7 +15,7 @@ const RecipeScreen = () => {
   
   const [filters, setFilters] = useState({
     isDoableOnly: false,
-    nbEaters: "",
+    nbEaters: null,
     maxTime: null,
   });
 
@@ -26,7 +26,7 @@ const RecipeScreen = () => {
   const resetFilters = () => {
     setFilters({
       isDoableOnly: false,
-      nbEaters: "",
+      nbEaters: null,
       maxTime: null,
     });
   };
@@ -42,12 +42,20 @@ const RecipeScreen = () => {
       return false;
     }
 
-    if (filters.nbEaters !== "" && item.nbeaters !== parseInt(filters.nbEaters)) {
-      return false; 
+    if (filters.nbEaters !== null) {
+        // Si la recette n'a pas d'info (null), on l'exclut si on cherche un nombre précis
+        if (item.nbeaters === null) return false;
+        
+        // Comparaison numérique
+        if (item.nbeaters !== parseInt(filters.nbEaters)) return false; 
     }
 
-    if (filters.maxTime && item.timetomake > filters.maxTime) {
-      return false;
+    // 4. Filtre Temps Max
+    if (filters.maxTime) {
+        // Si la recette n'a pas de temps (null), on l'exclut généralement des tris par temps
+        if (item.timetomake === null) return false;
+
+        if (item.timetomake > filters.maxTime) return false;
     }
 
     return true;

@@ -7,7 +7,7 @@ import styles from './recipeItem.style';
 const RecipeItem = ({ label, nbeaters, timetomake }) => {
   
   // Logique : si temps pair = faisable
-  const isDoable = timetomake % 2 !== 0; 
+  const isDoable = (timetomake || 0) % 2 !== 0;
   
   const statusColor = isDoable ? "#76cc77" : "#bb413b";
   const statusIcon = isDoable ? faCheckCircle : faTimesCircle;
@@ -29,12 +29,16 @@ const RecipeItem = ({ label, nbeaters, timetomake }) => {
 
         <View style={styles.infoRow}>
           <FontAwesomeIcon icon={faUserGroup} size={14} color="grey" style={{ marginRight: 5 }} />
-          <Text style={styles.infoText}>{nbeaters} personnes</Text>
+          <Text style={styles.infoText}>
+            {nbeaters != null ? `${nbeaters} personnes` : "/"}
+          </Text>
         </View>
 
         <View style={styles.infoRow}>
           <FontAwesomeIcon icon={faClock} size={14} color="grey" style={{ marginRight: 5 }} />
-          <Text style={styles.infoText}>{timetomake}m</Text>
+          <Text style={styles.infoText}>
+            {timetomake != null ? `${timetomake}m` : "/"}
+          </Text>
         </View>
         
       </View>
