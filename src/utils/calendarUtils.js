@@ -1,8 +1,8 @@
 // src/utils/calendarUtils.js
 
-const getStatusColor = (expirationDate) => {
+const getStatusColor = (expirationdate) => {
   const today = new Date();
-  const expDate = new Date(expirationDate);
+  const expDate = new Date(expirationdate);
 
   today.setHours(0, 0, 0, 0);
   expDate.setHours(0, 0, 0, 0);
@@ -20,9 +20,9 @@ export const getMarkedDates = (items, selectedDate) => {
 
   items.forEach((item) => {
     
-    const color = getStatusColor(item.expirationDate);
+    const color = getStatusColor(item.expirationdate);
 
-    markedDates[item.expirationDate] = {
+    markedDates[item.expirationdate] = {
       customStyles: {
         container: {
           borderWidth: 2,
