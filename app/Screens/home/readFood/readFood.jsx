@@ -1,15 +1,14 @@
 import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState } from 'react';
-import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
-import Modal from 'react-native-modal';
+import { Image, ImageBackground, Text, TouchableOpacity, View, Modal } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
 import { BASE_URL } from '../../../config/config';
 
 export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromDB, onRefresh }) {
   const image = { uri: BASE_URL.slice(0, -3) + data.imagepath };
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   let nutriScoreImage;
 
@@ -50,13 +49,8 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
     });
   }
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
-  return showAddOrUpdateFood ? (
-    <AddOrUpdateFood onClose={() => setShowAddOrUpdateFood(false)} isAnAdd={false} updateFoodFromDB={updateFoodFromDB} addFoodFromDB={addFoodFromDB} data={data} onCloseRead={onClose}/>
-  ) : (
+  return (
+    <>
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.backgroundImage}>
         <View style={styles.topContainer}>
@@ -64,7 +58,7 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
             <TouchableOpacity onPress={() => onClose()} style={styles.button}>
               <FontAwesomeIcon icon={faAngleLeft} size={24} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => toggleModal()} style={styles.button}>
+            <TouchableOpacity onPress={() => setShowDeleteModal(true)} style={styles.button}>
               <FontAwesomeIcon icon={faTrashCan} size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -105,26 +99,50 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
         </Text>
         <Image source={nutriScoreImage} style={styles.nutriScoreImage}/>
       </View>
-      <Modal isVisible={isModalVisible}>
+      
+    </View>
+    {showDeleteModal && (
+      <Modal
+        animationType="slide"        
+        presentationStyle="pageSheet" 
+        onRequestClose={() => setShowDeleteModal(false)} 
+        backdropColor={"transparent"}
+      >
         <View style={styles.modalDelete}>
           <Text style={styles.textModal}>Êtes-vous sûr de vouloir supprimer cet aliment ?</Text>
           <TouchableOpacity
             style={styles.buttonModalYes}
             onPress={() => {
               deleteFoodFromDB();
-              toggleModal();
+              setShowDeleteModal(false);
             }}
           >
             <Text style={styles.buttonTextYes}>Oui</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonModalNo}
-            onPress={toggleModal}
+            onPress={() => setShowDeleteModal(false)}
           >
             <Text style={styles.buttonTextNo}>Non</Text>
           </TouchableOpacity>
         </View>
       </Modal>
-    </View>
+    )}
+    {showAddOrUpdateFood && (
+      <Modal    
+        animationType="slide"        
+        presentationStyle="pageSheet" 
+        onRequestClose={() => setShowAddOrUpdateFood(false)} 
+      >
+        <AddOrUpdateFood 
+          onClose={() => setShowAddOrUpdateFood(false)} 
+          isAnAdd={false} 
+          updateFoodFromDB={updateFoodFromDB} 
+          addFoodFromDB={addFoodFromDB} 
+          data={data} 
+          onCloseRead={onClose}/>
+      </Modal>
+    )}
+    </>
     )
 };

@@ -1,7 +1,7 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useState, useEffect } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import Filter from '../filter/filter';
 import FoodItem from '../foodItem/foodItem';
@@ -140,32 +140,12 @@ export default function HomeScreen() {
     return true;
   });
 
-  const toggleModal = () => {
-    setFilterVisible(!isFilterVisible);
-  };
-
-  return showAddOrUpdateFood ? (
-    <AddOrUpdateFood 
-      onClose={() => setShowAddOrUpdateFood(false)} 
-      isAnAdd={true} 
-      updateFoodFromDB={updateFoodFromDB} 
-      addFoodFromDB={addFoodFromDB}
-      existingFoods={foodToshow}
-    />
-  ) : ( showReadFood ? (
-    <ReadFood 
-      onClose={() => setShowReadFood(false)} 
-      data={selectedFood} 
-      updateFoodFromDB={updateFoodFromDB} 
-      addFoodFromDB={addFoodFromDB}
-      onRefresh={getAllFoodFromDB}
-    />
-  ) : (
+  return (
     <>
     <TopBar />
     <View style={styles.containerScreen}>
       <Text style={styles.title}>Bonjour {username},</Text>
-      <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} toggleFilter={toggleModal}/>
+      <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} toggleFilter={() => setFilterVisible(true)}/>
       <ScrollView  style={styles.containerContent} showsVerticalScrollIndicator={false}>
         {filteredData.map((item, index) => (
           <TouchableOpacity key={index} onPress={() => {setSelectedFood(item); setShowReadFood(true)}}>
@@ -179,15 +159,52 @@ export default function HomeScreen() {
       >
         <FontAwesomeIcon icon={faPlus} size={24} color="white" />
       </TouchableOpacity>
-      <Filter
-        isFilterVisible={isFilterVisible}
-        toggleFilter={toggleModal}
-        filters={filters}
-        setFilters={setFilters}
-        onReset={resetFilters}
-      />
     </View>
+    {isFilterVisible && (
+      <Modal     
+        animationType="slide"        
+        presentationStyle="pageSheet" 
+        onRequestClose={() => setFilterVisible(false)} 
+        backdropColor={"transparent"}
+      >
+        <Filter
+          onClose={() => setFilterVisible(false)}
+          filters={filters}
+          setFilters={setFilters}
+          onReset={resetFilters}
+        />
+      </Modal>
+    )}
+    {showAddOrUpdateFood && (
+      <Modal     
+        animationType="slide"        
+        presentationStyle="pageSheet" 
+        onRequestClose={() => setShowAddOrUpdateFood(false)} 
+      >
+        <AddOrUpdateFood 
+          onClose={() => setShowAddOrUpdateFood(false)} 
+          isAnAdd={true} 
+          updateFoodFromDB={updateFoodFromDB} 
+          addFoodFromDB={addFoodFromDB}
+          existingFoods={foodToshow}
+        />
+      </Modal>
+    )}
+    {showReadFood && (
+      <Modal      
+        animationType="slide"        
+        presentationStyle="pageSheet" 
+        onRequestClose={() => setShowReadFood(false)} 
+      >
+        <ReadFood 
+          onClose={() => setShowReadFood(false)} 
+          data={selectedFood} 
+          updateFoodFromDB={updateFoodFromDB} 
+          addFoodFromDB={addFoodFromDB}
+          onRefresh={getAllFoodFromDB}
+        />
+      </Modal>
+    )}
     </>
   )
-  );
 };
