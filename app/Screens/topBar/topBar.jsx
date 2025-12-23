@@ -1,7 +1,6 @@
 import { TouchableOpacity, View, Image } from 'react-native';
 import styles from "./topBar.styles"
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 export default function TopBar() {
