@@ -107,7 +107,7 @@ export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, ad
   }
 
   return (
-    <>
+    <View>
     <TouchableWithoutFeedback
       onPress={() => {
         setShowStorageMenu(false);
@@ -223,6 +223,6 @@ export default function AddOrUpdateFood({ onClose, isAnAdd, updateFoodFromDB, ad
         />
       </View>
     )}
-    </>
+    </View>
   );
 };

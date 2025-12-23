@@ -3,17 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Checkbox from 'expo-checkbox';
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import Modal from 'react-native-modal';
 import styles from "./filter.styles"
 
-export default function Filter({ toggleFilter, isFilterVisible, filters, setFilters, onReset }) {
+export default function Filter({ onClose, filters, setFilters, onReset }) {
   const [showStorageMenu, setShowStorageMenu] = useState(false);
   const [showNutriScoreMenu, setNutriScoreMenu] = useState(false);
   const storageOptions = ["Placard", "Frigo", "Congélateur", "Corbeille", "Armoire"];
   const nutriSCoreOptions = ["A", "B", "C", "D", "E"];
   
   return (
-  <Modal isVisible={isFilterVisible}>
     <View style={styles.modalFilter}>
       <Text style={styles.textModal}>
         Chossissez vos filtres
@@ -89,23 +87,21 @@ export default function Filter({ toggleFilter, isFilterVisible, filters, setFilt
         </Text>
       </View>
       <TouchableOpacity
-  style={styles.resetButton}
-  onPress={onReset}
->
-  <Text style={styles.resetButtonText}>
-    Réinitialiser les filtres
-  </Text>
-</TouchableOpacity>
-
+        style={styles.resetButton}
+        onPress={onReset}
+      >
+        <Text style={styles.resetButtonText}>
+          Réinitialiser les filtres
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonModal}
-        onPress={toggleFilter}
+        onPress={onClose}
       >
         <Text style={styles.buttonText}>
           Confirmer
         </Text>
       </TouchableOpacity>
-      </View>
-    </Modal>
+    </View>
   )
 };
