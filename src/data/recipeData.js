@@ -5,7 +5,7 @@ export const MOCK_RECIPE_ITEMS = [
     label: "Petit Déjeuner rapide",
     description: "Nutella sur pain avec un Twix\n\ntset\n\n\ntest",
     caloricintake: 850,
-    nbeaters: 1,
+    nbeaters: null,
     timetomake: 5,
     ingredientamount_ingredientamount_recipeTorecipe: [
       {
@@ -100,7 +100,7 @@ export const MOCK_RECIPE_ITEMS = [
     description: "Une salade fraîcheur pour l'été.\nRiche en protéines végétales.",
     caloricintake: 320,
     nbeaters: 2,
-    timetomake: 15,
+    timetomake: null,
     ingredientamount_ingredientamount_recipeTorecipe: [
       {
         recipe: 3,
@@ -179,8 +179,8 @@ export const MOCK_RECIPE_ITEMS = [
     label: "Poulet Curry Coco",
     description: "1. Couper le poulet en dés.\n2. Faire revenir les oignons.\n3. Ajouter le curry et le lait de coco.\n4. Laisser mijoter 20 minutes.\n5. Servir avec du riz basmati.\n\nAttention : ne pas faire bouillir trop fort le lait de coco sinon il tranche.",
     caloricintake: 550,
-    nbeaters: 2,
-    timetomake: 45,
+    nbeaters: null,
+    timetomake: null,
     ingredientamount_ingredientamount_recipeTorecipe: [
       {
         recipe: 5,
