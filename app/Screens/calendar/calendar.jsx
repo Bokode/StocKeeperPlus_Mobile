@@ -1,4 +1,3 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,11 +15,14 @@ import styles from './calendar.styles';
 import { getMarkedDates } from '../../../src/utils/calendarUtils';
 import { getTodayDateString } from '../../../src/utils/dateHelpers';
 import { BASE_URL } from '../../config/config';
+import { useContext, useState, useMemo, useEffect, useCallback } from 'react';
+import { FoodContext } from '../../context/foodContext';
+
 
 const CalendarScreen = () => {
   const today = getTodayDateString();
   
-  const [foodItems, setFoodItems] = useState([]);
+  const { foodToShow, setFoodToShow } = useContext(FoodContext);
 
   const [selectedDate, setSelectedDate] = useState(today);
   const [showAllItems, setShowAllItems] = useState(true);
@@ -34,17 +36,20 @@ const CalendarScreen = () => {
     ])
     .then(([allFoodData, foodUserData]) => {
       const mergedFood = buildFoodToShow(allFoodData, foodUserData);
-      setFoodItems(mergedFood);
+      setFoodToShow(mergedFood);
     })
     .catch(error => {
       console.error("Erreur chargement calendrier:", error);
-      setFoodItems([]);
+      setFoodToShow([]);
     });
   }, []);
 
   useEffect(() => {
-    getAllFoodFromDB();
-  }, [getAllFoodFromDB]);
+    if (!foodToShow || foodToShow.length === 0) {
+      getAllFoodFromDB();
+    }
+  }, [foodToShow, getAllFoodFromDB]);
+
 
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
@@ -90,18 +95,18 @@ const CalendarScreen = () => {
   }
 
   const markedDates = useMemo(() => {
-    return getMarkedDates(foodItems, selectedDate);
-  }, [foodItems, selectedDate]);
+    return getMarkedDates(foodToShow, selectedDate);
+  }, [foodToShow, selectedDate]);
 
   const filteredItems = useMemo(() => {
-    return foodItems.filter(item => item.expirationdate === selectedDate);
-  }, [foodItems, selectedDate]);
+    return foodToShow.filter(item => item.expirationdate === selectedDate);
+  }, [foodToShow, selectedDate]);
 
   const allItemsSorted = useMemo(() => {
-    return [...foodItems].sort((a, b) => 
+    return [...foodToShow].sort((a, b) => 
       new Date(a.expirationdate) - new Date(b.expirationdate)
     );
-  }, [foodItems]);
+  }, [foodToShow]);
 
   const dataToDisplay = showAllItems ? allItemsSorted : filteredItems;
 
