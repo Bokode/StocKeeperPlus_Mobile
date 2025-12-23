@@ -1,6 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import Filter from '../filter/filter';
@@ -10,10 +10,11 @@ import SearchBar from '../searchBar/searchBar';
 import styles from "./home.styles"
 import { BASE_URL } from '../../../config/config';
 import TopBar from '../../topBar/topBar';
+import { FoodContext } from '../../../context/foodContext';
 
 export default function HomeScreen() {
   const [username, setUsername] = useState("le GOAT")
-  const [foodToshow, setAllFoodToShow] = useState([]);
+  const { foodToShow, setFoodToShow } = useContext(FoodContext);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   const [showReadFood, setShowReadFood] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
@@ -73,11 +74,11 @@ export default function HomeScreen() {
     ])
     .then(([allFoodData, foodUserData]) => {
       const mergedFood = buildFoodToShow(allFoodData, foodUserData);
-      setAllFoodToShow(mergedFood);
+      setFoodToShow(mergedFood);
     })
     .catch(error => {
       console.error(error);
-      setAllFoodToShow([]);
+      setFoodToShow([]);
     });
   }
 
@@ -117,7 +118,7 @@ export default function HomeScreen() {
     });
   };
 
-  const filteredData = foodToshow.filter(item => {
+  const filteredData = foodToShow.filter(item => {
     if (searchQuery && !item.labelFood.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
@@ -186,7 +187,7 @@ export default function HomeScreen() {
           isAnAdd={true} 
           updateFoodFromDB={updateFoodFromDB} 
           addFoodFromDB={addFoodFromDB}
-          existingFoods={foodToshow}
+          existingFoods={foodToShow}
         />
       </Modal>
     )}

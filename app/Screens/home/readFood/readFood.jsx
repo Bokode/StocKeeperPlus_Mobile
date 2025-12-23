@@ -11,6 +11,7 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   let nutriScoreImage;
+  let measuringunit;
 
   switch (data.nutriscoreFood) {
     case "A":
@@ -30,6 +31,20 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
       break;
     default:
       nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_unknown.png");
+  }
+
+  switch (data.measuringunit) {
+    case "unit":
+      measuringunit = "Unité";
+      break;
+    case "gram":
+      measuringunit = "Gramme";
+      break;
+    case "centiliter":
+      measuringunit = "Centilitre";
+      break;
+    default: 
+      measuringunit = "Quantité";
   }
 
   function deleteFoodFromDB() {
@@ -77,7 +92,7 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
           Et quoniam inedia gravi adflictabantur, locum petivere Paleas nomine, vergentem in mare, valido muro firmatum, ubi conduntur nunc usque commeatus distribui militibus omne latus Isauriae defendentibus adsueti. circumstetere igitur hoc munimentum per triduum et trinoctium et cum neque adclivitas ipsa sine discrimine adiri letali.
         </Text>  
         <Text style={styles.miniTitle}>
-          {data.quantity} Quantité
+          {data.quantity} {measuringunit}{data.quantity > 1 ? "s" : ""}
         </Text>
         <View style={styles.rowMiniTitle}>
           <FontAwesomeIcon icon={faBoxArchive} size={14} color="black" style={{marginRight: 6}}/>

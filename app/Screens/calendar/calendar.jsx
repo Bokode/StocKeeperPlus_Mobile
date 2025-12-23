@@ -18,6 +18,7 @@ import { MOCK_FOOD_ITEMS } from '../../../src/data/foodData';
 import { getMarkedDates } from '../../../src/utils/calendarUtils';
 import { getTodayDateString } from '../../../src/utils/dateHelpers';
 
+
 const CalendarScreen = () => {
   const today = getTodayDateString();
   const [selectedDate, setSelectedDate] = useState(today);
