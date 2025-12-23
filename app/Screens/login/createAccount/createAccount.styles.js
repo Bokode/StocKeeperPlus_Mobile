@@ -10,13 +10,13 @@ const styles = StyleSheet.create({
     logo: {
         width: 180,
         height: 45,
-        marginBottom: 150
+        marginBottom: 80
     },
     containerUser: {
         backgroundColor: "white",
         borderRadius: 15,
         width: "80%",
-        height: "55%",
+        height: "70%",
         flexDirection: "column",
         padding: 10,
     },

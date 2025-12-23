@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../Screens/login/login/loginScreen"
+import CreateAccount from "../Screens/login/createAccount/createAccount";
 
 const Stack = createNativeStackNavigator();
 
@@ -9,6 +10,14 @@ export default function StackNavigator({ setIsLoggedIn }) {
       <Stack.Screen name="Login">
         {(props) => (
           <LoginScreen
+            {...props}
+            onLoginSuccess={() => setIsLoggedIn(true)}
+          />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="CreateAccount">
+        {(props) => (
+          <CreateAccount
             {...props}
             onLoginSuccess={() => setIsLoggedIn(true)}
           />
