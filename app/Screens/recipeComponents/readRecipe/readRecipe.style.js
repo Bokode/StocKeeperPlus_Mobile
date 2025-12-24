@@ -1,163 +1,191 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ecf3fe", // Fond bleu clair cohérent avec le reste de l'app
-  },
-  // --- HEADER ---
-  backgroundImage: {
-    height: 250,
-    paddingTop: 40,
-    justifyContent: 'flex-start',
-  },
-  topContainer: {
-    width: "100%",
-  },
-  line: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-  },
-  button: {
-    backgroundColor: "white",
-    borderRadius: 8,
-    padding: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    elevation: 2,
-  },
-  // --- WIDGET SCORE CENTRAL ---
-  scoreContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 40,
-  },
-  scoreCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)', // Effet de verre
-    borderWidth: 2,
-    borderColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  scoreNumber: {
-    color: 'white',
-    fontSize: 26,
-    fontWeight: 'bold',
-  },
-  scoreLabel: {
-    color: 'white',
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  // --- CONTENU BLANC ---
-  containerContent: {
-    flex: 1,
-    marginTop: -40,
-    paddingTop: 30,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    backgroundColor: "white",
-    paddingHorizontal: 26,
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 28,
-    marginBottom: 20,
-    color: "#1c1b1f",
-  },
-  // --- BLOCS INFOS (PERS / TEMPS / KCAL) ---
-  infoBlocksContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 25,
-  },
-  infoBlock: {
-    backgroundColor: '#f7f9fd',
-    paddingVertical: 15,
-    borderRadius: 20,
-    alignItems: 'center',
-    width: '30%',
-  },
-  infoBlockText: {
-    marginTop: 8,
-    fontWeight: "bold",
-    fontSize: 13,
-    color: "#1c1b1f",
-  },
-  // --- ONGLETS (TABS) ---
-  tabContainer: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  activeTab: {
-    borderBottomWidth: 3,
-    borderBottomColor: '#4379de',
-  },
-  tabText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: 'grey',
-  },
-  activeTabText: {
-    color: '#4379de',
-  },
-  // --- LISTE INGRÉDIENTS ---
-  ingredientsList: {
-    marginTop: 5,
-  },
-  ingredientRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f8f8f8',
-  },
-  ingredientLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  stockIndicator: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 15,
-  },
-  ingredientLabel: {
-    fontSize: 16,
-    color: '#1c1b1f',
-  },
-  ingredientQuantity: {
-    fontSize: 14,
-    color: 'grey',
-    fontWeight: 'bold',
-  },
-  // --- PRÉPARATION / DESCRIPTION ---
-  descriptionText: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#49454f',
-    textAlign: 'justify',
-  },
-  placeholderText: {
-    textAlign: 'center',
-    marginTop: 30,
-    color: 'grey',
-    fontStyle: 'italic',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    backgroundImage: {
+        height: 220,
+        paddingTop: 10,
+    },
+    topContainer: {
+        paddingHorizontal: 15,
+    },
+    line: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    button: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    containerContent: {
+        flex: 1,
+        marginTop: -30,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        backgroundColor: 'white',
+        paddingHorizontal: 20,
+        paddingTop: 25,
+    },
+    
+    // --- Score ---
+    scoreContainer: {
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    scoreCircle: {
+        width: 110,
+        height: 110,
+        borderRadius: 55,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.15,
+        shadowRadius: 5,
+        elevation: 6,
+    },
+    scoreNumber: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#4379de',
+    },
+    scoreLabel: {
+        fontSize: 12,
+        color: 'grey',
+        fontWeight: '600',
+    },
+
+    // --- Infos ---
+    title: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: '#1c1b1f',
+        marginBottom: 20,
+        textAlign: 'center'
+    },
+    infoBlocksContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 25,
+    },
+    infoBlock: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f6f9ff',
+        paddingVertical: 12,
+        marginHorizontal: 5,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#eef2fa'
+    },
+    infoBlockText: {
+        marginLeft: 8,
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#1c1b1f',
+    },
+
+    // --- Onglets ---
+    tabContainer: {
+        flexDirection: 'row',
+        marginBottom: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    tab: {
+        flex: 1,
+        paddingVertical: 12,
+        alignItems: 'center',
+    },
+    activeTab: {
+        borderBottomWidth: 3,
+        borderBottomColor: '#4379de',
+    },
+    tabText: {
+        fontSize: 16,
+        color: 'grey',
+        fontWeight: '600',
+    },
+    activeTabText: {
+        color: '#4379de',
+    },
+    tabContentArea: {
+        paddingHorizontal: 5,
+    },
+
+    // --- Liste Ingrédients ---
+    ingredientsList: {
+        marginBottom: 10,
+    },
+    ingredientRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f5f5f5',
+    },
+    ingredientMainInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+        marginRight: 10,
+    },
+    
+    // --- Image et Badge ---
+    imageBadgeContainer: {
+        position: 'relative', // IMPORTANT pour le badge absolu
+        marginRight: 15,
+    },
+    ingredientImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 12,
+        backgroundColor: '#f0f0f0',
+    },
+    stockBadge: {
+        position: 'absolute',
+        top: -4,    // Dépasse légèrement en haut
+        right: -4,  // Dépasse légèrement à droite
+        width: 14,
+        height: 14,
+        borderRadius: 7,
+        borderWidth: 2, // Petite bordure blanche pour détacher de l'image
+        borderColor: 'white',
+        zIndex: 1,
+    },
+
+    ingredientLabel: {
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#1c1b1f',
+        flexShrink: 1,
+    },
+    ingredientQuantity: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#4379de',
+    },
+
+    descriptionText: {
+        fontSize: 16,
+        lineHeight: 24,
+        color: '#4e4e4e',
+        paddingHorizontal: 10,
+        textAlign: 'justify'
+    },
 });
 
 export default styles;

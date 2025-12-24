@@ -1,5 +1,5 @@
-import { useState, useContext, useMemo } from 'react';
-import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import React, { useState, useContext, useMemo } from 'react';
+import { Text, TouchableOpacity, View, ScrollView, Image } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { 
     faAngleLeft, 
@@ -12,33 +12,28 @@ import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-i
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { FoodContext } from '../../../context/foodContext';
+import { BASE_URL } from '../../../config/config'; 
 import styles from "./readRecipe.style";
 
 const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
     const [activeTab, setActiveTab] = useState('ingredients');
     const { foodToShow } = useContext(FoodContext);
 
-    // Extraction de la liste des ingrédients requis
+    const SERVER_URL = BASE_URL.slice(0, -3);
+
     const ingredientList = data?.ingredientamount_ingredientamount_recipeTorecipe || [];
 
-    // --- LOGIQUE DE CALCUL DU POURCENTAGE (AVEC QUANTITÉ) ---
     const percentage = useMemo(() => {
         if (ingredientList.length === 0) return 0;
-
         let validatedIngredients = 0;
-
         ingredientList.forEach(req => {
             const userItems = foodToShow.filter(fs => fs.idFood === req.food);
             const totalOwned = userItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
-            if (totalOwned >= req.quantity) {
-                validatedIngredients++;
-            }
+            if (totalOwned >= req.quantity) validatedIngredients++;
         });
-
         return Math.round((validatedIngredients / ingredientList.length) * 100);
     }, [ingredientList, foodToShow]);
 
-    // Fonction pour abréger les unités
     const formatUnit = (unit) => {
         switch (unit?.toLowerCase()) {
             case 'gram': return 'g';
@@ -50,7 +45,6 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
 
     return (
         <View style={styles.container}>
-            {/* Header avec Dégradé et Score */}
             <LinearGradient colors={['#4379de', '#7199e8']} style={styles.backgroundImage}>
                 <View style={styles.topContainer}>
                     <View style={styles.line}>
@@ -74,12 +68,10 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                 </View>
             </LinearGradient>
 
-            {/* Contenu de la Recette */}
             <View style={styles.containerContent}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Text style={styles.title}>{data.label}</Text>
 
-                    {/* Blocs d'informations rapides */}
                     <View style={styles.infoBlocksContainer}>
                         <View style={styles.infoBlock}>
                             <FontAwesomeIcon icon={faUserGroup} size={20} color="#4379de" />
@@ -95,71 +87,63 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                         </View>
                     </View>
 
-                    {/* Système d'onglets */}
                     <View style={styles.tabContainer}>
-                        <TouchableOpacity 
-                            onPress={() => setActiveTab('ingredients')} 
-                            style={[styles.tab, activeTab === 'ingredients' && styles.activeTab]}
-                        >
+                        <TouchableOpacity onPress={() => setActiveTab('ingredients')} style={[styles.tab, activeTab === 'ingredients' && styles.activeTab]}>
                             <Text style={[styles.tabText, activeTab === 'ingredients' && styles.activeTabText]}>Ingrédients</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity 
-                            onPress={() => setActiveTab('preparation')} 
-                            style={[styles.tab, activeTab === 'preparation' && styles.activeTab]}
-                        >
+                        <TouchableOpacity onPress={() => setActiveTab('preparation')} style={[styles.tab, activeTab === 'preparation' && styles.activeTab]}>
                             <Text style={[styles.tabText, activeTab === 'preparation' && styles.activeTabText]}>Préparation</Text>
                         </TouchableOpacity>
                     </View>
 
-                    {/* Contenu des onglets */}
                     <View style={styles.tabContentArea}>
                         {activeTab === 'ingredients' ? (
                             <View style={styles.ingredientsList}>
-                                {ingredientList.length > 0 ? (
-                                    ingredientList.map((item, index) => {
-                                        const foodInfo = item.food_ingredientamount_foodTofood;
-                                        
-                                        // Calcul du stock pour cet ingrédient précis
-                                        const userItems = foodToShow.filter(fs => fs.idFood === item.food);
-                                        const totalOwned = userItems.reduce((sum, fs) => sum + (fs.quantity || 0), 0);
+                                {ingredientList.map((item, index) => {
+                                    const foodInfo = item.food_ingredientamount_foodTofood;
+                                    
+                                    const userItems = foodToShow.filter(fs => fs.idFood === item.food);
+                                    const totalOwned = userItems.reduce((sum, fs) => sum + (fs.quantity || 0), 0);
 
-                                        // Détermination de la couleur (Vert/Orange/Rouge)
-                                        let statusColor = '#bb413b'; // Rouge par défaut
-                                        if (totalOwned >= item.quantity) {
-                                            statusColor = '#76cc77'; // Vert (Assez)
-                                        } else if (totalOwned > 0) {
-                                            statusColor = '#f3ce60'; // Orange (Pas assez)
-                                        }
+                                    let statusColor = '#bb413b'; 
+                                    if (totalOwned >= item.quantity) statusColor = '#76cc77';
+                                    else if (totalOwned > 0) statusColor = '#f3ce60';
 
-                                        return (
-                                            <View key={index} style={styles.ingredientRow}>
-                                                <View style={styles.ingredientLeft}>
-                                                    <View style={[styles.stockIndicator, { backgroundColor: statusColor }]} />
-                                                    <Text style={styles.ingredientLabel}>{foodInfo?.label || "Inconnu"}</Text>
+                                    const imagePath = foodInfo?.imagepath || '/images/default.jpg';
+                                    const fullImageUrl = `${SERVER_URL}${imagePath}`;
+
+                                    return (
+                                        <View key={index} style={styles.ingredientRow}>
+                                            <View style={styles.ingredientMainInfo}>
+                                                <View style={styles.imageBadgeContainer}>
+                                                    {/* 3. Utilisation uniquement de l'URI distante (plus de require local) */}
+                                                    <Image 
+                                                        source={{ uri: fullImageUrl }}
+                                                        style={styles.ingredientImage}
+                                                        resizeMode="cover"
+                                                    />
+                                                    <View style={[styles.stockBadge, { backgroundColor: statusColor }]} />
                                                 </View>
-                                                <View style={{ alignItems: 'flex-end' }}>
-                                                    <Text style={styles.ingredientQuantity}>
-                                                        {item.quantity} {formatUnit(foodInfo?.measuringunit)}
-                                                    </Text>
-                                                    {totalOwned < item.quantity && totalOwned > 0 && (
-                                                        <Text style={{ fontSize: 10, color: '#f3ce60' }}>
-                                                            En stock: {totalOwned} {formatUnit(foodInfo?.measuringunit)}
-                                                        </Text>
-                                                    )}
-                                                </View>
+                                                
+                                                <Text style={styles.ingredientLabel}>{foodInfo?.label || "Inconnu"}</Text>
                                             </View>
-                                        );
-                                    })
-                                ) : (
-                                    <Text style={styles.placeholderText}>Aucun ingrédient répertorié.</Text>
-                                )}
+
+                                            <View style={{ alignItems: 'flex-end' }}>
+                                                <Text style={styles.ingredientQuantity}>
+                                                    {item.quantity}{formatUnit(foodInfo?.measuringunit)}
+                                                </Text>
+                                                {totalOwned < item.quantity && totalOwned > 0 && (
+                                                    <Text style={{ fontSize: 10, color: '#f3ce60' }}>
+                                                        En stock: {totalOwned}{formatUnit(foodInfo?.measuringunit)}
+                                                    </Text>
+                                                )}
+                                            </View>
+                                        </View>
+                                    );
+                                })}
                             </View>
                         ) : (
-                            <View>
-                                <Text style={styles.descriptionText}>
-                                    {data.description || "Aucune instruction fournie."}
-                                </Text>
-                            </View>
+                            <Text style={styles.descriptionText}>{data.description || "Aucune instruction."}</Text>
                         )}
                     </View>
                     <View style={{ height: 40 }} />
