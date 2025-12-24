@@ -1,51 +1,115 @@
-import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
-  Platform,
-  StatusBar,
   TouchableOpacity,
   Modal,
   Pressable
 } from 'react-native';
-import { Calendar} from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 
 import FoodItem from '../home/foodItem/foodItem';
 import ReadFood from '../home/readFood/readFood';
-import { MOCK_FOOD_ITEMS } from '../../../src/data/foodData';
+import styles from './calendar.styles';
+
 import { getMarkedDates } from '../../../src/utils/calendarUtils';
 import { getTodayDateString } from '../../../src/utils/dateHelpers';
+import { BASE_URL } from '../../config/config';
+import { useContext, useState, useMemo, useEffect, useCallback } from 'react';
+import { FoodContext } from '../../context/foodContext';
+
 
 const CalendarScreen = () => {
   const today = getTodayDateString();
+  
+  const { foodToShow, setFoodToShow } = useContext(FoodContext);
+
   const [selectedDate, setSelectedDate] = useState(today);
   const [showAllItems, setShowAllItems] = useState(true);
   const [showReadFood, setShowReadFood] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
-  
-  const markedDates = useMemo(() => {
-    return getMarkedDates(MOCK_FOOD_ITEMS, selectedDate);
-  }, [selectedDate]);
 
-  
-  const filteredItems = useMemo(() => {
-    return MOCK_FOOD_ITEMS.filter(item => item.expirationDate === selectedDate);
-  }, [selectedDate]);
-
-  
-  const allItemsSorted = useMemo(() => {
-    
-    return [...MOCK_FOOD_ITEMS].sort((a, b) => 
-      new Date(a.expirationDate) - new Date(b.expirationDate)
-    );
+  const getAllFoodFromDB = useCallback(() => {
+    Promise.all([
+      fetch(`${BASE_URL}/food/all`).then(res => res.json()),
+      fetch(`${BASE_URL}/foodUser/me`).then(res => res.json())
+    ])
+    .then(([allFoodData, foodUserData]) => {
+      const mergedFood = buildFoodToShow(allFoodData, foodUserData);
+      setFoodToShow(mergedFood);
+    })
+    .catch(error => {
+      console.error("Erreur chargement calendrier:", error);
+      setFoodToShow([]);
+    });
   }, []);
 
-  
+  useEffect(() => {
+    if (!foodToShow || foodToShow.length === 0) {
+      getAllFoodFromDB();
+    }
+  }, [foodToShow, getAllFoodFromDB]);
+
+
+  function buildFoodToShow(allFood, foodUser) {
+    return foodUser.map(userFood => {
+      const food = allFood.find(f => f.id === userFood.food);
+
+      if (!food) return null;
+
+      return {
+        id: userFood.id, 
+        idFood: food.id,
+        labelFood: food.label,
+        dietFood: food.diet,
+        nutriscoreFood: food.nutriscore,
+        measuringunit: food.measuringunit,
+        barcode: food.barcode,
+        imagepath: food.imagepath,
+        userMail: userFood.user_mail,
+        quantity: userFood.quantity,
+        storagetype: userFood.storagetype,
+        expirationdate: userFood.expirationdate, 
+      };
+    }).filter(Boolean);
+  }
+
+  function updateFoodFromDB(content) {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(content)
+    })
+    .then(() => getAllFoodFromDB())
+    .catch(error => console.error(error));
+  }
+
+  function addFoodFromDB(content) {
+    fetch(`${BASE_URL}/foodUser/me`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(content)
+    })
+    .then(() => getAllFoodFromDB())
+    .catch(error => console.error(error));
+  }
+
+  const markedDates = useMemo(() => {
+    return getMarkedDates(foodToShow, selectedDate);
+  }, [foodToShow, selectedDate]);
+
+  const filteredItems = useMemo(() => {
+    return foodToShow.filter(item => item.expirationdate === selectedDate);
+  }, [foodToShow, selectedDate]);
+
+  const allItemsSorted = useMemo(() => {
+    return [...foodToShow].sort((a, b) => 
+      new Date(a.expirationdate) - new Date(b.expirationdate)
+    );
+  }, [foodToShow]);
+
   const dataToDisplay = showAllItems ? allItemsSorted : filteredItems;
 
-  
   const handleDayPress = (day) => {
     setSelectedDate(day.dateString);
     setShowAllItems(false); 
@@ -100,7 +164,8 @@ const CalendarScreen = () => {
         
         <FlatList
           data={dataToDisplay}
-          keyExtractor={(item) => item.id.toString()}
+          // Assurez-vous que votre objet a bien une clé unique (id ou idFood)
+          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item }) => (
             <Pressable
@@ -108,23 +173,22 @@ const CalendarScreen = () => {
                 setSelectedFood(item);
                 setShowReadFood(true);
               }}
-  
               style={({ pressed }) => [
-              {
-                transform: [{ scale: pressed ? 0.96 : 1 }],
-              opacity: pressed ? 0.9 : 1,
-              }
+                {
+                  transform: [{ scale: pressed ? 0.96 : 1 }],
+                  opacity: pressed ? 0.9 : 1,
+                }
               ]}
             >
               <FoodItem {...item} />
             </Pressable>
           )}
           ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>Rien à signaler ! 🍃</Text>
-          </View>
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>Rien à signaler ! 🍃</Text>
+            </View>
           }
-      />
+        />
       </View>
 
       <Modal
@@ -137,6 +201,10 @@ const CalendarScreen = () => {
           <ReadFood 
             data={selectedFood} 
             onClose={() => setShowReadFood(false)} 
+            // Ajout des props pour permettre l'édition comme dans Home
+            updateFoodFromDB={updateFoodFromDB} 
+            addFoodFromDB={addFoodFromDB}
+            onRefresh={getAllFoodFromDB}
           />
         )}
       </Modal>
@@ -144,59 +212,5 @@ const CalendarScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F6FF',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 44,
-  },
-  calendarWrapper: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-    zIndex: 1,
-    backgroundColor: '#F2F6FF',
-    paddingBottom: 10,
-  },
-  listContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    marginTop: 20,
-  },
-  
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  listHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-  },
-  toggleButton: {
-    backgroundColor: '#E3E9F8', 
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-  },
-  toggleButtonText: {
-    color: '#2E66E7', 
-    fontWeight: '600',
-    fontSize: 12,
-  },
-  emptyContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  emptyText: {
-    color: '#B0B5C6',
-    fontStyle: 'italic',
-  }
-});
 
 export default CalendarScreen;
