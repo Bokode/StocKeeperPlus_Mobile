@@ -45,7 +45,7 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
 
     return (
         <View style={styles.container}>
-            <LinearGradient colors={['#4379de', '#7199e8']} style={styles.backgroundImage}>
+            <LinearGradient colors={['#4379de', '#9bb1deff']} style={styles.backgroundImage}>
                 <View style={styles.topContainer}>
                     <View style={styles.line}>
                         <TouchableOpacity onPress={onClose} style={styles.button}>
