@@ -29,7 +29,7 @@ export default function CreateAccount({ navigation, onLoginSuccess }) {
     setLoading(true);
 
     try {
-      const response = await fetch(`${BASE_URL}/user/register`, {
+      const response = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -39,6 +39,7 @@ export default function CreateAccount({ navigation, onLoginSuccess }) {
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         setError(data.message || "Erreur lors de la création du compte.");
+        console.error(data);
         setLoading(false);
         return;
       }
@@ -63,6 +64,7 @@ export default function CreateAccount({ navigation, onLoginSuccess }) {
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         setError(data.message || "Erreur de connexion");
+        
         setLoading(false);
         return;
       }

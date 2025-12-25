@@ -4,14 +4,14 @@ import CreateAccount from "../Screens/login/createAccount/createAccount";
 
 const Stack = createNativeStackNavigator();
 
-export default function StackNavigator({ setIsLoggedIn }) {
+export default function StackNavigator({ setUser }) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login">
         {(props) => (
           <LoginScreen
             {...props}
-            onLoginSuccess={() => setIsLoggedIn(true)}
+            onLoginSuccess={(email) => setUser(email)}
           />
         )}
       </Stack.Screen>
@@ -19,7 +19,7 @@ export default function StackNavigator({ setIsLoggedIn }) {
         {(props) => (
           <CreateAccount
             {...props}
-            onLoginSuccess={() => setIsLoggedIn(true)}
+            onLoginSuccess={(email) => setUser(email)}
           />
         )}
       </Stack.Screen>
