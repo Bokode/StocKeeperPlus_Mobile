@@ -19,7 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; 
 import { useState } from "react";
 import UserInfo from "./userInfo"; 
-import { getMessaging, hasPermission} from '@react-native-firebase/messaging';
+// import { getMessaging, hasPermission} from '@react-native-firebase/messaging';
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { BASE_URL } from "../../../config/config";
@@ -58,7 +58,7 @@ export default function Parameters({ isVisible, onClose }) {
     };
 
 
-const handleNotificationPress = async () => {
+/*const handleNotificationPress = async () => {
     try {
         const messaging = getMessaging();
         
@@ -91,7 +91,7 @@ const handleNotificationPress = async () => {
             ]
         );
     }
-};
+};*/
 
 
     if (!isVisible) return null;
@@ -126,12 +126,12 @@ const handleNotificationPress = async () => {
                                 <Text style={styles.menuText}>Mon profil</Text>
                                 <FontAwesomeIcon icon={faUser} size={20} color="#4379de"/>
                             </TouchableOpacity>
-                            
+        {    /*               
                          <TouchableOpacity style={styles.menuItem} onPress={handleNotificationPress}>
                                 <Text style={styles.menuText}>Notifications</Text>
                                 <FontAwesomeIcon icon={faBell} size={20} color="#4379de"/>
                          </TouchableOpacity>
-
+*/}
                        
                             <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
                                 <Text style={styles.menuText}>Déconnexion</Text>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+/*import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { 
   getMessaging, 
@@ -46,4 +46,4 @@ export const useNotifications = (userIdentifier) => {
       unsubscribe();
     };
   }, [userIdentifier]);
-};
+};*/
