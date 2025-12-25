@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import React, { useState, useContext, useMemo } from 'react';
+import { Text, TouchableOpacity, View, ScrollView, Image } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { 
     faAngleLeft, 
@@ -11,14 +11,29 @@ import {
 import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { FoodContext } from '../../../context/foodContext';
+import { BASE_URL } from '../../../config/config'; 
 import styles from "./readRecipe.style";
 
 const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
     const [activeTab, setActiveTab] = useState('ingredients');
+    const { foodToShow } = useContext(FoodContext);
 
-    const percentage = Math.min(100, Math.max(0, (data.id * 17) % 100 + 20));
+    const SERVER_URL = BASE_URL.slice(0, -3);
 
-    // Fonction pour abréger les unités
+    const ingredientList = data?.ingredientamount_ingredientamount_recipeTorecipe || [];
+
+    const percentage = useMemo(() => {
+        if (ingredientList.length === 0) return 0;
+        let validatedIngredients = 0;
+        ingredientList.forEach(req => {
+            const userItems = foodToShow.filter(fs => fs.idFood === req.food);
+            const totalOwned = userItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+            if (totalOwned >= req.quantity) validatedIngredients++;
+        });
+        return Math.round((validatedIngredients / ingredientList.length) * 100);
+    }, [ingredientList, foodToShow]);
+
     const formatUnit = (unit) => {
         switch (unit?.toLowerCase()) {
             case 'gram': return 'g';
@@ -28,11 +43,9 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
         }
     };
 
-    const ingredientList = data.ingredientamount_ingredientamount_recipeTorecipe || [];
-
     return (
         <View style={styles.container}>
-            <LinearGradient colors={['#4379de', '#7199e8']} style={styles.backgroundImage}>
+            <LinearGradient colors={['#4379de', '#9bb1deff']} style={styles.backgroundImage}>
                 <View style={styles.topContainer}>
                     <View style={styles.line}>
                         <TouchableOpacity onPress={onClose} style={styles.button}>
@@ -86,37 +99,51 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                     <View style={styles.tabContentArea}>
                         {activeTab === 'ingredients' ? (
                             <View style={styles.ingredientsList}>
-                                {ingredientList.length > 0 ? (
-                                    ingredientList.map((item, index) => {
-                                        const foodInfo = item.food_ingredientamount_foodTofood;
-                                        // On garde ta logique de faisabilité (id pair/impair pour le mock)
-                                        const isAvailable = (item.food % 2 === 0); 
+                                {ingredientList.map((item, index) => {
+                                    const foodInfo = item.food_ingredientamount_foodTofood;
+                                    
+                                    const userItems = foodToShow.filter(fs => fs.idFood === item.food);
+                                    const totalOwned = userItems.reduce((sum, fs) => sum + (fs.quantity || 0), 0);
 
-                                        return (
-                                            <View key={index} style={styles.ingredientRow}>
-                                                <View style={styles.ingredientLeft}>
-                                                    <View style={[
-                                                        styles.stockIndicator, 
-                                                        { backgroundColor: isAvailable ? '#76cc77' : '#bb413b' }
-                                                    ]} />
-                                                    <Text style={styles.ingredientLabel}>{foodInfo?.label || "Inconnu"}</Text>
+                                    let statusColor = '#bb413b'; 
+                                    if (totalOwned >= item.quantity) statusColor = '#76cc77';
+                                    else if (totalOwned > 0) statusColor = '#f3ce60';
+
+                                    const imagePath = foodInfo?.imagepath || '/images/default.jpg';
+                                    const fullImageUrl = `${SERVER_URL}${imagePath}`;
+
+                                    return (
+                                        <View key={index} style={styles.ingredientRow}>
+                                            <View style={styles.ingredientMainInfo}>
+                                                <View style={styles.imageBadgeContainer}>
+                                                    {/* 3. Utilisation uniquement de l'URI distante (plus de require local) */}
+                                                    <Image 
+                                                        source={{ uri: fullImageUrl }}
+                                                        style={styles.ingredientImage}
+                                                        resizeMode="cover"
+                                                    />
+                                                    <View style={[styles.stockBadge, { backgroundColor: statusColor }]} />
                                                 </View>
+                                                
+                                                <Text style={styles.ingredientLabel}>{foodInfo?.label || "Inconnu"}</Text>
+                                            </View>
+
+                                            <View style={{ alignItems: 'flex-end' }}>
                                                 <Text style={styles.ingredientQuantity}>
                                                     {item.quantity}{formatUnit(foodInfo?.measuringunit)}
                                                 </Text>
+                                                {totalOwned < item.quantity && totalOwned > 0 && (
+                                                    <Text style={{ fontSize: 10, color: '#f3ce60' }}>
+                                                        En stock: {totalOwned}{formatUnit(foodInfo?.measuringunit)}
+                                                    </Text>
+                                                )}
                                             </View>
-                                        );
-                                    })
-                                ) : (
-                                    <Text style={styles.placeholderText}>Aucun ingrédient répertorié.</Text>
-                                )}
+                                        </View>
+                                    );
+                                })}
                             </View>
                         ) : (
-                            <View>
-                                <Text style={styles.descriptionText}>
-                                    {data.description || "Aucune instruction."}
-                                </Text>
-                            </View>
+                            <Text style={styles.descriptionText}>{data.description || "Aucune instruction."}</Text>
                         )}
                     </View>
                     <View style={{ height: 40 }} />

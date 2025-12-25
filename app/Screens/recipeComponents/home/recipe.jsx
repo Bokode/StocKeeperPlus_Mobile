@@ -1,22 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native'; // Ajout de Modal
+import { ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native';
 import SearchBar from '../../home/searchBar/searchBar'; 
 import RecipeItem from '../item/recipeItem';
 import RecipeFilter from '../filter/recipeFilter';
 import TopBar from '../../topBar/topBar';
-import ReadRecipe from '../readRecipe/readRecipe'; // Import de ton composant de détail
+import ReadRecipe from '../readRecipe/readRecipe';
 
-import { MOCK_RECIPE_ITEMS } from '../../../../src/data/recipeData'; 
+import { BASE_URL } from '../../../config/config';
+import { FoodContext } from '../../../context/foodContext';
 import styles from './recipe.style';
 
 const RecipeScreen = () => {
+  // --- ÉTATS ---
+  const [recipes, setRecipes] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isFilterVisible, setFilterVisible] = useState(false);
-  
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [showReadRecipe, setShowReadRecipe] = useState(false); // État pour le Modal
+  const [showReadRecipe, setShowReadRecipe] = useState(false);
+  
+  const { foodToShow } = useContext(FoodContext); // Récupération du stock réel
 
   const [filters, setFilters] = useState({
     nbEaters: null,
@@ -25,67 +29,74 @@ const RecipeScreen = () => {
     onlyFavorites: false
   });
 
-  const toggleFilterModal = () => {
-    setFilterVisible(!isFilterVisible);
-  };
-
-  const resetFilters = () => {
-    setFilters({
-      nbEaters: null,
-      maxTime: null,
-      minPercentage: 0,
-      onlyFavorites: false
-    });
-  };
-
-  // Charger les favoris au démarrage
+  // --- LOGIQUE DE CHARGEMENT ---
   useEffect(() => {
-    const loadFavorites = async () => {
-      try {
-        const savedFavorites = await AsyncStorage.getItem('recipe_favorites');
-        if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
-      } catch (e) { console.error("Erreur chargement favoris", e); }
-    };
+    getAllRecipes();
     loadFavorites();
   }, []);
 
-  // Fonction pour ajouter/retirer un favori
-  const toggleFavorite = async (recipeId) => {
-    let newFavorites = [...favorites];
-    if (newFavorites.includes(recipeId)) {
-      newFavorites = newFavorites.filter(id => id !== recipeId);
-    } else {
-      newFavorites.push(recipeId);
+  const getAllRecipes = async () => {
+    try {
+      // Suite à la modification du backend (recipeORM.js), cette route inclut désormais les ingrédients
+      const response = await fetch(`${BASE_URL}/recipe/all`);
+      const data = await response.json();
+      setRecipes(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des recettes:", error);
     }
+  };
+
+  const loadFavorites = async () => {
+    try {
+      const savedFavorites = await AsyncStorage.getItem('recipe_favorites');
+      if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
+    } catch (e) {
+      console.error("Erreur chargement favoris:", e);
+    }
+  };
+
+  // --- CALCULS & FILTRAGE ---
+  const calculateFeasibility = useCallback((recipe) => {
+    const ingredientsReq = recipe.ingredientamount_ingredientamount_recipeTorecipe || [];
+    if (ingredientsReq.length === 0) return 0;
+
+    let ownedCount = 0;
+
+    ingredientsReq.forEach(req => {
+        // 1. On récupère TOUS les items de l'utilisateur qui correspondent à cet aliment
+        // Note: On utilise idFood car c'est ainsi que ton Home.jsx construit les objets
+        const userStock = foodToShow.filter(fs => fs.idFood === req.food);
+
+        // 2. On calcule la somme totale des quantités possédées pour cet aliment
+        const totalQuantityOwned = userStock.reduce((sum, item) => sum + (item.quantity || 0), 0);
+
+        // 3. On valide l'ingrédient seulement si la quantité possédée >= quantité requise
+        if (totalQuantityOwned >= req.quantity) {
+            ownedCount++;
+        }
+    });
+
+    return Math.round((ownedCount / ingredientsReq.length) * 100);
+}, [foodToShow]);
+
+  const toggleFavorite = async (recipeId) => {
+    let newFavorites = favorites.includes(recipeId)
+      ? favorites.filter(id => id !== recipeId)
+      : [...favorites, recipeId];
+    
     setFavorites(newFavorites);
     await AsyncStorage.setItem('recipe_favorites', JSON.stringify(newFavorites));
   };
 
-  const filteredData = MOCK_RECIPE_ITEMS.filter(item => {
-    if (searchQuery && !item.label.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
+  const filteredData = recipes.filter(item => {
+    const recipePercentage = calculateFeasibility(item);
 
-    const percentage = Math.min(100, Math.max(0, (item.id * 17) % 100 + 20));
-
-    if (filters.minPercentage > 0 && percentage < filters.minPercentage) {
-        return false;
-    }
-
-    if (filters.nbEaters !== null) {
-        if (item.nbeaters === null) return false;
-        if (item.nbeaters !== parseInt(filters.nbEaters)) return false; 
-    }
-
-    if (filters.maxTime) {
-        if (item.timetomake === null) return false;
-        if (item.timetomake > filters.maxTime) return false;
-    }
-
-    // Nouveau filtre Favoris
-    if (filters.onlyFavorites && !favorites.includes(item.id)) {
-      return false;
-    }
+    if (searchQuery && !item.label.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    if (filters.minPercentage > 0 && recipePercentage < filters.minPercentage) return false;
+    if (filters.nbEaters && item.nbeaters !== parseInt(filters.nbEaters)) return false;
+    if (filters.maxTime && item.timetomake > filters.maxTime) return false;
+    if (filters.onlyFavorites && !favorites.includes(item.id)) return false;
+    
     return true;
   });
 
@@ -98,7 +109,7 @@ const RecipeScreen = () => {
         <SearchBar 
           searchQuery={searchQuery} 
           onSearchChange={setSearchQuery} 
-          toggleFilter={toggleFilterModal}
+          toggleFilter={() => setFilterVisible(true)}
         />
 
         <ScrollView style={styles.containerContent} showsVerticalScrollIndicator={false}>
@@ -107,38 +118,47 @@ const RecipeScreen = () => {
               <TouchableOpacity 
                 key={item.id} 
                 onPress={() => {
-                  setSelectedRecipe(item);    // On stocke la recette
-                  setShowReadRecipe(true);    // On ouvre le Modal
+                  setSelectedRecipe(item);
+                  setShowReadRecipe(true);
                 }}
               >
-                <RecipeItem {...item} isFavorite={favorites.includes(item.id)}/>
+                <RecipeItem 
+                    {...item} 
+                    isFavorite={favorites.includes(item.id)}
+                    percentage={calculateFeasibility(item)} 
+                />
               </TouchableOpacity>
             ))
           ) : (
             <Text style={styles.noResultText}>Aucune recette trouvée</Text>
           )}
-          
           <View style={{height: 20}} />
         </ScrollView>
 
-        {/* MODAL POUR LE DÉTAIL (Comme dans HomeScreen) */}
-        {showReadRecipe && (
-        <Modal animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowReadRecipe(false)}>
-          <ReadRecipe 
-            onClose={() => setShowReadRecipe(false)} 
-            data={selectedRecipe} 
-            isFavorite={favorites.includes(selectedRecipe.id)} // On passe l'état
-            onToggleFavorite={() => toggleFavorite(selectedRecipe.id)} // On passe la fonction
-          />
-        </Modal>
-      )}
+        {/* MODAL DE DÉTAIL */}
+        {showReadRecipe && selectedRecipe && (
+          <Modal 
+            animationType="slide" 
+            presentationStyle="pageSheet" 
+            onRequestClose={() => setShowReadRecipe(false)}
+          >
+            <ReadRecipe 
+              onClose={() => setShowReadRecipe(false)} 
+              data={selectedRecipe} 
+              isFavorite={favorites.includes(selectedRecipe.id)}
+              onToggleFavorite={() => toggleFavorite(selectedRecipe.id)}
+              percentage={calculateFeasibility(selectedRecipe)}
+            />
+          </Modal>
+        )}
 
+        {/* MODAL DE FILTRES */}
         <RecipeFilter
           isFilterVisible={isFilterVisible}
-          toggleFilter={toggleFilterModal}
+          toggleFilter={() => setFilterVisible(false)}
           filters={filters}
           setFilters={setFilters}
-          onReset={resetFilters}
+          onReset={() => setFilters({ nbEaters: null, maxTime: null, minPercentage: 0, onlyFavorites: false })}
         />
       </View>
     </>
