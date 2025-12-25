@@ -20,8 +20,36 @@ import {
 import { useState } from "react";
 import UserInfo from "./userInfo"; 
 import { getMessaging, hasPermission} from '@react-native-firebase/messaging';
+import { useContext } from "react";
+import { AuthContext } from "../../../context/authContext";
+import { BASE_URL } from "../../../config/config";
 
 export default function Parameters({ isVisible, onClose }) {
+    const { setIsLoggedIn } = useContext(AuthContext);
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/auth/logout`, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include' 
+            });
+            if (response.ok)
+            {
+                setIsLoggedIn(false);
+                onClose();
+            }
+            else
+            {
+                Alert.alert("Erreur lors de la deconnexion");
+            }
+
+        }
+        catch (err)
+        {
+            console.error(err);
+        }
+    }
 
     const [showUserInfo, setShowUserInfo] = useState(false);
     const handleClose = () => {
@@ -105,7 +133,7 @@ const handleNotificationPress = async () => {
                          </TouchableOpacity>
 
                        
-                            <TouchableOpacity style={styles.menuItem}>
+                            <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
                                 <Text style={styles.menuText}>Déconnexion</Text>
                                 <FontAwesomeIcon icon={faRightFromBracket} size={20} color="#4379de" />
                             </TouchableOpacity>

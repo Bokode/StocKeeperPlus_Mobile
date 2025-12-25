@@ -4,6 +4,7 @@ import TabNavigator from "./StackNavigator/TabNavigator";
 import { FoodProvider } from "./context/foodContext";
 import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging';
 import { useNotifications } from "../src/utils/useNotifications";
+import { AuthContext } from "./context/authContext";
 
 const messaging = getMessaging();
 
@@ -16,6 +17,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
+    <AuthContext.Provider value={{setIsLoggedIn}}>
     <FoodProvider>
       {isLoggedIn ? (
         <TabNavigator /> 
@@ -23,5 +25,6 @@ export default function App() {
         <StackNavigator setIsLoggedIn={setIsLoggedIn}/>
       )}
     </FoodProvider>
+    </AuthContext.Provider>
   );
 }
