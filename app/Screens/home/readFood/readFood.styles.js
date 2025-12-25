@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   backgroundImage: {
@@ -39,10 +41,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 35,
     marginBottom: 15
-  },
-  description: {
-    marginBottom: 25,
-    paddingInlineEnd: 26,
   },
   rowMiniTitle: {
     flexDirection: "row",
@@ -95,7 +93,59 @@ const styles = StyleSheet.create({
   buttonTextNo: {
     color: "#3962ac",
     fontWeight: "bold"
-  }
+  },
+  carouselContainer: {
+    marginTop: 15,
+    height: 180,
+    marginBottom: 20,
+  },
+  carouselCard: {
+    width: width * 0.65,
+    marginRight: 15,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    shadowColor: '#4379de',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
+    overflow: 'hidden',
+  },
+  cardHeader: {
+    backgroundColor: '#ecf3fe',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eef2f5',
+  },
+  carouselTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#333',
+    textAlign: 'left',
+  },
+  cardBody: {
+    padding: 15,
+    justifyContent: 'space-around',
+    flex: 1,
+  },
+  statRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  iconContainer: {
+    width: 28,
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  carouselText: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+  },
 });
 
 export default styles;
