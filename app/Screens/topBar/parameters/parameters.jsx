@@ -25,7 +25,7 @@ import { AuthContext } from "../../../context/authContext";
 import { BASE_URL } from "../../../config/config";
 
 export default function Parameters({ isVisible, onClose }) {
-    const { setIsLoggedIn } = useContext(AuthContext);
+    const { setUser } = useContext(AuthContext);
 
     const handleLogout = async () => {
         try {
@@ -36,7 +36,7 @@ export default function Parameters({ isVisible, onClose }) {
             });
             if (response.ok)
             {
-                setIsLoggedIn(false);
+                setUser(null);
                 onClose();
             }
             else
