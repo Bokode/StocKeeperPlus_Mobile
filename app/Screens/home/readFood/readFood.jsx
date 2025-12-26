@@ -241,7 +241,12 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
         onRequestClose={() => setShowRecipeDetail(false)}
       >
         <Suspense fallback={
-          <View style={{ padding: 20, alignItems: 'center' }}>
+          <View style={{ 
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 20
+          }}>
             <ActivityIndicator size="large" color="#0000ff" />
             <Text>Chargement...</Text>
           </View>
