@@ -45,11 +45,7 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
 
     return (
         <View style={styles.container}>
-            {/* Header avec Dégradé */}
             <LinearGradient colors={['#4379de', '#9bb1deff']} style={styles.gradientHeader}>
-                
-                {/* --- BLOC 1 : NAVIGATION (HAUT) --- */}
-                {/* Ce bloc est indépendant du score */}
                 <View style={styles.navContainer}>
                     <View style={styles.navBar}>
                         <TouchableOpacity onPress={onClose} style={styles.navButton}>
@@ -64,9 +60,6 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-
-                {/* --- BLOC 2 : SCORE (BAS) --- */}
-                {/* Ce bloc est indépendant de la navigation */}
                 <View style={styles.scoreWrapper}>
                     <View style={styles.scoreCircle}>
                         <Text style={styles.scoreNumber}>{percentage}%</Text>
@@ -122,15 +115,12 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                                     return (
                                         <View key={index} style={styles.ingredientRow}>
                                             <View style={styles.ingredientMainInfo}>
-                                                
-                                                {/* Conteneur Image + Badge */}
                                                 <View style={styles.imageBadgeContainer}>
                                                     <Image 
                                                         source={{ uri: fullImageUrl }}
                                                         style={styles.ingredientImage}
                                                         resizeMode="cover"
                                                     />
-                                                    {/* Badge avec Z-Index élevé */}
                                                     <View style={[styles.stockBadge, { backgroundColor: statusColor }]} />
                                                 </View>
                                                 

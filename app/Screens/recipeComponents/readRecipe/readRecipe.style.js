@@ -5,8 +5,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    // --- HEADER (DÉGRADÉ) ---
-    // On utilise 'space-between' pour coller la Nav en haut et le Score en bas
     gradientHeader: {
         height: 220,
         paddingTop: 10,
@@ -14,7 +12,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
     },
 
-    // --- ZONE 1 : BARRE DE NAVIGATION (Haut) ---
     navContainer: {
         paddingHorizontal: 15,
     },
@@ -33,7 +30,6 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
 
-    // --- ZONE 2 : SCORE (Bas du header) ---
     scoreWrapper: {
         alignItems: 'center',
         marginBottom: 50, 
@@ -45,7 +41,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        // Ombres pour donner du relief
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.15,
@@ -74,9 +69,8 @@ const styles = StyleSheet.create({
         paddingTop: 25,
     },
 
-    // --- INFOS RECETTE ---
     title: {
-        fontSize: 24, // Légèrement réduit pour éviter les retours à la ligne moches
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#1c1b1f',
         marginBottom: 20,
@@ -106,7 +100,6 @@ const styles = StyleSheet.create({
         color: '#1c1b1f',
     },
 
-    // --- ONGLETS ---
     tabContainer: {
         flexDirection: 'row',
         marginBottom: 20,
@@ -134,14 +127,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
 
-    // --- LISTE INGRÉDIENTS ---
     ingredientsList: {
         marginBottom: 10,
     },
     ingredientRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center', // Important pour centrer verticalement
+        alignItems: 'center',
         paddingVertical: 12,
         borderBottomWidth: 1,
         borderBottomColor: '#f5f5f5',
@@ -152,14 +144,12 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
     },
-    
-    // --- CORRECTION DES IMAGES ET BADGES ---
+
     imageBadgeContainer: {
-        width: 50,  // Dimension fixe
-        height: 50, // Dimension fixe
+        width: 50,
+        height: 50,
         marginRight: 15,
         position: 'relative', 
-        // IMPORTANT : Permet au badge de dépasser du cadre sur Android
         overflow: 'visible', 
     },
     ingredientImage: {
@@ -172,12 +162,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: -4,    
         right: -4,  
-        width: 16,  // Un peu plus grand pour être bien visible
+        width: 16,
         height: 16,
         borderRadius: 8,
         borderWidth: 2, 
         borderColor: 'white',
-        // IMPORTANT : Force le badge au premier plan
         zIndex: 10, 
         elevation: 5, 
     },
