@@ -1,23 +1,22 @@
 import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan, faClock, faUtensils, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useState, useEffect } from 'react';
-import { Image, ImageBackground, Text, TouchableOpacity, View, Modal, FlatList } from 'react-native';
+import React, { useState, useContext, useMemo, Suspense } from 'react';
+import { Image, ImageBackground, Text, TouchableOpacity, View, Modal, FlatList, ActivityIndicator } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
 import { BASE_URL } from '../../../config/config';
+import { RecipeContext } from '../../../context/recipeContext';
+const ReadRecipe = React.lazy(() => import('../../recipeComponents/readRecipe/readRecipe'));
 
 export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromDB, onRefresh }) {
-  const image = { uri: BASE_URL.slice(0, -3) + data.imagepath };
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
-  const [recipeToShow, setRecipeToShow] = useState([]);
+  const [showRecipeDetail, setShowRecipeDetail] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const image = { uri: BASE_URL.slice(0, -3) + data.imagepath };
+  const { recipes } = useContext(RecipeContext);
+  
   let nutriScoreImage;
-  let measuringunit;
-
-  useEffect(() => {
-    getAllRecipePossible();
-  }, []);
-
   switch (data.nutriscoreFood) {
     case "A":
       nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_a.png");
@@ -38,6 +37,7 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
       nutriScoreImage = require("../../../../assets/nutriscore/nutriscore_unknown.png");
   }
 
+  let measuringunit;
   switch (data.measuringunit) {
     case "unit":
       measuringunit = "Unité";
@@ -52,38 +52,25 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
       measuringunit = "Quantité";
   }
 
-  function getAllRecipePossible() {
-    Promise.all([
-      fetch(`${BASE_URL}/ingredientAmount/all`).then(res => res.json()),
-      fetch(`${BASE_URL}/recipe/all`).then(res => res.json())
-    ])
-    .then(([ingredientAmountData, recipeData]) => {
-      const recipeToShow = buildRecipeToShow(ingredientAmountData, recipeData);
-      setRecipeToShow(recipeToShow);
-    })
-    .catch(error => {
-      console.error(error);
-      setRecipeToShow([]);
-    });
-  }
+  const recipeToShow = useMemo(() => {
+    if (!recipes || recipes.length === 0) return [];
 
-  function buildRecipeToShow(ingredientAmountData, recipeData) {
-    const recipesWithCurrentFood = recipeData.filter(recipe => 
-      ingredientAmountData.some(ingredient => ingredient.recipe === recipe.id && ingredient.food === data.idFood)
-    );
-
-    return recipesWithCurrentFood.map(recipe => {
-      const ingredientsForRecipe = ingredientAmountData.filter(ingredient => ingredient.recipe === recipe.id);
-
-      return {
+    return recipes
+      .filter(recipe =>
+        recipe.ingredientamount_ingredientamount_recipeTorecipe?.some(
+          ing => ing.food === data.idFood
+        )
+      )
+      .map(recipe => ({
         id: recipe.id,
         label: recipe.label,
         timeToMake: recipe.timetomake,
         nbEaters: recipe.nbeaters,
-        numberOfIngredients: ingredientsForRecipe.length,
-      };
-    });
-  }
+        numberOfIngredients:
+          recipe.ingredientamount_ingredientamount_recipeTorecipe?.length || 0,
+        fullRecipe: recipe
+      }));
+  }, [recipes, data.idFood]);
 
   function deleteFoodFromDB() {
     fetch(`${BASE_URL}/foodUser/me`, {
@@ -163,7 +150,14 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 10 }} 
               renderItem={({ item }) => (
-                <View style={styles.carouselCard}>
+                <TouchableOpacity
+                  style={styles.carouselCard}
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setSelectedRecipe(item.fullRecipe);
+                    setShowRecipeDetail(true);
+                  }}
+                >
                   <View style={styles.cardHeader}>
                     <Text style={styles.carouselTitle} numberOfLines={1}>
                       {item.label}
@@ -190,7 +184,7 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
                       <Text style={styles.carouselText}>{item.numberOfIngredients} {item.numberOfIngredients > 1 ? "Ingrédients" : "Ingrédient"}</Text>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               )}
             />
           </View>
@@ -238,6 +232,30 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
           addFoodFromDB={addFoodFromDB} 
           data={data} 
           onCloseRead={onClose}/>
+      </Modal>
+    )}
+    {showRecipeDetail && selectedRecipe && (
+      <Modal
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowRecipeDetail(false)}
+      >
+        <Suspense fallback={
+          <View style={{ 
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 20
+          }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text>Chargement...</Text>
+          </View>
+        }>
+          <ReadRecipe
+            data={selectedRecipe}
+            onClose={() => setShowRecipeDetail(false)}
+          />
+        </Suspense>
       </Modal>
     )}
     </>
