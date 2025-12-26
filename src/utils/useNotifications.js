@@ -1,15 +1,18 @@
-import { useEffect } from 'react';
+/*import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { 
   getMessaging, 
   requestPermission, 
   subscribeToTopic, 
   onNotificationOpenedApp, 
-  AuthorizationStatus 
+  AuthorizationStatus, 
+  unsubscribeFromTopic
 } from '@react-native-firebase/messaging';
 
 export const useNotifications = (userIdentifier) => {
   const router = useRouter();
+  const cleanId = userIdentifier?.replace(/[@.]/g, '_');
+  const topic = `user_${cleanId}`;
 
   useEffect(() => {
     if (!userIdentifier) return;
@@ -23,9 +26,10 @@ export const useNotifications = (userIdentifier) => {
         authStatus === AuthorizationStatus.PROVISIONAL;
 
       if (enabled) {
-        const cleanId = userIdentifier.replace(/[@.]/g, '_');
-        const topic = `user_${cleanId}`;
+        
+        
         await subscribeToTopic(messaging, topic);
+        console.log(`abonnement au topic : ${topic}`);
       }
     };
 
@@ -35,6 +39,11 @@ export const useNotifications = (userIdentifier) => {
 
     });
 
-    return unsubscribe;
+    return () => {
+      console.log(`Désabonnement du topic : ${topic}`);
+      
+      unsubscribeFromTopic(messaging, topic);
+      unsubscribe();
+    };
   }, [userIdentifier]);
-};
+};*/

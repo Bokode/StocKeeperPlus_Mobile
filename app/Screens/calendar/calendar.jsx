@@ -17,6 +17,7 @@ import { getTodayDateString } from '../../../src/utils/dateHelpers';
 import { BASE_URL } from '../../config/config';
 import { useContext, useState, useMemo, useEffect, useCallback } from 'react';
 import { FoodContext } from '../../context/foodContext';
+import TopBar from '../topBar/topBar';
 
 
 const CalendarScreen = () => {
@@ -116,6 +117,8 @@ const CalendarScreen = () => {
   };
 
   return (
+    <>
+    <TopBar />
     <View style={styles.container}>
       <View style={styles.calendarWrapper}>
         <Calendar
@@ -210,6 +213,7 @@ const CalendarScreen = () => {
       </Modal>
       
     </View>
+    </>
   );
 };
 

@@ -4,15 +4,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F6FF',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 44,
+    overflow:'hidden',
+    marginTop: -30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30  
   },
   calendarWrapper: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 3,
-    elevation: 2,
-    zIndex: 1,
     backgroundColor: '#F2F6FF',
     paddingBottom: 10,
   },
