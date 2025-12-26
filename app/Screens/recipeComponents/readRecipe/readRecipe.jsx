@@ -232,8 +232,8 @@ const ReadRecipe = ({ onClose, data }) => {
                                                         {item.quantity}{formatUnit(foodInfo?.measuringunit)}
                                                     </Text>
                                                     {totalOwned < item.quantity && totalOwned > 0 && (
-                                                        <Text style={{ fontSize: 10, color: '#f3ce60' }}>
-                                                            Stock: {totalOwned}{formatUnit(foodInfo?.measuringunit)}
+                                                        <Text style={{ fontSize: 10, color: '#4e4e4e' }}>
+                                                            En stock: {totalOwned}{formatUnit(foodInfo?.measuringunit)}
                                                         </Text>
                                                     )}
                                                 </View>
