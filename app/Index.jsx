@@ -2,6 +2,7 @@ import { useState } from "react";
 import StackNavigator from "./StackNavigator/StackNavigator";
 import TabNavigator from "./StackNavigator/TabNavigator";
 import { FoodProvider } from "./context/foodContext";
+import { RecipeProvider } from "./context/recipeContext";
 import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging';
 import { useNotifications } from "../src/utils/useNotifications";
 
@@ -17,11 +18,13 @@ export default function App() {
 
   return (
     <FoodProvider>
-      {isLoggedIn ? (
-        <TabNavigator /> 
-      ) : (
-        <StackNavigator setIsLoggedIn={setIsLoggedIn}/>
-      )}
+      <RecipeProvider>
+        {isLoggedIn ? (
+          <TabNavigator /> 
+        ) : (
+          <StackNavigator setIsLoggedIn={setIsLoggedIn}/>
+        )}
+      </RecipeProvider>
     </FoodProvider>
-  );
+);
 }
