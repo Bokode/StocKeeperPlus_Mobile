@@ -21,6 +21,16 @@ export default function CreateAccount({ navigation, onLoginSuccess }) {
       return;
     }
 
+    if (password.length < 8) {
+      setError("Le mot de passe est trop court (Minimum 8 charactères)")
+      return;
+    }
+
+    if (password.length > 64) {
+      setError("Le mot de passe est trop long (Maximum 64 charactères)")
+      return;
+    }
+
     if (password !== passwordConfirm) {
       setError("Les mots de passe ne correspondent pas.");
       return;
