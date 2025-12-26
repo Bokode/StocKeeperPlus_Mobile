@@ -39,6 +39,10 @@ const RecipeScreen = () => {
     if (filters.onlyFavorites && !favorites.includes(item.id)) return false;
     
     return true;
+  }).sort((a, b) => {
+    const percentageA = calculateFeasibility(a);
+    const percentageB = calculateFeasibility(b);
+    return percentageB - percentageA;
   });
 
   return (
