@@ -18,7 +18,6 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
   ];
 
   const feasibilityOptions = [
-    { label: "Peu importe (> 0%)", value: 0 },
     { label: "Au moins 25%", value: 25 },
     { label: "Au moins 50%", value: 50 },
     { label: "Au moins 75%", value: 75 },
