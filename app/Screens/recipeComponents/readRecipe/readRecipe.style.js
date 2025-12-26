@@ -1,45 +1,38 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
     },
-    backgroundImage: {
+    gradientHeader: {
         height: 220,
         paddingTop: 10,
+        paddingBottom: 20, 
+        justifyContent: 'space-between', 
     },
-    topContainer: {
+
+    navContainer: {
         paddingHorizontal: 15,
     },
-    line: {
+    navBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 10,
     },
-    button: {
+    navButton: { 
         width: 40,
         height: 40,
         borderRadius: 20,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 20
     },
-    containerContent: {
-        flex: 1,
-        marginTop: -30,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        backgroundColor: 'white',
-        paddingHorizontal: 20,
-        paddingTop: 25,
-    },
-    
-    // --- Score ---
-    scoreContainer: {
+
+    scoreWrapper: {
         alignItems: 'center',
-        marginTop: 10,
+        marginBottom: 50, 
     },
     scoreCircle: {
         width: 110,
@@ -65,9 +58,19 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
-    // --- Infos ---
+    // --- CONTENU PRINCIPAL ---
+    containerContent: {
+        flex: 1,
+        marginTop: -30, 
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        backgroundColor: 'white',
+        paddingHorizontal: 20,
+        paddingTop: 25,
+    },
+
     title: {
-        fontSize: 26,
+        fontSize: 24,
         fontWeight: 'bold',
         color: '#1c1b1f',
         marginBottom: 20,
@@ -84,20 +87,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f6f9ff',
-        paddingVertical: 12,
-        marginHorizontal: 5,
+        paddingVertical: 10,
+        marginHorizontal: 4,
         borderRadius: 12,
         borderWidth: 1,
         borderColor: '#eef2fa'
     },
     infoBlockText: {
-        marginLeft: 8,
-        fontSize: 14,
+        marginLeft: 6,
+        fontSize: 13,
         fontWeight: '600',
         color: '#1c1b1f',
     },
 
-    // --- Onglets ---
     tabContainer: {
         flexDirection: 'row',
         marginBottom: 20,
@@ -125,7 +127,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
 
-    // --- Liste Ingrédients ---
     ingredientsList: {
         marginBottom: 10,
     },
@@ -143,28 +144,31 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
     },
-    
-    // --- Image et Badge ---
+
     imageBadgeContainer: {
-        position: 'relative', // IMPORTANT pour le badge absolu
-        marginRight: 15,
-    },
-    ingredientImage: {
         width: 50,
         height: 50,
+        marginRight: 15,
+        position: 'relative', 
+        overflow: 'visible', 
+    },
+    ingredientImage: {
+        width: '100%',
+        height: '100%',
         borderRadius: 12,
         backgroundColor: '#f0f0f0',
     },
     stockBadge: {
         position: 'absolute',
-        top: -4,    // Dépasse légèrement en haut
-        right: -4,  // Dépasse légèrement à droite
-        width: 14,
-        height: 14,
-        borderRadius: 7,
-        borderWidth: 2, // Petite bordure blanche pour détacher de l'image
+        top: -4,    
+        right: -4,  
+        width: 16,
+        height: 16,
+        borderRadius: 8,
+        borderWidth: 2, 
         borderColor: 'white',
-        zIndex: 1,
+        zIndex: 10, 
+        elevation: 5, 
     },
 
     ingredientLabel: {
