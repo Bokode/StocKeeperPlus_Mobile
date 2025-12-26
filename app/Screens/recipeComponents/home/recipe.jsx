@@ -40,9 +40,7 @@ const RecipeScreen = () => {
     
     return true;
   }).sort((a, b) => {
-    const percentageA = calculateFeasibility(a);
-    const percentageB = calculateFeasibility(b);
-    return percentageB - percentageA;
+    return calculateFeasibility(b) - calculateFeasibility(a);
   });
 
   return (
