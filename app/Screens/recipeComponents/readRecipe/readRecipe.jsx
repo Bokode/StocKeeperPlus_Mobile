@@ -171,7 +171,7 @@ const ReadRecipe = ({ onClose, data }) => {
                         </View>
                         <View style={styles.infoBlock}>
                             <FontAwesomeIcon icon={faFire} size={18} color="#4379de" />
-                            <Text style={styles.infoBlockText}>{data.caloricintake || "0"} Kcal</Text>
+                            <Text style={styles.infoBlockText}>{data.caloricintake || "/"} Kcal</Text>
                         </View>
                     </View>
 
