@@ -45,13 +45,17 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
 
     return (
         <View style={styles.container}>
-            <LinearGradient colors={['#4379de', '#9bb1deff']} style={styles.backgroundImage}>
-                <View style={styles.topContainer}>
-                    <View style={styles.line}>
-                        <TouchableOpacity onPress={onClose} style={styles.button}>
+            {/* Header avec Dégradé */}
+            <LinearGradient colors={['#4379de', '#9bb1deff']} style={styles.gradientHeader}>
+                
+                {/* --- BLOC 1 : NAVIGATION (HAUT) --- */}
+                {/* Ce bloc est indépendant du score */}
+                <View style={styles.navContainer}>
+                    <View style={styles.navBar}>
+                        <TouchableOpacity onPress={onClose} style={styles.navButton}>
                             <FontAwesomeIcon icon={faAngleLeft} size={24} color="black" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={onToggleFavorite}>
+                        <TouchableOpacity style={styles.navButton} onPress={onToggleFavorite}>
                             <FontAwesomeIcon 
                                 icon={isFavorite ? faBookmarkSolid : faBookmarkRegular} 
                                 size={24} 
@@ -60,12 +64,16 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.scoreContainer}>
+
+                {/* --- BLOC 2 : SCORE (BAS) --- */}
+                {/* Ce bloc est indépendant de la navigation */}
+                <View style={styles.scoreWrapper}>
                     <View style={styles.scoreCircle}>
                         <Text style={styles.scoreNumber}>{percentage}%</Text>
                         <Text style={styles.scoreLabel}>Faisable</Text>
                     </View>
                 </View>
+
             </LinearGradient>
 
             <View style={styles.containerContent}>
@@ -74,15 +82,15 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
 
                     <View style={styles.infoBlocksContainer}>
                         <View style={styles.infoBlock}>
-                            <FontAwesomeIcon icon={faUserGroup} size={20} color="#4379de" />
+                            <FontAwesomeIcon icon={faUserGroup} size={18} color="#4379de" />
                             <Text style={styles.infoBlockText}>{data.nbeaters || "/"} pers.</Text>
                         </View>
                         <View style={styles.infoBlock}>
-                            <FontAwesomeIcon icon={faClock} size={20} color="#4379de" />
+                            <FontAwesomeIcon icon={faClock} size={18} color="#4379de" />
                             <Text style={styles.infoBlockText}>{data.timetomake || "/"} min</Text>
                         </View>
                         <View style={styles.infoBlock}>
-                            <FontAwesomeIcon icon={faFire} size={20} color="#4379de" />
+                            <FontAwesomeIcon icon={faFire} size={18} color="#4379de" />
                             <Text style={styles.infoBlockText}>{data.caloricintake || "0"} Kcal</Text>
                         </View>
                     </View>
@@ -101,7 +109,6 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                             <View style={styles.ingredientsList}>
                                 {ingredientList.map((item, index) => {
                                     const foodInfo = item.food_ingredientamount_foodTofood;
-                                    
                                     const userItems = foodToShow.filter(fs => fs.idFood === item.food);
                                     const totalOwned = userItems.reduce((sum, fs) => sum + (fs.quantity || 0), 0);
 
@@ -115,13 +122,15 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                                     return (
                                         <View key={index} style={styles.ingredientRow}>
                                             <View style={styles.ingredientMainInfo}>
+                                                
+                                                {/* Conteneur Image + Badge */}
                                                 <View style={styles.imageBadgeContainer}>
-                                                    {/* 3. Utilisation uniquement de l'URI distante (plus de require local) */}
                                                     <Image 
                                                         source={{ uri: fullImageUrl }}
                                                         style={styles.ingredientImage}
                                                         resizeMode="cover"
                                                     />
+                                                    {/* Badge avec Z-Index élevé */}
                                                     <View style={[styles.stockBadge, { backgroundColor: statusColor }]} />
                                                 </View>
                                                 
@@ -134,7 +143,7 @@ const ReadRecipe = ({ onClose, data, isFavorite, onToggleFavorite }) => {
                                                 </Text>
                                                 {totalOwned < item.quantity && totalOwned > 0 && (
                                                     <Text style={{ fontSize: 10, color: '#f3ce60' }}>
-                                                        En stock: {totalOwned}{formatUnit(foodInfo?.measuringunit)}
+                                                        Stock: {totalOwned}{formatUnit(foodInfo?.measuringunit)}
                                                     </Text>
                                                 )}
                                             </View>

@@ -1,45 +1,42 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
     },
-    backgroundImage: {
+    // --- HEADER (DÉGRADÉ) ---
+    // On utilise 'space-between' pour coller la Nav en haut et le Score en bas
+    gradientHeader: {
         height: 220,
         paddingTop: 10,
+        paddingBottom: 20, 
+        justifyContent: 'space-between', 
     },
-    topContainer: {
+
+    // --- ZONE 1 : BARRE DE NAVIGATION (Haut) ---
+    navContainer: {
         paddingHorizontal: 15,
     },
-    line: {
+    navBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 10,
     },
-    button: {
+    navButton: { 
         width: 40,
         height: 40,
         borderRadius: 20,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 20
     },
-    containerContent: {
-        flex: 1,
-        marginTop: -30,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        backgroundColor: 'white',
-        paddingHorizontal: 20,
-        paddingTop: 25,
-    },
-    
-    // --- Score ---
-    scoreContainer: {
+
+    // --- ZONE 2 : SCORE (Bas du header) ---
+    scoreWrapper: {
         alignItems: 'center',
-        marginTop: 10,
+        marginBottom: 50, 
     },
     scoreCircle: {
         width: 110,
@@ -48,6 +45,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
+        // Ombres pour donner du relief
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.15,
@@ -65,9 +63,20 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
-    // --- Infos ---
+    // --- CONTENU PRINCIPAL ---
+    containerContent: {
+        flex: 1,
+        marginTop: -30, 
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        backgroundColor: 'white',
+        paddingHorizontal: 20,
+        paddingTop: 25,
+    },
+
+    // --- INFOS RECETTE ---
     title: {
-        fontSize: 26,
+        fontSize: 24, // Légèrement réduit pour éviter les retours à la ligne moches
         fontWeight: 'bold',
         color: '#1c1b1f',
         marginBottom: 20,
@@ -84,20 +93,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f6f9ff',
-        paddingVertical: 12,
-        marginHorizontal: 5,
+        paddingVertical: 10,
+        marginHorizontal: 4,
         borderRadius: 12,
         borderWidth: 1,
         borderColor: '#eef2fa'
     },
     infoBlockText: {
-        marginLeft: 8,
-        fontSize: 14,
+        marginLeft: 6,
+        fontSize: 13,
         fontWeight: '600',
         color: '#1c1b1f',
     },
 
-    // --- Onglets ---
+    // --- ONGLETS ---
     tabContainer: {
         flexDirection: 'row',
         marginBottom: 20,
@@ -125,14 +134,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
     },
 
-    // --- Liste Ingrédients ---
+    // --- LISTE INGRÉDIENTS ---
     ingredientsList: {
         marginBottom: 10,
     },
     ingredientRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'center', // Important pour centrer verticalement
         paddingVertical: 12,
         borderBottomWidth: 1,
         borderBottomColor: '#f5f5f5',
@@ -144,27 +153,33 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     
-    // --- Image et Badge ---
+    // --- CORRECTION DES IMAGES ET BADGES ---
     imageBadgeContainer: {
-        position: 'relative', // IMPORTANT pour le badge absolu
+        width: 50,  // Dimension fixe
+        height: 50, // Dimension fixe
         marginRight: 15,
+        position: 'relative', 
+        // IMPORTANT : Permet au badge de dépasser du cadre sur Android
+        overflow: 'visible', 
     },
     ingredientImage: {
-        width: 50,
-        height: 50,
+        width: '100%',
+        height: '100%',
         borderRadius: 12,
         backgroundColor: '#f0f0f0',
     },
     stockBadge: {
         position: 'absolute',
-        top: -4,    // Dépasse légèrement en haut
-        right: -4,  // Dépasse légèrement à droite
-        width: 14,
-        height: 14,
-        borderRadius: 7,
-        borderWidth: 2, // Petite bordure blanche pour détacher de l'image
+        top: -4,    
+        right: -4,  
+        width: 16,  // Un peu plus grand pour être bien visible
+        height: 16,
+        borderRadius: 8,
+        borderWidth: 2, 
         borderColor: 'white',
-        zIndex: 1,
+        // IMPORTANT : Force le badge au premier plan
+        zIndex: 10, 
+        elevation: 5, 
     },
 
     ingredientLabel: {
