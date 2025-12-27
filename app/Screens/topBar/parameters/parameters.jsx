@@ -114,7 +114,7 @@ export default function Parameters({ isVisible, onClose }) {
                         <View style={styles.header}>
                             <Text style={styles.title}>Paramètres</Text>
                             <TouchableOpacity onPress={handleClose}>
-                                    <FontAwesomeIcon icon={faTimes} size={24} color="#4379de"/>
+                                    <FontAwesomeIcon icon={faTimes} size={24} color="#333"/>
                             </TouchableOpacity>
                         </View>
 
