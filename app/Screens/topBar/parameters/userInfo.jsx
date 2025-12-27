@@ -15,6 +15,7 @@ export default function UserInfo() {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState(null);
 
   const [editForm, setEditForm] = useState({
     username: '',
@@ -42,7 +43,7 @@ export default function UserInfo() {
     })
     .catch(error => {
       console.error(error);
-      Alert.alert("Erreur", "Impossible de récupérer les informations.");
+      setError("Erreur", "Impossible de récupérer les informations.");
     });
   };
 
@@ -52,14 +53,25 @@ export default function UserInfo() {
 
   const handleUpdate = () => {
     if (!editForm.username || !editForm.password || !editForm.confirmPassword) {
-      Alert.alert("Attention", "Tous les champs sont obligatoires (Nom et mot de passe).");
+      setError("Tous les champs sont obligatoires (Nom et mot de passe).");
+      return;
+    }
+
+    if (editForm.password.length < 8) {
+      setError("Le mot de passe est trop court (Minimum 8 charactères)")
+      return;
+    }
+
+    if (editForm.password.length > 64) {
+      setError("Le mot de passe est trop long (Maximum 64 charactères)")
       return;
     }
 
     if (editForm.password !== editForm.confirmPassword) {
-      Alert.alert("Erreur", "Les mots de passe ne correspondent pas.");
+      setError("Les mots de passe ne correspondent pas.");
       return;
     }
+
 
     const body = {
       username: editForm.username,
@@ -81,12 +93,12 @@ export default function UserInfo() {
         Alert.alert("Succès", "Votre profil a été mis à jour !");
       } else {
         const errorData = await res.json();
-        Alert.alert("Erreur", errorData.message || "Erreur lors de la mise à jour");
+        setError("Erreur", errorData.message || "Erreur lors de la mise à jour");
       }
     })
     .catch(error => {
       console.error(error);
-      Alert.alert("Erreur réseau", "Impossible de contacter le serveur.");
+      setError("Erreur réseau", "Impossible de contacter le serveur.");
     });
   };
 
@@ -119,6 +131,7 @@ export default function UserInfo() {
                 onChangeText={(text) => setEditForm({ ...editForm, password: text })}
                 secureTextEntry={true}
                 placeholder="Minimum 8 caractères"
+                autoCapitalize="none"
               />
 
               <Text style={styles.label}>Confirmer le mot de passe :</Text>
@@ -128,7 +141,12 @@ export default function UserInfo() {
                 onChangeText={(text) => setEditForm({ ...editForm, confirmPassword: text })}
                 secureTextEntry={true}
                 placeholder="Répétez le mot de passe"
+                autoCapitalize="none"
               />
+
+              <View style={styles.section}>
+                {error && <Text style={styles.error}>{error}</Text>}
+              </View>
 
               <View style={styles.buttonGroup}>
                 <TouchableOpacity 

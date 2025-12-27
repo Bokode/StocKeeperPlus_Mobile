@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#fafafa',
     fontSize: 16,
+    color:'#000',
   },
   
   buttonGroup: {
@@ -86,6 +87,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 8,
     fontSize: 16,
+  },
+  error:{
+    color: '#c8000aff',
   },
 });
 
