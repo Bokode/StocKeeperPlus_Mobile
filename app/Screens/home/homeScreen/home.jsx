@@ -1,6 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import Filter from '../filter/filter';
@@ -10,11 +10,13 @@ import SearchBar from '../searchBar/searchBar';
 import styles from "./home.styles"
 import { BASE_URL } from '../../../config/config';
 import TopBar from '../../topBar/topBar';
-import { FoodContext } from '../../../context/foodContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFoodToShow } from '../../../../src/store/slices/foodSlice';
 
 export default function HomeScreen() {
-  const [username, setUsername] = useState("le GOAT")
-  const { foodToShow, setFoodToShow } = useContext(FoodContext);
+  const dispatch = useDispatch()
+  const [username, setUsername] = useState("le GOAT");
+  const foodToShow = useSelector(state => state.food.foodToShow);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   const [showReadFood, setShowReadFood] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
@@ -74,11 +76,11 @@ export default function HomeScreen() {
     ])
     .then(([allFoodData, foodUserData]) => {
       const mergedFood = buildFoodToShow(allFoodData, foodUserData);
-      setFoodToShow(mergedFood);
+      dispatch(setFoodToShow(mergedFood));
     })
     .catch(error => {
       console.error(error);
-      setFoodToShow([]);
+      dispatch(setFoodToShow([]));
     });
   }
 

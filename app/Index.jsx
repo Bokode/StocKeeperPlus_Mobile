@@ -1,7 +1,8 @@
 import { useState } from "react";
 import StackNavigator from "./StackNavigator/StackNavigator";
 import TabNavigator from "./StackNavigator/TabNavigator";
-import { FoodProvider } from "./context/foodContext";
+import { Provider } from 'react-redux';
+import { store } from '../src/store/index';
 
 //import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging';
 //import { useNotifications } from "../src/utils/useNotifications";
@@ -18,7 +19,7 @@ export default function App() {
   
   return (
     <AuthContext.Provider value={{setUser}}>
-    <FoodProvider>
+    <Provider store={store}>
     <RecipeProvider>
       {user ? (
         <TabNavigator /> 
@@ -26,7 +27,7 @@ export default function App() {
         <StackNavigator setUser={setUser}/>
       )}
     </RecipeProvider>
-    </FoodProvider>
+    </Provider>
     </AuthContext.Provider>
   );
 }

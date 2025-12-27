@@ -10,8 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-
-import { FoodContext } from '../../../context/foodContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFoodToShow } from '../../../../src/store/slices/foodSlice';
 import { RecipeContext } from '../../../context/recipeContext';
 import { BASE_URL } from '../../../config/config'; 
 import ReadFood from '../../home/readFood/readFood';
@@ -24,8 +24,9 @@ const ReadRecipe = ({ onClose, data }) => {
     const [selectedFoodData, setSelectedFoodData] = useState(null);
 
     // --- CONTEXTES ---
-    // 1. FoodContext pour le stock (setFoodToShow pour les mises à jour)
-    const { foodToShow, setFoodToShow } = useContext(FoodContext);
+    // 1. FoodSlicepour le stock (setFoodToShow pour les mises à jour)
+    const dispatch = useDispatch();
+    const foodToShow = useSelector(state => state.food.foodToShow);
     
     // 2. RecipeContext pour les favoris et le calcul
     const { favorites, toggleFavorite, calculateFeasibility } = useContext(RecipeContext);
@@ -96,7 +97,7 @@ const ReadRecipe = ({ onClose, data }) => {
                 };
             }).filter(Boolean);
             
-            setFoodToShow(mergedFood);
+            dispatch(setFoodToShow(mergedFood));
             // NOTE : Le pourcentage de la recette se mettra à jour tout seul 
             // grâce au RecipeContext qui écoute FoodContext !
         } catch (error) {

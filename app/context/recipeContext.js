@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../config/config';
-import { FoodContext } from './foodContext'; 
+import { useSelector } from 'react-redux';
 
 export const RecipeContext = createContext();
 
@@ -10,7 +10,7 @@ export const RecipeProvider = ({ children }) => {
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const { foodToShow } = useContext(FoodContext);
+    const foodToShow = useSelector(state => state.food.foodToShow);
 
     useEffect(() => {
         refreshRecipes();
