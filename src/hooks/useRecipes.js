@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useContext } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecipes, loadFavorites, toggleFavorite } from '../store/slices/recipeSlice';
 
 // Import temporaire du contexte Food (tant que Food n'est pas dans Redux)
-import { FoodContext } from '../../app/context/foodContext'; 
 
 export const useRecipes = () => {
   const dispatch = useDispatch();
@@ -11,7 +10,7 @@ export const useRecipes = () => {
   const { list: recipes, favorites, loading } = useSelector((state) => state.recipes);
   
   // 2. On récupère la nourriture (Soit via Contexte, soit via Redux plus tard)
-  const { foodToShow } = useContext(FoodContext); 
+  const foodToShow = useSelector((state) => state.food.foodToShow) || [];
   // SI TU PASSES FOOD EN REDUX, REMPLACE LA LIGNE CI-DESSUS PAR :
   // const { list: foodToShow } = useSelector((state) => state.food);
 
