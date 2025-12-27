@@ -7,7 +7,6 @@ import { store } from '../src/store/index';
 //import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging';
 //import { useNotifications } from "../src/utils/useNotifications";
 
-import { RecipeProvider } from "./context/recipeContext";
 import { AuthContext } from "./context/authContext";
 
 //const messaging = getMessaging();
@@ -17,15 +16,14 @@ import { AuthContext } from "./context/authContext";
 function NavigationWrapper() {
   const user = useSelector((state) => state.auth.user);
   //useNotifications(user);
-  
   return (
-    <RecipeProvider>
+    <Provider store={store}>
       {user ? (
         <TabNavigator /> 
       ) : (
         <StackNavigator />
       )}
-    </RecipeProvider>
+    </Provider>
   );
 }
 
