@@ -20,7 +20,7 @@ export default function Filter({ onClose, filters, setFilters, onReset }) {
         <FontAwesomeIcon icon={faBoxArchive} size={20} color="#1c1b1f"/>
         <TouchableOpacity
           style={{ flex: 1, paddingVertical: 12, paddingLeft: 10 }}
-          onPress={() => setShowStorageMenu(!showStorageMenu)}
+          onPress={() => {setShowStorageMenu(!showStorageMenu); setNutriScoreMenu(false);}}
         >
           <Text style={{ color: filters.storageType ? "#1c1b1f" : "grey" }}>
             {filters.storageType || "Type de stockage"}
@@ -49,7 +49,7 @@ export default function Filter({ onClose, filters, setFilters, onReset }) {
         <FontAwesomeIcon icon={faBoxArchive} size={20} color="#1c1b1f"/>
         <TouchableOpacity
           style={{ flex: 1, paddingVertical: 12, paddingLeft: 10 }}
-          onPress={() => setNutriScoreMenu(!showNutriScoreMenu)}
+          onPress={() => {setNutriScoreMenu(!showNutriScoreMenu); setShowStorageMenu(false);}}
         >
           <Text style={{ color: filters.nutriScore ? "#1c1b1f" : "grey" }}>
             {filters.nutriScore || "NutriScore"}
