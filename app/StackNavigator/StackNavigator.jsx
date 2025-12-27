@@ -11,7 +11,6 @@ export default function StackNavigator({ setUser }) {
         {(props) => (
           <LoginScreen
             {...props}
-            onLoginSuccess={(email) => setUser(email)}
           />
         )}
       </Stack.Screen>
@@ -19,7 +18,6 @@ export default function StackNavigator({ setUser }) {
         {(props) => (
           <CreateAccount
             {...props}
-            onLoginSuccess={(email) => setUser(email)}
           />
         )}
       </Stack.Screen>
