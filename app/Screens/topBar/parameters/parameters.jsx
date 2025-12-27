@@ -20,12 +20,12 @@ import {
 import { useState } from "react";
 import UserInfo from "./userInfo"; 
 // import { getMessaging, hasPermission} from '@react-native-firebase/messaging';
-import { useContext } from "react";
-import { AuthContext } from "../../../context/authContext";
 import { BASE_URL } from "../../../config/config";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../../src/store/slices/authSlice";
 
 export default function Parameters({ isVisible, onClose }) {
-    const { setUser } = useContext(AuthContext);
+    const dispatch = useDispatch();
 
     const handleLogout = async () => {
         try {
@@ -36,7 +36,7 @@ export default function Parameters({ isVisible, onClose }) {
             });
             if (response.ok)
             {
-                setUser(null);
+                dispatch(logout());
                 onClose();
             }
             else
