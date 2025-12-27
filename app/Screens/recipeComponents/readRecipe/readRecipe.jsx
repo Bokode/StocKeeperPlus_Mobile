@@ -11,8 +11,9 @@ import {
 import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { useRecipes } from '../../../../src/hooks/useRecipes';
 import { FoodContext } from '../../../context/foodContext';
-import { RecipeContext } from '../../../context/recipeContext';
+// import { RecipeContext } from '../../../context/recipeContext';
 import { BASE_URL } from '../../../config/config'; 
 import ReadFood from '../../home/readFood/readFood';
 import styles from "./readRecipe.style";
@@ -23,12 +24,11 @@ const ReadRecipe = ({ onClose, data }) => {
     const [showFoodDetail, setShowFoodDetail] = useState(false);
     const [selectedFoodData, setSelectedFoodData] = useState(null);
 
+    const { favorites, toggleFavorite, calculateFeasibility } = useRecipes();
+
     // --- CONTEXTES ---
     // 1. FoodContext pour le stock (setFoodToShow pour les mises à jour)
     const { foodToShow, setFoodToShow } = useContext(FoodContext);
-    
-    // 2. RecipeContext pour les favoris et le calcul
-    const { favorites, toggleFavorite, calculateFeasibility } = useContext(RecipeContext);
 
     // --- REFS & DIMENSIONS (Swipe) ---
     const scrollViewRef = useRef(null);

@@ -6,7 +6,8 @@ import RecipeFilter from '../filter/recipeFilter';
 import TopBar from '../../topBar/topBar';
 import ReadRecipe from '../readRecipe/readRecipe';
 
-import { RecipeContext } from '../../../context/recipeContext';
+// import { RecipeContext } from '../../../context/recipeContext';
+import { useRecipes } from '../../../../src/hooks/useRecipes';
 import styles from './recipe.style';
 
 const RecipeScreen = () => {
@@ -15,19 +16,14 @@ const RecipeScreen = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [showReadRecipe, setShowReadRecipe] = useState(false);
   
+  const { recipes, favorites, toggleFavorite, calculateFeasibility } = useRecipes();
+  
   const [filters, setFilters] = useState({
     nbEaters: null,
     maxTime: null,
     minPercentage: 0,
     onlyFavorites: false
   });
-
-  const { 
-      recipes, 
-      favorites, 
-      toggleFavorite, 
-      calculateFeasibility 
-  } = useContext(RecipeContext);
 
   const filteredData = recipes.filter(item => {
     const recipePercentage = calculateFeasibility(item);
