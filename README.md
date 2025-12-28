@@ -25,7 +25,7 @@ Bienvenue sur la documentation de l'application mobile de **StocKeeper+**. Cette
 Pour lancer ce projet, vous avez uniquement besoin de :
 
 * **Docker Desktop** (ou Docker Engine + Docker Compose) installé et lancé sur votre machine.
-* **Le dossier StocKeeperPlusProject** contenant l'API et la base de données.
+* **Le dossier StocKeeperPlusProject** contenant l'API et la base de données. [Télécharger le projet ici](https://github.com/Bokode/StocKeeperPlusProject)
 
 *L'API et la base de données sont conteneurisée et servies via Vite à l'intérieur de l'environnement Docker.*
 
