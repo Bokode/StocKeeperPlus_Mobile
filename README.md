@@ -49,8 +49,9 @@ Ouvrez un autre terminal à la racine du dossier StocKeeperPlusMobile et créez 
 EXPO_PUBLIC_IP_ADRESS=<votre_adresse_IP_locale>
 ```
 
-Puis exécutez la commande :
+Puis exécutez les commandes :
 ```bash
+npm install
 npm start
 ```
 
