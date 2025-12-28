@@ -169,7 +169,6 @@ const CalendarScreen = () => {
         
         <FlatList
           data={dataToDisplay}
-          // Assurez-vous que votre objet a bien une clé unique (id ou idFood)
           keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item }) => (
@@ -206,7 +205,6 @@ const CalendarScreen = () => {
           <ReadFood 
             data={selectedFood} 
             onClose={() => setShowReadFood(false)} 
-            // Ajout des props pour permettre l'édition comme dans Home
             updateFoodFromDB={updateFoodFromDB} 
             addFoodFromDB={addFoodFromDB}
             onRefresh={getAllFoodFromDB}
