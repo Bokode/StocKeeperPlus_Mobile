@@ -1,5 +1,3 @@
-// src/utils/calendarUtils.js
-
 const getStatusColor = (expirationdate) => {
   const today = new Date();
   const expDate = new Date(expirationdate);

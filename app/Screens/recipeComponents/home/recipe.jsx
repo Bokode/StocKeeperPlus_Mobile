@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native';
 import SearchBar from '../../home/searchBar/searchBar'; 
 import RecipeItem from '../item/recipeItem';
@@ -6,7 +6,6 @@ import RecipeFilter from '../filter/recipeFilter';
 import TopBar from '../../topBar/topBar';
 import ReadRecipe from '../readRecipe/readRecipe';
 
-// import { RecipeContext } from '../../../context/recipeContext';
 import { useRecipes } from '../../../../src/hooks/useRecipes';
 import styles from './recipe.style';
 

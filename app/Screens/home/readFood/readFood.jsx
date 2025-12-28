@@ -1,6 +1,6 @@
 import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan, faClock, faUtensils, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import React, { useState, useContext, useMemo, Suspense } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { Image, ImageBackground, Text, TouchableOpacity, View, Modal, FlatList, ActivityIndicator } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
