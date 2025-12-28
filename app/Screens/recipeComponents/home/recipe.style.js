@@ -26,5 +26,4 @@ const styles = StyleSheet.create({
   }
 });
 
-// C'est cette ligne qui permet d'éviter le warning d'Expo Router
 export default styles;

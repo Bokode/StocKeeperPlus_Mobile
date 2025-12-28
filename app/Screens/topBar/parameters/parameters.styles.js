@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     fullScreenHeader: {
-        height: 60, // Hauteur standard
+        height: 60,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     backButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 60, // Largeur fixe pour aider au centrage du titre
+        width: 60,
     },
     backText: {
         color: '#333',

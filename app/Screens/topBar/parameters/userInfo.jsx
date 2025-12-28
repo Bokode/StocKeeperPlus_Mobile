@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -13,7 +13,6 @@ import styles from './userInfo.styles';
 
 export default function UserInfo() {
   const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
 
@@ -23,7 +22,6 @@ export default function UserInfo() {
     confirmPassword: ''
   });
 
-  // 1. Récupération des infos
   const getUserInfo = () => {
     fetch(`${BASE_URL}/user/me`, {
       method: 'GET',
@@ -167,7 +165,6 @@ export default function UserInfo() {
               </View>
             </View>
           ) : (
-            // --- MODE LECTURE ---
             <View>
               <View style={styles.infoRow}>
                 <Text style={styles.label}>Nom d'utilisateur :</Text>
