@@ -47,6 +47,7 @@ export default function HomeScreen() {
     });
   }
  
+  // Code grandement amélioré par l'IAG //
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
       const food = allFood.find(f => f.id === userFood.food);
@@ -83,6 +84,7 @@ export default function HomeScreen() {
       dispatch(setFoodToShow([]));
     });
   }
+  // Fin //
 
   function addFoodFromDB(content) {
     fetch(`${BASE_URL}/foodUser/me`, {

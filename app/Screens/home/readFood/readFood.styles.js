@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     color: "#3962ac",
     fontWeight: "bold"
   },
+  // Code généré par l'IAG //
   carouselContainer: {
     marginTop: 15,
     height: 180,
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eef2f5',
   },
+  // Fin //
   carouselTitle: {
     fontSize: 16,
     fontWeight: '700',
