@@ -4,16 +4,20 @@ import { BASE_URL } from "../../../config/config";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import styles from "./createAccount.styles";
 import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../../../src/store/slices/authSlice";
 
-export default function CreateAccount({ navigation, onLoginSuccess }) {
+export default function CreateAccount({ navigation }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const createAccount = async () => {
+    
     setError(null);
 
     if (!username.trim() || !email.trim() || !password || !passwordConfirm) {
@@ -80,7 +84,7 @@ export default function CreateAccount({ navigation, onLoginSuccess }) {
       }
 
       setLoading(false);
-      onLoginSuccess(email);
+      dispatch(loginSuccess(email));
 
     } catch (err) {
       setError("Erreur serveur.");

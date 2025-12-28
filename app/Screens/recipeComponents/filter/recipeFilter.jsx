@@ -49,7 +49,6 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
         <View style={styles.modalFilter}>
             <Text style={styles.textModal}>Filtrer les recettes</Text>
 
-            {/* --- INPUT : Nombre de personnes --- */}
             <View style={styles.searchSection}>
                 <FontAwesomeIcon icon={faUserGroup} size={20} color="#1c1b1f" />
                 <TextInput
@@ -68,7 +67,6 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
                 />
             </View>
 
-          {/* --- DROPDOWN 1 : Temps --- */}
           <View style={[styles.searchSection, { zIndex: 20 }]}> 
             <FontAwesomeIcon icon={faClock} size={20} color="#1c1b1f" />
             <TouchableOpacity
@@ -103,7 +101,6 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
             )}
           </View>
 
-          {/* --- DROPDOWN 2 : Faisabilité --- */}
           <View style={[styles.searchSection, { zIndex: 10 }]}> 
             <FontAwesomeIcon icon={faUtensils} size={20} color="#1c1b1f" />
             <TouchableOpacity
@@ -137,8 +134,8 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
                 </View>
             )}
           </View>
-
-          {/* --- CHECKBOX : Uniquement Favoris --- */}
+          
+          {/* CheckBox spéciale avec logo dedans, IA utilisée comme outil d'aide pour la faire. */}
           <TouchableOpacity 
             style={styles.favoriteFilterRow} 
             onPress={() => {
@@ -155,7 +152,6 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
             <Text style={styles.favoriteLabel}>Afficher uniquement mes favoris</Text>
           </TouchableOpacity>
 
-          {/* --- BOUTONS --- */}
           <TouchableOpacity 
             style={styles.resetButton} 
             onPress={() => {

@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 export default function TabNavigator() {
   return (
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Accueil"
         screenOptions={({ route }) => ({
           headerShown: false,
 
@@ -27,16 +27,16 @@ export default function TabNavigator() {
             let iconName;
 
             switch (route.name) {
-              case "Home":
+              case "Accueil":
                 iconName = "home";
                 break;
-              case "Recipe":q
+              case "Recette":
                 iconName = "cutlery";
                 break;
-              case "Map":
+              case "Carte":
                 iconName = "map";
                 break;
-              case "Calendar":
+              case "Calendrier":
                 iconName = "calendar";
                 break;
             }
@@ -59,10 +59,10 @@ export default function TabNavigator() {
           },
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Recipe" component={RecipeScreen} />
-        <Tab.Screen name="Map" component={MapScreen} />
-        <Tab.Screen name="Calendar" component={CalendarScreen} />
+        <Tab.Screen name="Accueil" component={HomeScreen} />
+        <Tab.Screen name="Recette" component={RecipeScreen} />
+        <Tab.Screen name="Carte" component={MapScreen} />
+        <Tab.Screen name="Calendrier" component={CalendarScreen} />
       </Tab.Navigator>
   );
 }

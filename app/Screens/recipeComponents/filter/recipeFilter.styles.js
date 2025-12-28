@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
   },
-  // --- NOUVEAU STYLE : FILTRE FAVORIS ---
   favoriteFilterRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -88,7 +87,6 @@ const styles = StyleSheet.create({
     color: '#1c1b1f',
     fontWeight: '600',
   },
-  // --- BOUTONS ---
   resetButton: {
     paddingVertical: 12,
     borderRadius: 10,

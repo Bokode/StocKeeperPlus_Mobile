@@ -4,8 +4,11 @@ import { BASE_URL } from "../../../config/config";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import styles from "./loginScreen.styles";
 import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../../../src/store/slices/authSlice";
 
-export default function LoginScreen({ navigation, onLoginSuccess }) {
+export default function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -27,7 +30,7 @@ export default function LoginScreen({ navigation, onLoginSuccess }) {
         return;
       }
 
-      onLoginSuccess(email);
+      dispatch(loginSuccess(email));
 
     } catch (err) {
       setError("Erreur serveur");

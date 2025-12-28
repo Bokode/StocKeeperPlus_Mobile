@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Text, TouchableOpacity, View, ScrollView, Image, Dimensions, Modal } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { 
@@ -11,39 +11,33 @@ import {
 import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { FoodContext } from '../../../context/foodContext';
-import { RecipeContext } from '../../../context/recipeContext';
-import { BASE_URL } from '../../../config/config'; 
+import { useSelector, useDispatch } from 'react-redux';
+import { setFoodToShow } from '../../../../src/store/slices/foodSlice';
+import { useRecipes } from '../../../../src/hooks/useRecipes';
+import { BASE_URL } from '../../../config/config';
 import ReadFood from '../../home/readFood/readFood';
 import styles from "./readRecipe.style";
 
 const ReadRecipe = ({ onClose, data }) => {
-    // --- ÉTATS LOCAUX ---
     const [activeTab, setActiveTab] = useState('ingredients');
     const [showFoodDetail, setShowFoodDetail] = useState(false);
     const [selectedFoodData, setSelectedFoodData] = useState(null);
 
-    // --- CONTEXTES ---
-    // 1. FoodContext pour le stock (setFoodToShow pour les mises à jour)
-    const { foodToShow, setFoodToShow } = useContext(FoodContext);
-    
-    // 2. RecipeContext pour les favoris et le calcul
-    const { favorites, toggleFavorite, calculateFeasibility } = useContext(RecipeContext);
+    const { favorites, toggleFavorite, calculateFeasibility } = useRecipes();
 
-    // --- REFS & DIMENSIONS (Swipe) ---
+    const dispatch = useDispatch();
+    const foodToShow = useSelector(state => state.food.foodToShow);
+
     const scrollViewRef = useRef(null);
     const screenWidth = Dimensions.get('window').width;
     const contentWidth = screenWidth - 40;
 
-    // --- VARIABLES ---
     const SERVER_URL = BASE_URL.slice(0, -3);
     const ingredientList = data?.ingredientamount_ingredientamount_recipeTorecipe || [];
     const isFavorite = favorites.includes(data.id);
     
-    // On utilise le calcul centralisé (plus de useMemo compliqué ici !)
     const percentage = calculateFeasibility(data);
 
-    // --- FONCTIONS UTILITAIRES ---
     const formatUnit = (unit) => {
         switch (unit?.toLowerCase()) {
             case 'gram': return 'g';
@@ -52,8 +46,6 @@ const ReadRecipe = ({ onClose, data }) => {
             default: return unit || '';
         }
     };
-
-    // --- GESTION SWIPE & TABS ---
     const handleTabPress = (tabName) => {
         setActiveTab(tabName);
         if (scrollViewRef.current) {
@@ -69,8 +61,6 @@ const ReadRecipe = ({ onClose, data }) => {
         if (newTab !== activeTab) setActiveTab(newTab);
     };
 
-    // --- GESTION MODAL FOOD (Update/Add depuis la recette) ---
-    // Fonction pour rafraîchir le contexte Food (récupérée de Home logique)
     const refreshFoodContext = async () => {
         try {
             const [allFoodData, foodUserData] = await Promise.all([
@@ -96,9 +86,7 @@ const ReadRecipe = ({ onClose, data }) => {
                 };
             }).filter(Boolean);
             
-            setFoodToShow(mergedFood);
-            // NOTE : Le pourcentage de la recette se mettra à jour tout seul 
-            // grâce au RecipeContext qui écoute FoodContext !
+            dispatch(setFoodToShow(mergedFood));
         } catch (error) {
             console.error("Erreur refresh context:", error);
         }
@@ -192,7 +180,6 @@ const ReadRecipe = ({ onClose, data }) => {
                         onMomentumScrollEnd={handleScrollEnd}
                         scrollEventThrottle={16}
                     >
-                        {/* --- PAGE 1 : INGRÉDIENTS --- */}
                         <View style={{ width: contentWidth }}>
                              <View style={styles.ingredientsList}>
                                 {ingredientList.length > 0 ? (
@@ -246,7 +233,6 @@ const ReadRecipe = ({ onClose, data }) => {
                             </View>
                         </View>
 
-                        {/* --- PAGE 2 : PRÉPARATION --- */}
                         <View style={{ width: contentWidth }}>
                              <Text style={styles.descriptionText}>{data.description || "Aucune instruction."}</Text>
                         </View>
@@ -255,7 +241,6 @@ const ReadRecipe = ({ onClose, data }) => {
                 </ScrollView>
             </View>
 
-            {/* --- MODAL ALIMENT --- */}
             {showFoodDetail && selectedFoodData && (
                 <Modal 
                     animationType="slide" 

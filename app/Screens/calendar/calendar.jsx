@@ -15,15 +15,17 @@ import styles from './calendar.styles';
 import { getMarkedDates } from '../../../src/utils/calendarUtils';
 import { getTodayDateString } from '../../../src/utils/dateHelpers';
 import { BASE_URL } from '../../config/config';
-import { useContext, useState, useMemo, useEffect, useCallback } from 'react';
-import { FoodContext } from '../../context/foodContext';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import TopBar from '../topBar/topBar';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFoodToShow } from '../../../src/store/slices/foodSlice';
 
 
 const CalendarScreen = () => {
   const today = getTodayDateString();
   
-  const { foodToShow, setFoodToShow } = useContext(FoodContext);
+  const dispatch = useDispatch();
+  const foodToShow = useSelector(state => state.food.foodToShow);
 
   const [selectedDate, setSelectedDate] = useState(today);
   const [showAllItems, setShowAllItems] = useState(true);
@@ -37,11 +39,11 @@ const CalendarScreen = () => {
     ])
     .then(([allFoodData, foodUserData]) => {
       const mergedFood = buildFoodToShow(allFoodData, foodUserData);
-      setFoodToShow(mergedFood);
+      dispatch(setFoodToShow(mergedFood));
     })
     .catch(error => {
       console.error("Erreur chargement calendrier:", error);
-      setFoodToShow([]);
+      dispatch(setFoodToShow([]));
     });
   }, []);
 
@@ -167,7 +169,6 @@ const CalendarScreen = () => {
         
         <FlatList
           data={dataToDisplay}
-          // Assurez-vous que votre objet a bien une clé unique (id ou idFood)
           keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item }) => (
@@ -204,7 +205,6 @@ const CalendarScreen = () => {
           <ReadFood 
             data={selectedFood} 
             onClose={() => setShowReadFood(false)} 
-            // Ajout des props pour permettre l'édition comme dans Home
             updateFoodFromDB={updateFoodFromDB} 
             addFoodFromDB={addFoodFromDB}
             onRefresh={getAllFoodFromDB}

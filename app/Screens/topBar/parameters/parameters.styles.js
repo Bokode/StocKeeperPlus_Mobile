@@ -36,13 +36,13 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         paddingBottom: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#4379de',
+        borderBottomColor: '#333',
     },
 
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#4379de',
+        color: '#333',
     },
 
     content: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     menuText: {
         fontSize: 16,
-        color: '#4379de',
+        color: '#333',
     },
     fullScreenContainer: {
         flex: 1,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     fullScreenHeader: {
-        height: 60, // Hauteur standard
+        height: 60,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -79,10 +79,10 @@ const styles = StyleSheet.create({
     backButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 60, // Largeur fixe pour aider au centrage du titre
+        width: 60,
     },
     backText: {
-        color: '#4379de',
+        color: '#333',
         fontSize: 16,
         marginLeft: 5,
     },

@@ -1,6 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, Modal } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import Filter from '../filter/filter';
@@ -10,11 +10,13 @@ import SearchBar from '../searchBar/searchBar';
 import styles from "./home.styles"
 import { BASE_URL } from '../../../config/config';
 import TopBar from '../../topBar/topBar';
-import { FoodContext } from '../../../context/foodContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFoodToShow } from '../../../../src/store/slices/foodSlice';
 
 export default function HomeScreen() {
-  const [username, setUsername] = useState("le GOAT")
-  const { foodToShow, setFoodToShow } = useContext(FoodContext);
+  const dispatch = useDispatch()
+  const [username, setUsername] = useState("le GOAT");
+  const foodToShow = useSelector(state => state.food.foodToShow);
   const [showAddOrUpdateFood, setShowAddOrUpdateFood] = useState(false);
   const [showReadFood, setShowReadFood] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
@@ -45,6 +47,7 @@ export default function HomeScreen() {
     });
   }
  
+  // Code grandement amélioré par l'IAG //
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
       const food = allFood.find(f => f.id === userFood.food);
@@ -74,13 +77,14 @@ export default function HomeScreen() {
     ])
     .then(([allFoodData, foodUserData]) => {
       const mergedFood = buildFoodToShow(allFoodData, foodUserData);
-      setFoodToShow(mergedFood);
+      dispatch(setFoodToShow(mergedFood));
     })
     .catch(error => {
       console.error(error);
-      setFoodToShow([]);
+      dispatch(setFoodToShow([]));
     });
   }
+  // Fin //
 
   function addFoodFromDB(content) {
     fetch(`${BASE_URL}/foodUser/me`, {
@@ -118,28 +122,34 @@ export default function HomeScreen() {
     });
   };
 
-  const filteredData = foodToShow.filter(item => {
-    if (searchQuery && !item.labelFood.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
+  const filteredData = foodToShow
+    .filter(item => {
+      if (searchQuery && !item.labelFood.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
 
-    const today = new Date();
-    const expDate = new Date(item.expirationdate);
-    const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
-    if (filters.estPerime && (dayBeforeExpiration >= 0)) {
-      return false;
-    }
+      const today = new Date();
+      const expDate = new Date(item.expirationdate);
+      const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+      if (filters.estPerime && (dayBeforeExpiration >= 0)) {
+        return false;
+      }
 
-    if (filters.storageType && item.storagetype !== filters.storageType) {
-      return false;
-    }
+      if (filters.storageType && item.storagetype !== filters.storageType) {
+        return false;
+      }
 
-    if (filters.nutriScore && item.nutriscoreFood !== filters.nutriScore) {
-      return false;
-    }
-  
-    return true;
-  });
+      if (filters.nutriScore && item.nutriscoreFood !== filters.nutriScore) {
+        return false;
+      }
+    
+      return true;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.expirationdate);
+      const dateB = new Date(b.expirationdate);
+      return dateA - dateB;
+    })
 
   return (
     <>

@@ -1,11 +1,11 @@
 import { faAngleLeft, faBoxArchive, faCalendar, faPenToSquare, faTrashCan, faClock, faUtensils, faListUl } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import React, { useState, useContext, useMemo, Suspense } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { Image, ImageBackground, Text, TouchableOpacity, View, Modal, FlatList, ActivityIndicator } from 'react-native';
 import AddOrUpdateFood from '../AddUpdateFood/addOrUpdateFood';
 import styles from "./readFood.styles"
 import { BASE_URL } from '../../../config/config';
-import { RecipeContext } from '../../../context/recipeContext';
+import { useRecipes } from '../../../../src/hooks/useRecipes';
 const ReadRecipe = React.lazy(() => import('../../recipeComponents/readRecipe/readRecipe'));
 
 export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromDB, onRefresh }) {
@@ -14,7 +14,7 @@ export default function ReadFood({ onClose, data, updateFoodFromDB, addFoodFromD
   const [showRecipeDetail, setShowRecipeDetail] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const image = { uri: BASE_URL.slice(0, -3) + data.imagepath };
-  const { recipes } = useContext(RecipeContext);
+  const { recipes } = useRecipes();
   
   let nutriScoreImage;
   switch (data.nutriscoreFood) {
