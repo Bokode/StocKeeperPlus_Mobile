@@ -134,7 +134,8 @@ const RecipeFilter = ({ toggleFilter, isFilterVisible, filters, setFilters, onRe
                 </View>
             )}
           </View>
-
+          
+          {/* CheckBox spéciale avec logo dedans, IA utilisée comme outil d'aide pour la faire. */}
           <TouchableOpacity 
             style={styles.favoriteFilterRow} 
             onPress={() => {
