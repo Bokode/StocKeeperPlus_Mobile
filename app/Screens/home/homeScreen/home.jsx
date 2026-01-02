@@ -47,6 +47,7 @@ export default function HomeScreen() {
     });
   }
  
+  // Code grandement amélioré par l'IAG //
   function buildFoodToShow(allFood, foodUser) {
     return foodUser.map(userFood => {
       const food = allFood.find(f => f.id === userFood.food);
@@ -83,6 +84,7 @@ export default function HomeScreen() {
       dispatch(setFoodToShow([]));
     });
   }
+  // Fin //
 
   function addFoodFromDB(content) {
     fetch(`${BASE_URL}/foodUser/me`, {
@@ -120,28 +122,34 @@ export default function HomeScreen() {
     });
   };
 
-  const filteredData = foodToShow.filter(item => {
-    if (searchQuery && !item.labelFood.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
+  const filteredData = foodToShow
+    .filter(item => {
+      if (searchQuery && !item.labelFood.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
 
-    const today = new Date();
-    const expDate = new Date(item.expirationdate);
-    const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
-    if (filters.estPerime && (dayBeforeExpiration >= 0)) {
-      return false;
-    }
+      const today = new Date();
+      const expDate = new Date(item.expirationdate);
+      const dayBeforeExpiration = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
+      if (filters.estPerime && (dayBeforeExpiration >= 0)) {
+        return false;
+      }
 
-    if (filters.storageType && item.storagetype !== filters.storageType) {
-      return false;
-    }
+      if (filters.storageType && item.storagetype !== filters.storageType) {
+        return false;
+      }
 
-    if (filters.nutriScore && item.nutriscoreFood !== filters.nutriScore) {
-      return false;
-    }
-  
-    return true;
-  });
+      if (filters.nutriScore && item.nutriscoreFood !== filters.nutriScore) {
+        return false;
+      }
+    
+      return true;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.expirationdate);
+      const dateB = new Date(b.expirationdate);
+      return dateA - dateB;
+    })
 
   return (
     <>
