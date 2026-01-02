@@ -5,6 +5,7 @@ import Svg, { Circle } from 'react-native-svg';
 import styles from './recipeItem.style';
 
 const RecipeItem = ({ label, nbeaters, timetomake, percentage, isFavorite }) => {
+  // Aidé par l'IA pour créer le cercle et sa logique, mais l'idée vient de moi et j'ai adapté
   const size = 80;
   const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;

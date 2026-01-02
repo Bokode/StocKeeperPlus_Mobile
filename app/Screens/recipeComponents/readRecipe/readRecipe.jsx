@@ -136,6 +136,7 @@ const ReadRecipe = ({ onClose, data }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
+                {/* Aidé par l'IA pour créer un beau cercle avec le pourcentage (surtout pour le css) */}
                 <View style={styles.scoreWrapper}>
                     <View style={styles.scoreCircle}>
                         <Text style={styles.scoreNumber}>{percentage}%</Text>
