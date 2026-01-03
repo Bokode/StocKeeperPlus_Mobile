@@ -48,7 +48,7 @@ docker compose up --build
 Ouvrez un autre terminal à la racine du dossier StocKeeperPlusMobile et créez un fichier `.env` contenant 
 ```
 EXPO_PUBLIC_IP_ADRESS=<votre_adresse_IP_locale>
-EXPO_PUBLIC_API_KEY_SPLASH=<votre_clé_API>
+EXPO_PUBLIC_API_KEY_SPLASH=<votre_clé_API_unsplash>
 ```
 
 Puis exécutez les commandes :
