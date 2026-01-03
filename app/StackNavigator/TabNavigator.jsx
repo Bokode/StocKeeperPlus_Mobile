@@ -1,13 +1,25 @@
 import CalendarScreen from "../Screens/calendar/calendar";
 import HomeScreen from "../Screens/home/homeScreen/home";
-import MapScreen from "../Screens/map";
+import MapScreen from "../Screens/Map/map";
+import DetailsStore from "../Screens/Map/detailsStore";
 import RecipeScreen from "../Screens/recipeComponents/home/recipe";
 
 import { View } from 'react-native';
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function MapStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MapScreen" component={MapScreen} />
+      <Stack.Screen name="DetailsStore" component={DetailsStore} />
+    </Stack.Navigator>
+  );
+}
 
 export default function TabNavigator() {
   return (
@@ -61,7 +73,7 @@ export default function TabNavigator() {
       >
         <Tab.Screen name="Accueil" component={HomeScreen} />
         <Tab.Screen name="Recette" component={RecipeScreen} />
-        <Tab.Screen name="Carte" component={MapScreen} />
+        <Tab.Screen name="Carte" component={MapStack} />
         <Tab.Screen name="Calendrier" component={CalendarScreen} />
       </Tab.Navigator>
   );
