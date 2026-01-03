@@ -26,6 +26,7 @@ Pour lancer ce projet, vous avez uniquement besoin de :
 
 * **Docker Desktop** (ou Docker Engine + Docker Compose) installé et lancé sur votre machine.
 * **Le dossier StocKeeperPlusProject** contenant l'API et la base de données. [Télécharger le projet ici](https://github.com/Bokode/StocKeeperPlusProject)
+* **Une clé API** de chez unsplash. [Leur site](https://unsplash.com/developers)
 
 *L'API et la base de données sont conteneurisée et servies via Vite à l'intérieur de l'environnement Docker.*
 
@@ -47,6 +48,7 @@ docker compose up --build
 Ouvrez un autre terminal à la racine du dossier StocKeeperPlusMobile et créez un fichier `.env` contenant 
 ```
 EXPO_PUBLIC_IP_ADRESS=<votre_adresse_IP_locale>
+EXPO_PUBLIC_API_KEY_SPLASH=<votre_clé_API>
 ```
 
 Puis exécutez les commandes :
