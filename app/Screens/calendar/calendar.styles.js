@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+// style amélioré par IAG //
 const styles = StyleSheet.create({
   container: {
     flex: 1,

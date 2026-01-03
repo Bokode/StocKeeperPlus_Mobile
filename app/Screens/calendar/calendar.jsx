@@ -96,7 +96,7 @@ const CalendarScreen = () => {
     .then(() => getAllFoodFromDB())
     .catch(error => console.error(error));
   }
-
+  // Utilisation de useMemo induite par l'IAG //
   const markedDates = useMemo(() => {
     return getMarkedDates(foodToShow, selectedDate);
   }, [foodToShow, selectedDate]);

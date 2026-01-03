@@ -9,6 +9,7 @@ import {
   unsubscribeFromTopic
 } from '@react-native-firebase/messaging';
 
+// Utilisation de l'IAG pour la compréhension de firebase //
 export const useNotifications = (userIdentifier) => {
   const router = useRouter();
   const cleanId = userIdentifier?.replace(/[@.]/g, '_');
@@ -29,7 +30,6 @@ export const useNotifications = (userIdentifier) => {
         
         
         await subscribeToTopic(messaging, topic);
-        console.log(`abonnement au topic : ${topic}`);
       }
     };
 
@@ -40,8 +40,6 @@ export const useNotifications = (userIdentifier) => {
     });
 
     return () => {
-      console.log(`Désabonnement du topic : ${topic}`);
-      
       unsubscribeFromTopic(messaging, topic);
       unsubscribe();
     };
